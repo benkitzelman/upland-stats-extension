@@ -1,0 +1,13 @@
+{
+  "name": "Upland Stats",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Get pages source from a popup",
+  "action": {
+    "default_popup": "dist/assets/html/popup.html"
+  },
+  "permissions": ["tabs", "activeTab", "scripting"],
+  "host_permissions": [
+    "*://*.upland.me/"
+  ]
+}
