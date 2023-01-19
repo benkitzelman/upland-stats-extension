@@ -1,6 +1,8 @@
 # Upland Stats
 
-This template should help get you started developing with Vue 3 in Vite.
+A Chrome extension to give additional property and neighbourhood stats for play.upland.me
+
+Upland Stats uses Vue 3 in Vite.
 
 ## Recommended IDE Setup
 
