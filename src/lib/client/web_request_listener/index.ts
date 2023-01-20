@@ -15,8 +15,6 @@ const storeCurrentCoordinates = (url: URL, state: any) => {
     },
     {} as any
   );
-
-  console.log("UPDATED:", state.currentCoordinates);
 };
 
 const storeCurrentProperty = (id: number, state: any) => {
@@ -25,7 +23,14 @@ const storeCurrentProperty = (id: number, state: any) => {
 
 export const onCompletedHandler = (state: any) => ({ url }: OnCompletedDetails) => {
   console.log(">>", url);
+
   let match;
-  if (url.indexOf("/api/map?") > -1) storeCurrentCoordinates(new URL(url), state);
-  if (match = url.match(/\/api\/properties\/(\d+)$/)) storeCurrentProperty(parseInt(match[1], 10), state);
+
+  if (url.indexOf("/api/map?") > -1) {
+    storeCurrentCoordinates(new URL(url), state)
+  }
+
+  if (match = url.match(/\/api\/properties\/(\d+)$/)) {
+    storeCurrentProperty(parseInt(match[1], 10), state);
+  }
 };

@@ -1,28 +1,19 @@
 import type { StateChangeMessage, UIMessage } from "@/types/worker_messaging";
+import type { State } from "./state";
 
-export default (object: any) => {
-  const observedState = new Proxy(object, {
-    get(...args) {
-      return Reflect.get(...args);
-    },
-
-    set(target: any, name: string, value: any, receiver: any) {
-      syncState({ [name]: value });
-      return Reflect.set(target, name, value, receiver);
-    },
-  });
-
-  listenForStateRequests(observedState);
-  return observedState;
+export default (state: State) => {
+  listenForStateRequests(state);
+  state.on("changed", (newState) => syncState(newState));
+  return state;
 };
 
-const listenForStateRequests = (state: ProxyHandler<any>) => {
+const listenForStateRequests = (state: State) => {
   chrome.runtime.onMessage.addListener(function (msg: UIMessage) {
     if (msg.action === "get-state") syncState(state);
   });
+};
 
-}
-const syncState = async (state: any) => {
+const syncState = async (state: State) => {
   await chrome.runtime.sendMessage({
     action: "state-changed",
     state,

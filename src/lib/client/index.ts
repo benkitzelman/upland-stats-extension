@@ -1,7 +1,7 @@
 import * as Cheerio from "cheerio";
 import * as Messages from "./messages";
 import * as Parsers from "./page_parsers";
-import * as WebRequestListener from "../web_request_listener";
+import * as WebRequestListener from "./web_request_listener";
 import * as Errors from "../errors";
 import * as Constants from "../constants";
 import type UplandApi from "../api";

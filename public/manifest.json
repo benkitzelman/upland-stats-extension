@@ -11,7 +11,8 @@
     "type": "module"
   },
   "permissions": ["tabs", "activeTab", "scripting", "webRequest"],
-  "host_permissions": [
-    "*://*.upland.me/"
-  ]
+  "host_permissions": ["*://*.upland.me/"],
+  "externally_connectable": {
+    "matches": ["*://*.upland.me/"]
+  }
 }

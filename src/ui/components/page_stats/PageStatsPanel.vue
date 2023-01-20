@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import state from "../../state";
+// import state from "../../state";
 import PropertyDetails from "./PropertyDetails.vue";
 
 export default {

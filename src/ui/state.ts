@@ -5,6 +5,7 @@ import type {
   Message as WorkerMessage,
   GetStateMessage,
 } from "@/types/worker_messaging";
+import type { Neighbourhood } from "@/lib/api/types";
 
 const State = reactive({
   session: undefined as GetSessionSettings["data"] | undefined,
@@ -12,13 +13,14 @@ const State = reactive({
   currentCoordinates: undefined as ScreenCoords | undefined,
 
   currentPropertyId: undefined as number | undefined,
+
+  viewableNeighbourhoods: [] as Neighbourhood[],
 });
 
 export const syncWithWorker = async function () {
   chrome.runtime.onMessage.addListener(function (msg: WorkerMessage) {
     if (msg.action === "state-changed") {
       for (const prop of Object.keys(msg.state)) {
-        console.log("set", prop, msg.state[prop]);
         (State as any)[prop] = msg.state[prop];
       }
     }

@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as Constants from "../constants";
 import type * as Api from "./types";
 
@@ -24,15 +23,18 @@ export default class UplandApi {
   headers() {
     return {
       authorization: this.authToken,
+      "Content-Type": "application/json",
+      redirect: "follow",
     };
   }
 
   async get<T = any>(path: string, extraHeaders: object = {}): Promise<T> {
-    const resp = await axios.get(Constants.API_BASE_URL + path, {
+    const resp = await fetch(Constants.API_BASE_URL + path, {
+      method: "GET",
       headers: { ...this.headers(), ...extraHeaders },
     });
 
-    return resp.data;
+    return resp.json();
   }
 
   property(id: number) {

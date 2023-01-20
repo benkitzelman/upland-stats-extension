@@ -27,9 +27,8 @@ export default {
     return {
       key: 1,
       state,
-      currentCoordinates: state.currentCoordinates,
       loading: false,
-      hoods: [] as Hood[],
+      hoods: state.viewableNeighbourhoods as Hood[],
       cols: [
         { prop: "name", header: "Neighbourhood" },
         { prop: "monthlyYield", header: "UPX / sq. ft. / Mo" },
@@ -38,43 +37,23 @@ export default {
   },
 
   watch: {
-    "state.currentCoordinates"(newArea) {
-      this.currentCoordinates = newArea;
-      this.updateHoods();
+    "state.viewableNeighbourhoods"(newHoods) {
+      this.hoods = newHoods;
+      this.updateYields(this.hoods);
     },
   },
 
-  async created() {
-    await this.updateHoods();
+  created() {
+    this.updateYields(this.hoods);
   },
 
   methods: {
-    api() {
-      return state.session?.auth_token
-        ? new Api(state.session?.auth_token)
-        : null;
-    },
+    async updateYields(hoods: Hood[]) {
+      if (!state.session?.auth_token || !hoods) return;
 
-    async updateHoods() {
       this.loading = true;
 
-      const api = this.api();
-
-      if (api && this.currentCoordinates) {
-        this.hoods = await service.neighbourhoodsWithin(
-          this.currentCoordinates,
-          api
-        );
-        await this.updateYields(this.hoods);
-      }
-
-      this.loading = false;
-    },
-
-    async updateYields(hoods: Hood[]) {
-      const api = this.api();
-
-      if (!api || !hoods) return;
+      const api = new Api(state.session?.auth_token);
 
       for (const hood of hoods) {
         const upx = await service.monthlyRentPerUnitFor(hood.id, api);
@@ -82,6 +61,7 @@ export default {
       }
 
       this.key = (this.key || 0) + 1;
+      this.loading = false;
     },
   },
 };
