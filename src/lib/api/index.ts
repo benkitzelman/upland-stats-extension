@@ -54,4 +54,8 @@ export default class UplandApi {
   listNeighbourhoods() {
     return this.get<Api.NeighbourhoodsResp>("/neighborhood");
   }
+
+  collections() {
+    return this.get("/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1");
+  }
 }

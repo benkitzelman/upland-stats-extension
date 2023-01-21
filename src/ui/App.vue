@@ -1,5 +1,8 @@
 <template>
-  <h1 class="green">Upland Stats</h1>
+  <div class="Title">
+    <h1 class="green">Upland Stats</h1>
+    <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
+  </div>
 
   <header>
     <div class="wrapper">
@@ -13,11 +16,33 @@
   <RouterView />
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import Spinner from "vue-spinner/src/BounceLoader.vue";
+import state from "./state";
+
+export default {
+  components: { RouterLink, RouterView, Spinner },
+
+  data() {
+    return {
+      state,
+    };
+  },
+
+  watch: {
+    "state.loading"() {},
+  },
+};
 </script>
 
 <style scoped>
+.Title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -60,7 +85,7 @@ header .wrapper {
 nav {
   text-align: left;
   font-size: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   margin-top: 0;
   width: 100%;
 }

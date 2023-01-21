@@ -1,7 +1,6 @@
+import SharedState from "@/lib/shared_state";
 import type { Monitor } from "@/lib/client";
 import type Api from "@/lib/api";
-import type { GetSessionSettings } from "../lib/client/messages";
-import type { Neighbourhood } from "@/lib/api/types";
 
 // TYPES -----------
 export type ScreenCoords = {
@@ -20,17 +19,11 @@ type EvtHandler = (...args: any) => any;
 
 // STATE -----------
 const state = {
-  monitor: undefined as Monitor | undefined,
-
-  session: undefined as GetSessionSettings["data"] | undefined,
+  ...SharedState,
 
   api: undefined as Api | undefined,
 
-  currentCoordinates: undefined as ScreenCoords | undefined,
-
-  currentPropertyId: undefined as number | undefined,
-
-  viewableNeighbourhoods: [] as Neighbourhood[],
+  monitor: undefined as Monitor | undefined,
 };
 
 // EVENTS -----------

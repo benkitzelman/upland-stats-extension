@@ -1,11 +1,12 @@
 <template>
-  <List v-if="loading || (hoods && hoods.length > 0)" :items="hoods" :cols="cols" :key="key" :loading="loading">
-    <template #empty>
-      <div class="EmptyMsg">
-        <p>Move to view...</p>
-      </div>
-    </template>
-  </List>
+  <List
+    v-if="loading || (hoods && hoods.length > 0)"
+    :items="hoods"
+    :cols="cols"
+    :loading="loading"
+    :sorting="{ prop: 'monthlyYield', dir: 'desc' }"
+    ref="list"
+  />
 </template>
 
 <script lang="ts">
@@ -25,13 +26,12 @@ export default {
 
   data() {
     return {
-      key: 1,
       state,
       loading: false,
       hoods: state.viewableNeighbourhoods as Hood[],
       cols: [
         { prop: "name", header: "Neighbourhood" },
-        { prop: "monthlyYield", header: "UPX / sq. ft. / Mo" },
+        { prop: "monthlyYield", header: "UPX / ft. / Mo.", style: "text-align: right" },
       ],
     };
   },
@@ -39,28 +39,29 @@ export default {
   watch: {
     "state.viewableNeighbourhoods"(newHoods) {
       this.hoods = newHoods;
-      this.updateYields(this.hoods);
+      this.updateYields();
     },
   },
 
   created() {
-    this.updateYields(this.hoods);
+    this.updateYields();
   },
 
   methods: {
-    async updateYields(hoods: Hood[]) {
-      if (!state.session?.auth_token || !hoods) return;
+    async updateYields() {
+      if (!state.session?.auth_token || !this.hoods) return;
 
       this.loading = true;
 
       const api = new Api(state.session?.auth_token);
 
-      for (const hood of hoods) {
+      for (const hood of this.hoods) {
         const upx = await service.monthlyRentPerUnitFor(hood.id, api);
         hood.monthlyYield ||= upx ? parseFloat(upx.toFixed(2)) : null;
       }
 
-      this.key = (this.key || 0) + 1;
+      (this.$refs as any).list?.sort();
+
       this.loading = false;
     },
   },

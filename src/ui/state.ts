@@ -1,20 +1,13 @@
 import { reactive } from "vue";
+import SharedState from "../lib/shared_state";
 
-import type { GetSessionSettings } from "../lib/client/messages";
 import type {
   Message as WorkerMessage,
   GetStateMessage,
 } from "@/types/worker_messaging";
-import type { Neighbourhood } from "@/lib/api/types";
 
 const State = reactive({
-  session: undefined as GetSessionSettings["data"] | undefined,
-
-  currentCoordinates: undefined as ScreenCoords | undefined,
-
-  currentPropertyId: undefined as number | undefined,
-
-  viewableNeighbourhoods: [] as Neighbourhood[],
+  ...SharedState,
 });
 
 export const syncWithWorker = async function () {

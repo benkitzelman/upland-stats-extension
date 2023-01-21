@@ -41,14 +41,15 @@ export const monthlyRentPerUnitFor = async (
   const res =
     (await api.listProperties(area, { limit: 1, offset: 0 })).properties || [];
 
-  if (!res || res.length === 0) return null;
+  if (!res || res.length === 0) {
+    return null;
+  }
 
   const propertySummary = res[0];
   const property = await api.property(propertySummary.prop_id);
 
   const monthlyRent = property.yield_per_hour * 24 * 30;
   const amt = monthlyRent / property.area;
-  console.log("RENT:", monthlyRent, "AREA:", property.area, "per unit", amt);
 
   rents[neighbourhoodId] = amt;
   store.setNeighbourhoodYields(rents);

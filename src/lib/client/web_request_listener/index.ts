@@ -31,6 +31,6 @@ export const onCompletedHandler = (state: any) => ({ url }: OnCompletedDetails) 
   }
 
   if (match = url.match(/\/api\/properties\/(\d+)$/)) {
-    storeCurrentProperty(parseInt(match[1], 10), state);
+    // storeCurrentProperty(parseInt(match[1], 10), state);
   }
 };

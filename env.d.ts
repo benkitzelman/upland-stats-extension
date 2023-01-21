@@ -29,3 +29,4 @@ declare interface Window {
 }
 
 declare module "vue-spinner/src/PulseLoader.vue";
+declare module "vue-spinner/src/BounceLoader.vue";

@@ -1,42 +1,35 @@
 <template>
   <div class="SimpleList">
-    <div class="Headers">
-      <slot name="header">
-        <template v-for="(header, index) in headers" :key="index">
-          <div class="Header" @click="sort(cols[index].prop)">
-            <div class="Name">{{ header }}</div>
-            <div class="Sort" v-if="sortBy?.prop === cols[index].prop">
-              <span v-if="sortBy.dir === 'asc'">&#9660;</span>
-              <span v-else>&#9650;</span>
+    <Spinner :loading="showLoad" color="#3AB982" size="10px" class="Spinner" />
+    <table>
+      <thead>
+        <tr>
+          <th v-for="(header, index) in headers" :key="index" @click="sortByProp(cols[index].prop)">
+            <div class="Header">
+              <div class="Name">{{ header }}</div>
+              <div class="Sort" v-if="sortBy?.prop === cols[index].prop">
+                <span v-if="sortBy.dir === 'asc'">&#9650;</span>
+                <span v-else>&#9660;</span>
+              </div>
             </div>
-          </div>
-        </template>
-      </slot>
-    </div>
+          </th>
+          <th v-if="actionsCol">
+            <div class="Header" />
+          </th>
+        </tr>
+      </thead>
 
-    <div class="Items">
-      <slot v-if="!showLoad && (!rows || rows.length === 0)" name="empty">
-        <p>- No items -</p>
-      </slot>
-
-      <Spinner
-        :loading="showLoad"
-        color="#3AB982"
-        height="35px"
-        width="4px"
-        class="Spinner"
-      />
-
-      <template v-for="(row, index) in rows" :key="index">
-        <slot name="item" v-bind="row">
-          <div class="Row">
-            <div v-for="prop in Object.keys(row)" :key="prop" :class="prop">
-              {{ row[prop] }}
-            </div>
-          </div>
-        </slot>
-      </template>
-    </div>
+      <tbody>
+        <tr v-for="(item, index) in rows" :key="index" class="Row">
+          <td v-for="(val, prop) in item" :key="prop" :class="prop" :style="colForProp(prop)?.style">
+            {{ val }}
+          </td>
+          <td v-if="actionsCol">
+            <slot name="actions" :item="item" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -46,6 +39,7 @@ import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 export type Col = {
   header: string;
   prop: string;
+  style: string;
 };
 
 export type Sort = {
@@ -71,26 +65,49 @@ export default {
       type: Array,
       required: true,
     },
+    idKey: {
+      type: String,
+      required: false,
+      default: () => "id",
+    },
+    actionsCol: {
+      type: Boolean,
+      required: false,
+      default: () => false,
+    },
     loading: {
       type: Boolean,
       required: false,
       default: () => false,
+    },
+    sorting: {
+      type: Object,
+      required: false,
+      default: () => null,
     },
   },
 
   data() {
     return {
       ...this.parseTableData(this.items),
-      sortBy: null as Sort | null,
+      sortBy: this.sorting as Sort | null,
       showLoad: this.loading,
     };
   },
 
+  created() {
+    this.sort();
+  },
+
   watch: {
-    items(newItems) {
-      const data = this.parseTableData(newItems);
-      this.headers = data.headers;
-      this.rows = data.rows;
+    items: {
+      handler(newItems) {
+        const data = this.parseTableData(newItems);
+        this.headers = data.headers;
+        this.rows = data.rows;
+        this.sort();
+      },
+      deep: true,
     },
     loading(newLoad) {
       this.showLoad = newLoad;
@@ -98,6 +115,10 @@ export default {
   },
 
   methods: {
+    colForProp(prop: string) {
+      return (this.cols as Col[]).find((col) => col.prop === prop);
+    },
+
     parseTableData(items: any[]) {
       const headers = (this.cols as Col[]).map(({ header }) => header);
       const props = (this.cols as Col[]).map(({ prop }) => prop);
@@ -112,59 +133,66 @@ export default {
       return { headers, rows };
     },
 
-    sort(prop: string) {
+    sortByProp(prop: string) {
       let dir = "asc";
       if (this.sortBy?.prop === prop) {
         dir = this.sortBy.dir === "asc" ? "desc" : "asc";
       }
 
-      this.rows.sort((a: any, b: any) => {
-        const res = compare(a, b, prop);
-        return dir === "desc" ? res * -1 : res;
-      });
-
       this.sortBy = { prop, dir };
+      this.sort();
+    },
+
+    sort() {
+      if (!this.sortBy) return;
+
+      this.rows.sort((a: any, b: any) => {
+        const res = compare(a, b, this.sortBy.prop);
+        return this.sortBy.dir === "desc" ? res * -1 : res;
+      });
     },
   },
 };
 </script>
 
 <style scoped>
-.Headers {
-  font: 800;
-  background: #454545;
-  color: #fff;
-  padding: 10px 0;
-  margin: 10px 0;
-  border-bottom: 1px solid #fff;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  display: flex;
-  justify-content: space-between;
+.SimpleList .Spinner {
+  text-align: center;
 }
-
-.Headers .Header {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 0 5px;
+.SimpleList > table {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 10px 0 0 0;
+  border-spacing: 0;
+  width: 100%;
 }
-.Headers .Header .Sort {
-  width: 12px;
+.SimpleList > table > thead > tr > th {
+  font-weight: 800;
+  background: #254545;
+  color: hsla(160, 100%, 37%, 1);
+  padding: 5px;
+}
+.SimpleList > table > thead > tr > th:first-child {
+  border-top-left-radius: 10px;
+}
+.SimpleList > table > thead > tr > th:last-child {
+  border-top-right-radius: 10px;
+}
+.SimpleList > table > thead > tr > th > .Header {
+  display: flex;
+}
+.SimpleList > table > thead > tr > th > .Header .Sort {
   margin-left: 5px;
 }
-
-.Row {
-  display: flex;
-  justify-content: space-between;
+.SimpleList > table > tbody {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
-
-.Items {
-  display: flex;
-  flex-direction: column;
-  padding: 0px 5px;
-}
-.Spinner {
-  text-align: center;
+.SimpleList > table > tbody > tr > td {
+  padding: 0 5px;
+  border-bottom: 1px dotted #2f2f2f;
 }
 </style>
