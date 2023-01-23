@@ -10,6 +10,7 @@ export interface Labels {
 }
 
 export interface Property {
+  currency: undefined;
   prop_id: number;
   full_address: string;
   centerlat: string;
@@ -107,6 +108,7 @@ export type PropertySummary = Pick<
   | "status"
 > & {
   currency: "UPX" | "USD";
+  on_market: undefined;
 };
 
 export type ListPropertiesResp = {

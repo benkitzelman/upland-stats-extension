@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import PageStats from "../components/page_stats/PageStatsPanel.vue";
-import Neighbourhoods from "../components/HoodList.vue";
-import Properties from "../components/PropertyList.vue";
+import Neighbourhoods from "../components/CurrentHoods.vue";
+import Properties from "../components/CurrentProperties.vue";
 import state from "../state";
 
 export default {

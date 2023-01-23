@@ -4,7 +4,11 @@
     <table>
       <thead>
         <tr>
-          <th v-for="(header, index) in headers" :key="index" @click="sortByProp(cols[index].prop)">
+          <th
+            v-for="(header, index) in headers"
+            :key="index"
+            @click="sortByProp(cols[index].prop)"
+          >
             <div class="Header">
               <div class="Name">{{ header }}</div>
               <div class="Sort" v-if="sortBy?.prop === cols[index].prop">
@@ -20,12 +24,17 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in rows" :key="index" class="Row">
-          <td v-for="(val, prop) in item" :key="prop" :class="prop" :style="colForProp(prop)?.style">
+        <tr v-for="({ __id, ...item }, index) in rows" :key="index" class="Row">
+          <td
+            v-for="(val, prop) in item"
+            :key="prop"
+            :class="prop"
+            :style="colForProp(prop)?.style"
+          >
             {{ val }}
           </td>
           <td v-if="actionsCol">
-            <slot name="actions" :item="item" />
+            <slot name="actions" :item="itemWithId(__id)" />
           </td>
         </tr>
       </tbody>
@@ -115,6 +124,10 @@ export default {
   },
 
   methods: {
+    itemWithId(id: string) {
+      return this.items.find((item: any) => item[this.idKey] === id);
+    },
+
     colForProp(prop: string) {
       return (this.cols as Col[]).find((col) => col.prop === prop);
     },
@@ -124,10 +137,13 @@ export default {
       const props = (this.cols as Col[]).map(({ prop }) => prop);
 
       const rows = (items as any[]).map((item) =>
-        props.reduce((row, prop) => {
-          row[prop] = item[prop];
-          return row;
-        }, {} as any)
+        props.reduce(
+          (row, prop) => {
+            row[prop] = item[prop];
+            return row;
+          },
+          { __id: item[this.idKey] } as any
+        )
       );
 
       return { headers, rows };

@@ -2,27 +2,29 @@
   <h3 class="green">{{ hood.name }} Properties</h3>
   <List
     v-if="loading || (properties && properties.length > 0)"
-    :items="properties"
-    :cols="cols"
+    :properties="properties"
     :loading="loading"
     :actionsCol="true"
     :sorting="{ prop: 'priceUPX', dir: 'asc' }"
-    idKey="prop_id"
     ref="list"
   >
-    <template #actions="{ item }">
-      <button @click="stash(item)">Stash</button>
+    <template #actions="{ property }">
+      <button v-if="property.stashed" @click="unstash(property)">
+        Unstash
+      </button>
+      <button v-else @click="stash(property)">Stash</button>
     </template>
   </List>
 </template>
 
 <script lang="ts">
-import List from "./SimpleList.vue";
+import List from "./PropertiesList.vue";
 import state from "../state";
-import Api from "@/lib/api";
+import * as storage from "../../lib/storage";
+import Api from "../../lib/api";
 import * as service from "../../services/property";
 
-import type { PropertySummary } from '../../lib/api/types';
+import type { PropertySummary } from "../../lib/api/types";
 
 export default {
   components: { List },
@@ -38,12 +40,6 @@ export default {
       state,
       loading: false,
       properties: [] as any[],
-      cols: [
-        { prop: "full_address", header: "Address" },
-        { prop: "roi", header: "ROI" },
-        { prop: "monthlyRentUPX", header: "UPX / Mo" },
-        { prop: "priceUPX", header: "Price" },
-      ],
     };
   },
 
@@ -73,12 +69,34 @@ export default {
           api
         )) || [];
 
+      this.properties = this.properties.map((p) => ({
+        ...p,
+        stashed: this.isStashed(p.prop_id),
+      }));
       (this.$refs as any).list?.sort();
 
       this.loading = false;
     },
-    stash({ prop_id }: PropertySummary) {
-      alert("STASHED" + prop_id);
+    isStashed(prop_id: number) {
+      return !!storage.getStashedProperties().find(({ id }) => id === prop_id);
+    },
+    stash(property: any) {
+      storage.setStashedProperties(
+        storage
+          .getStashedProperties()
+          .concat({ id: property.prop_id, hoodId: this.hood.id })
+      );
+
+      property.stashed = true;
+    },
+    unstash(property: any) {
+      const properties = storage.getStashedProperties();
+
+      storage.setStashedProperties(
+        properties.filter(({ id }) => id !== property.prop_id)
+      );
+
+      property.stashed = false;
     },
   },
 };
