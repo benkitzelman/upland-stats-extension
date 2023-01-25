@@ -65,17 +65,24 @@ export default {
       this.loading = true;
 
       const api = new Api(this.state.session.auth_token);
-      this.properties =
+      const properties =
         (await service.propertiesWithRent(
           this.state.viewableNeighbourhoods,
           this.state.currentCoordinates,
           api
         )) || [];
 
-      this.properties = this.properties.map((p) => ({
-        ...p,
-        stashed: this.isStashed(p.prop_id),
-      }));
+      for (const prop of properties) {
+        if (this.properties.findIndex((p) => p.prop_id == prop.prop_id) > -1) {
+          continue;
+        }
+
+        this.properties.push({
+          ...prop,
+          stashed: this.isStashed(prop.prop_id),
+        });
+      }
+
       (this.$refs as any).list?.sort();
 
       this.loading = false;

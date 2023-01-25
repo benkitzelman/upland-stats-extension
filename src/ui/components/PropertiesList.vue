@@ -23,6 +23,7 @@
 <script lang="ts">
 import List from "./SimpleList.vue";
 import PropertyDetails from "./PropertyDetails.vue";
+import { compareNumeric } from "../../lib/comparitors";
 
 export default {
   components: { List, PropertyDetails },
@@ -56,9 +57,9 @@ export default {
     return {
       cols: [
         { prop: "full_address", header: "Address" },
-        { prop: "roi", header: "ROI" },
-        { prop: "monthlyRentUPX", header: "UPX / Mo" },
-        { prop: "priceUPX", header: "Price" },
+        { prop: "roi", header: "ROI", sortFn: compareNumeric },
+        { prop: "monthlyRentUPX", header: "UPX / Mo", sortFn: compareNumeric },
+        { prop: "priceUPX", header: "Price", sortFn: compareNumeric },
       ],
     };
   },

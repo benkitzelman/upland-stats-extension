@@ -11,9 +11,6 @@
         <p>Move the viewscreen to an area with properties on the map...</p>
       </div>
     </template>
-    <template v-else>
-      <p>Loading...</p>
-    </template>
   </main>
 </template>
 

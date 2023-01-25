@@ -1,6 +1,5 @@
 <template>
   <div class="SimpleList">
-    <Spinner :loading="showLoad" color="#3AB982" size="10px" class="Spinner" />
     <table>
       <thead>
         <tr>
@@ -50,12 +49,13 @@
 </template>
 
 <script lang="ts">
-import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import { compare } from "../../lib/comparitors";
 
 export type Col = {
   header: string;
   prop: string;
   style: string;
+  sortfn?: (a: any, b: any) => number;
 };
 
 export type Sort = {
@@ -63,15 +63,7 @@ export type Sort = {
   dir: "asc" | "desc";
 };
 
-const compare = (a: any, b: any, prop: string) => {
-  if (a[prop] > b[prop]) return 1;
-  if (a[prop] < b[prop]) return -1;
-  return 0;
-};
-
 export default {
-  components: { Spinner: PulseLoader },
-
   props: {
     items: {
       type: Array,
@@ -87,11 +79,6 @@ export default {
       default: () => "id",
     },
     actionsCol: {
-      type: Boolean,
-      required: false,
-      default: () => false,
-    },
-    loading: {
       type: Boolean,
       required: false,
       default: () => false,
@@ -112,7 +99,6 @@ export default {
     return {
       ...this.parseTableData(this.items),
       sortBy: this.sorting as Sort | null,
-      showLoad: this.loading,
     };
   },
 
@@ -129,9 +115,6 @@ export default {
         this.sort();
       },
       deep: true,
-    },
-    loading(newLoad) {
-      this.showLoad = newLoad;
     },
   },
 
@@ -174,8 +157,10 @@ export default {
     sort() {
       if (!this.sortBy) return;
 
+      const comparitor = this.colForProp(this.sortByProp)?.sortFn || compare;
+
       this.rows.sort((a: any, b: any) => {
-        const res = compare(a, b, this.sortBy.prop);
+        const res = comparitor(a, b, this.sortBy.prop);
         return this.sortBy.dir === "desc" ? res * -1 : res;
       });
     },
@@ -187,9 +172,7 @@ export default {
 </script>
 
 <style scoped>
-.SimpleList .Spinner {
-  text-align: center;
-}
+
 .SimpleList > table {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top-left-radius: 10px;

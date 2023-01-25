@@ -12,6 +12,7 @@ let hoods: NeighbourhoodMap | null = null;
 
 export const fetchAll = async (api: UplandApi) => {
   if (hoods) return hoods;
+
   const all = await api.listNeighbourhoods();
 
   hoods = all.reduce((map, hood) => {
@@ -33,13 +34,14 @@ export const monthlyRentPerUnitFor = async (
 
   const neighbourhoods = await fetchAll(api);
   const hood = neighbourhoods[neighbourhoodId];
+
   if (!hood) throw new Error(`Unknown hood (Id: ${neighbourhoodId})`);
   if (!hood.center)
     throw new Error(`Hood has no center coords (Id: ${neighbourhoodId})`);
 
-  const area = areaFrom(hood.center.coordinates);
+  const areaCoords = areaCoordsFrom(hood.center.coordinates);
   const res =
-    (await api.listProperties(area, { limit: 1, offset: 0 })).properties || [];
+    (await api.listProperties(areaCoords, { limit: 1, offset: 0 })).properties || [];
 
   if (!res || res.length === 0) {
     return null;
@@ -95,7 +97,7 @@ const boundariesToPolygon = (boundaries: Boundaries): Coords[] => {
   }));
 };
 
-const areaFrom = ([long, lat]: number[]): AreaCoords => {
+const areaCoordsFrom = ([long, lat]: number[]): AreaCoords => {
   return {
     north: lat + 0.002,
     south: lat - 0.002,

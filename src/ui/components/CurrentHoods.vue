@@ -15,6 +15,7 @@ import * as service from "../../services/neighbourhood";
 import Api from "../../lib/api";
 import state from "../state";
 import type { Neighbourhood } from "../../lib/api/types";
+import { compareNumeric } from "../../lib/comparitors";
 
 type Hood = Neighbourhood & {
   monthlyYield?: number | null;
@@ -31,14 +32,29 @@ export default {
       hoods: state.viewableNeighbourhoods as Hood[],
       cols: [
         { prop: "name", header: "Neighbourhood" },
-        { prop: "monthlyYield", header: "UPX / ft. / Mo.", style: "text-align: right" },
+        {
+          prop: "monthlyYield",
+          header: "UPX / ft. / Mo.",
+          style: "text-align: right",
+          sortFn: compareNumeric,
+        },
       ],
     };
   },
 
   watch: {
-    "state.viewableNeighbourhoods"(newHoods) {
+    "state.viewableNeighbourhoods"(newHoods: Neighbourhood[]) {
       this.hoods = newHoods;
+
+      for (const hood of newHoods) {
+        if (this.hoods.findIndex(({ id }) => id === hood.id) > -1) continue;
+        this.hoods.push(hood);
+      }
+
+      this.hoods = this.hoods.filter(
+        ({ id }) => newHoods.findIndex((p) => id === p.id) !== -1
+      );
+
       this.updateYields();
     },
   },

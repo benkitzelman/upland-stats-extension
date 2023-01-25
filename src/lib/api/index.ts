@@ -16,6 +16,8 @@ export type Page = {
 export default class UplandApi {
   readonly authToken: string;
 
+  private promiseMap: { [url: string]: Promise<any> } = {};
+
   constructor(authToken: string) {
     this.authToken = authToken;
   }
@@ -29,12 +31,16 @@ export default class UplandApi {
   }
 
   async get<T = any>(path: string, extraHeaders: object = {}): Promise<T> {
-    const resp = await fetch(Constants.API_BASE_URL + path, {
+    // ensure that while waiting for a response from a path, additional calls dont create additional requests
+    this.promiseMap[path] ||= fetch(Constants.API_BASE_URL + path, {
       method: "GET",
       headers: { ...this.headers(), ...extraHeaders },
     });
 
-    return resp.json();
+    const resp = await this.promiseMap[path];
+    delete this.promiseMap[path];
+
+    return resp.clone().json();
   }
 
   property(id: number) {
