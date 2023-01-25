@@ -1,4 +1,5 @@
 import * as Constants from "../constants";
+import singleInvoke from "../single_invocation";
 import type * as Api from "./types";
 
 export type AreaCoords = {
@@ -31,16 +32,17 @@ export default class UplandApi {
   }
 
   async get<T = any>(path: string, extraHeaders: object = {}): Promise<T> {
+    const url = Constants.API_BASE_URL + path;
+
     // ensure that while waiting for a response from a path, additional calls dont create additional requests
-    this.promiseMap[path] ||= fetch(Constants.API_BASE_URL + path, {
-      method: "GET",
-      headers: { ...this.headers(), ...extraHeaders },
+    return singleInvoke(url, async () => {
+      const resp = await fetch(url, {
+        method: "GET",
+        headers: { ...this.headers(), ...extraHeaders },
+      });
+
+      return resp.json();
     });
-
-    const resp = await this.promiseMap[path];
-    delete this.promiseMap[path];
-
-    return resp.clone().json();
   }
 
   property(id: number) {

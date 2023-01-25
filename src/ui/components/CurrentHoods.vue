@@ -14,8 +14,9 @@ import List from "./SimpleList.vue";
 import * as service from "../../services/neighbourhood";
 import Api from "../../lib/api";
 import state from "../state";
-import type { Neighbourhood } from "../../lib/api/types";
 import { compareNumeric } from "../../lib/comparitors";
+import singleInvoke from "../../lib/single_invocation";
+import type { Neighbourhood } from "../../lib/api/types";
 
 type Hood = Neighbourhood & {
   monthlyYield?: number | null;
@@ -71,10 +72,12 @@ export default {
 
       const api = new Api(state.session?.auth_token);
 
-      for (const hood of this.hoods) {
+      const promises = this.hoods.map(async (hood) => {
         const upx = await service.monthlyRentPerUnitFor(hood.id, api);
         hood.monthlyYield ||= upx ? parseFloat(upx.toFixed(2)) : null;
-      }
+      });
+
+      await Promise.all(promises);
 
       (this.$refs as any).list?.sort();
 

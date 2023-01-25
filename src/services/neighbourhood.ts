@@ -1,5 +1,6 @@
 import Geo from "geolib";
 import * as store from "../lib/storage";
+import singleInvoke from "../lib/single_invocation";
 
 import type { AreaCoords, default as UplandApi } from "@/lib/api";
 import type { Boundaries, Neighbourhood } from "@/lib/api/types";
