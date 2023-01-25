@@ -7,20 +7,25 @@
     :loading="loading"
     :actionsCol="true"
     :sorting="{ prop: 'priceUPX', dir: 'asc' }"
+    :expandable="true"
     idKey="prop_id"
     ref="list"
   >
     <template #actions="{ item }">
       <slot name="actions" :property="item" />
     </template>
+    <template #expanded="{ item }">
+      <PropertyDetails :id="item.prop_id" />
+    </template>
   </List>
 </template>
 
 <script lang="ts">
 import List from "./SimpleList.vue";
+import PropertyDetails from "./PropertyDetails.vue";
 
 export default {
-  components: { List },
+  components: { List, PropertyDetails },
   props: {
     title: {
       type: String,

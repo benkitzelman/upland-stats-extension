@@ -24,19 +24,26 @@
       </thead>
 
       <tbody>
-        <tr v-for="({ __id, ...item }, index) in rows" :key="index" class="Row">
-          <td
-            v-for="(val, prop) in item"
-            :key="prop"
-            :class="prop"
-            :style="colForProp(prop)?.style"
-          >
-            {{ val }}
-          </td>
-          <td v-if="actionsCol">
-            <slot name="actions" :item="itemWithId(__id)" />
-          </td>
-        </tr>
+        <template v-for="({ __id, expanded, ...item }, index) in rows" :key="index">
+          <tr class="Row" @click="toggleExpand(rows[index])">
+            <td
+              v-for="(val, prop) in item"
+              :key="prop"
+              :class="prop"
+              :style="colForProp(prop)?.style"
+            >
+              {{ val }}
+            </td>
+            <td v-if="actionsCol">
+              <slot name="actions" :item="itemWithId(__id)" />
+            </td>
+          </tr>
+          <tr v-if="expandable && expanded">
+            <td :colspan="Object.keys(item).length">
+              <slot name="expanded" :item="itemWithId(__id)" />
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </div>
@@ -93,6 +100,11 @@ export default {
       type: Object,
       required: false,
       default: () => null,
+    },
+    expandable: {
+      type: Boolean,
+      required: false,
+      default: () => false,
     },
   },
 
@@ -166,6 +178,9 @@ export default {
         const res = compare(a, b, this.sortBy.prop);
         return this.sortBy.dir === "desc" ? res * -1 : res;
       });
+    },
+    toggleExpand(item: any) {
+      if (this.expandable) item.expanded = !item.expanded;
     },
   },
 };

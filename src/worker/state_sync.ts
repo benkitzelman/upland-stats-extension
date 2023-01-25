@@ -14,8 +14,12 @@ const listenForStateRequests = (state: State) => {
 };
 
 const syncState = async (state: State) => {
-  await chrome.runtime.sendMessage({
-    action: "state-changed",
-    state,
-  } as StateChangeMessage);
+  try {
+    await chrome.runtime.sendMessage({
+      action: "state-changed",
+      state,
+    } as StateChangeMessage);
+  } catch (err) {
+    console.warn("Worker send message:", err);
+  }
 };

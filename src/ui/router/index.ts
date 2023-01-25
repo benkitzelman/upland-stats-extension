@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/HomeView.vue";
+import Live from "../views/LiveView.vue";
 import Stash from "../views/StashView.vue";
 
 const router = createRouter({
@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: Home,
+      component: Live,
     },
     {
       path: "/stash",

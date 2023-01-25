@@ -37,3 +37,15 @@ h1 {
 
   }
 }
+
+.Icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.Icon svg {
+  max-width: 25px;
+  max-height: 25px;
+  min-width: 20px;
+  min-height: 20px;
+}

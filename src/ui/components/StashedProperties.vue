@@ -8,7 +8,9 @@
     ref="list"
   >
     <template #actions="{ property }">
-      <button @click="unstash(property)">Unstash</button>
+      <div class="Icon">
+        <TrashIcon @click="unstash(property)" />
+      </div>
     </template>
   </List>
   <p v-if="!loading && properties && properties.length === 0" class="EmptyMsg">
@@ -18,6 +20,7 @@
 
 <script lang="ts">
 import List from "./PropertiesList.vue";
+import TrashIcon from "./icons/TrashIcon.vue";
 import state from "../state";
 import * as storage from "../../lib/storage";
 import * as service from "../../services/property";
@@ -26,7 +29,7 @@ import Api from "../../lib/api";
 import type { PropertySummary } from "../../lib/api/types";
 
 export default {
-  components: { List },
+  components: { List, TrashIcon },
 
   data() {
     return {
@@ -34,6 +37,13 @@ export default {
       loading: false,
       properties: [] as any[],
     };
+  },
+
+  watch: {
+    "state.session"(session) {
+      this.state.session = session;
+      this.loadProperties();
+    },
   },
 
   created() {

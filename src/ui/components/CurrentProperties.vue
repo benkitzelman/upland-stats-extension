@@ -9,25 +9,28 @@
     ref="list"
   >
     <template #actions="{ property }">
-      <button v-if="property.stashed" @click="unstash(property)">
-        Unstash
-      </button>
-      <button v-else @click="stash(property)">Stash</button>
+      <div v-if="property.stashed" class="Icon">
+        <TickIcon @click.stop="unstash(property)" />
+      </div>
+      <div v-else class="Icon">
+        <PlusIcon @click.stop="stash(property)" />
+      </div>
     </template>
   </List>
 </template>
 
 <script lang="ts">
 import List from "./PropertiesList.vue";
+import PlusIcon from "./icons/PlusIcon.vue";
+import TickIcon from "./icons/TickIcon.vue";
 import state from "../state";
 import * as storage from "../../lib/storage";
 import Api from "../../lib/api";
 import * as service from "../../services/property";
 
-import type { PropertySummary } from "../../lib/api/types";
-
 export default {
-  components: { List },
+  components: { List, PlusIcon, TickIcon },
+
   props: {
     hood: {
       required: true,

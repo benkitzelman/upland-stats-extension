@@ -7,7 +7,7 @@
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/">Live</RouterLink>
         <RouterLink to="/stash">Stashed Properties</RouterLink>
       </nav>
     </div>
