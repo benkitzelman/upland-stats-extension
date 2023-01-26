@@ -4,25 +4,13 @@ import * as Parsers from "./page_parsers";
 import * as WebRequestListener from "./web_request_listener";
 import * as Errors from "../errors";
 import * as Constants from "../constants";
-import type UplandApi from "../api";
+import type { Hood } from "@/services/neighbourhood";
 
 declare global {
   const chrome: any;
 }
 
 export type Monitor = PromisedType<ReturnType<typeof createClientMonitor>>;
-
-export type AppState = {
-  monitor: Monitor | undefined;
-
-  session: Messages.GetSessionSettings["data"] | undefined;
-
-  api: UplandApi | undefined;
-
-  currentCoordinates: ScreenCoords | undefined;
-
-  currentPropertyId: number | undefined;
-};
 
 const MESSAGE_TIMEOUT_MS = 5 * 1000;
 
@@ -32,7 +20,7 @@ export const getTab = async () => {
   })) || [])[0];
 };
 
-const createClientMonitor = async function (tab: any, state: AppState) {
+const createClientMonitor = async function (tab: any, state: any) {
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
@@ -99,12 +87,22 @@ const createClientMonitor = async function (tab: any, state: AppState) {
       const { data } = await this.message("getSessionSettings");
       return data;
     },
+
+    async getScreenDimensions() {
+      const { data } = await this.message("getScreenDimensions");
+      return data;
+    },
+
+    async markNeighbourhoods(hoods: Hood[]) {
+      const { ok } = await this.message("markNeighbourhoods", hoods);
+      return ok;
+    },
   };
 };
 
 let monitor: Monitor | undefined;
 
-export const instance = async (state?: AppState, tab?: any) => {
+export const instance = async (state?: any, tab?: any) => {
   if (monitor) return monitor;
 
   const currentTab = tab || (await getTab());

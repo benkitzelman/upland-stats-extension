@@ -13,6 +13,7 @@ export default async function (state: State) {
   state.session = await state.monitor.getSession();
   if (state.session) state.api = new Api(state.session.auth_token);
 
+  state.screenDimensions = await state.monitor.getScreenDimensions();
   state.loading = false;
 
   state.on("changed:currentCoordinates", async (newCoords) => {

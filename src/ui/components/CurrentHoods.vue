@@ -5,6 +5,8 @@
     :cols="cols"
     :loading="loading"
     :sorting="{ prop: 'monthlyYield', dir: 'desc' }"
+    @item-hover-on="onHoodHoverIn"
+    @item-hover-off="onHoodHoverOut"
     ref="list"
   />
 </template>
@@ -13,15 +15,12 @@
 import List from "./SimpleList.vue";
 import * as service from "../../services/neighbourhood";
 import Api from "../../lib/api";
+import * as ClientMonitor from "../../lib/client";
 import state from "../state";
 import { compareNumeric } from "../../lib/comparitors";
-import singleInvoke from "../../lib/single_invocation";
-import type { Neighbourhood } from "../../lib/api/types";
 
-type Hood = Neighbourhood & {
-  monthlyYield?: number | null;
-  key?: number;
-};
+import type { Neighbourhood } from "../../lib/api/types";
+import type { Hood } from "../../services/neighbourhood";
 
 export default {
   components: { List },
@@ -56,17 +55,25 @@ export default {
         ({ id }) => newHoods.findIndex((p) => id === p.id) !== -1
       );
 
-      this.updateYields();
+      this.updateHoods();
     },
   },
 
   created() {
-    this.updateYields();
+    this.updateHoods();
   },
 
   methods: {
-    async updateYields() {
-      if (!state.session?.auth_token || !this.hoods) return;
+    async onHoodHoverIn(hood: Hood) {
+      (await ClientMonitor.instance(state)).markNeighbourhoods([hood]);
+    },
+
+    async onHoodHoverOut() {
+      (await ClientMonitor.instance(state)).markNeighbourhoods([]);
+    },
+
+    async updateHoods() {
+      if (!state.session?.auth_token || !state.currentCoordinates || !this.hoods) return;
 
       this.loading = true;
 
@@ -75,6 +82,7 @@ export default {
       const promises = this.hoods.map(async (hood) => {
         const upx = await service.monthlyRentPerUnitFor(hood.id, api);
         hood.monthlyYield ||= upx ? parseFloat(upx.toFixed(2)) : null;
+        hood.screenCoords ||= service.screenCoordsFor(hood, state.currentCoordinates as any, state.screenDimensions)
       });
 
       await Promise.all(promises);

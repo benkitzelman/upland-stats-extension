@@ -1,3 +1,5 @@
+import type { Hood } from "@/services/neighbourhood";
+
 type Message = { eventId: number };
 
 export type GetPageSourceMsg = Message & {
@@ -20,7 +22,26 @@ export type GetSessionSettings = Message & {
   };
 };
 
-export type ClientMessage = GetPageSourceMsg;
+export type MarkNeighbourhoodsMessage = Message & {
+  action: "markNeighbourhoods";
+  ok: boolean;
+};
+
+export type GetScreenDimensions = Message & {
+  action: "getScreenDimensions";
+  data: {
+    width: number;
+    height: number;
+  };
+};
+
+export type ScreenDimensions = GetScreenDimensions["data"];
+
+export type ClientMessage =
+  | GetPageSourceMsg
+  | GetScreenDimensions
+  | GetSessionSettings
+  | MarkNeighbourhoodsMessage;
 
 export function getPageSource(eventId: number): GetPageSourceMsg {
   return window.UplandStats.getPageSource(eventId);
@@ -28,4 +49,12 @@ export function getPageSource(eventId: number): GetPageSourceMsg {
 
 export function getSessionSettings(eventId: number): GetSessionSettings {
   return window.UplandStats.getSessionSettings(eventId);
+}
+
+export function getScreenDimensions(eventId: number): GetScreenDimensions {
+  return window.UplandStats.getScreenDimensions(eventId);
+}
+
+export function markNeighbourhoods(eventId: number, hoods: Hood[]): MarkNeighbourhoodsMessage {
+  return window.UplandStats.markNeighbourhoods(eventId, hoods);
 }

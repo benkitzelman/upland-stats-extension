@@ -24,7 +24,7 @@
 
       <tbody>
         <template v-for="({ __id, expanded, ...item }, index) in rows" :key="index">
-          <tr class="Row" @click="toggleExpand(rows[index])">
+          <tr class="Row" @click="onClick(rows[index])" @mouseover="onMouseOver(rows[index])" @mouseleave="onMouseLeave(rows[index])">
             <td
               v-for="(val, prop) in item"
               :key="prop"
@@ -164,6 +164,19 @@ export default {
         return this.sortBy.dir === "desc" ? res * -1 : res;
       });
     },
+
+    onClick(item: any) {
+      this.toggleExpand(item);
+      this.$emit("item-click", this.itemWithId(item.__id));
+    },
+
+    onMouseOver(item: any) {
+      this.$emit("item-hover-on", this.itemWithId(item.__id));
+    },
+    onMouseLeave(item: any) {
+      this.$emit("item-hover-off", this.itemWithId(item.__id));
+    },
+
     toggleExpand(item: any) {
       if (this.expandable) item.expanded = !item.expanded;
     },
@@ -172,7 +185,6 @@ export default {
 </script>
 
 <style scoped>
-
 .SimpleList > table {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top-left-radius: 10px;

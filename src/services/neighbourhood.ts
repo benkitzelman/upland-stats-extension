@@ -1,12 +1,18 @@
-import Geo from "geolib";
 import * as store from "../lib/storage";
-import singleInvoke from "../lib/single_invocation";
+import * as Geo from "../services/geo";
 
 import type { AreaCoords, default as UplandApi } from "@/lib/api";
-import type { Boundaries, Neighbourhood } from "@/lib/api/types";
+import type { Neighbourhood } from "@/lib/api/types";
 import type { NeighbourhoodYieldMap } from "../lib/storage";
+import type { ScreenDimensions } from "@/lib/client/messages";
 
 export type NeighbourhoodMap = { [id: number]: Neighbourhood };
+
+export type Hood = Neighbourhood & {
+  monthlyYield?: number | null;
+  screenCoords?: { x: number; y: number };
+  key?: number;
+};
 
 let rents: NeighbourhoodYieldMap | null = null;
 let hoods: NeighbourhoodMap | null = null;
@@ -40,9 +46,10 @@ export const monthlyRentPerUnitFor = async (
   if (!hood.center)
     throw new Error(`Hood has no center coords (Id: ${neighbourhoodId})`);
 
-  const areaCoords = areaCoordsFrom(hood.center.coordinates);
+  const areaCoords = Geo.areaCoordsFrom(hood.center.coordinates);
   const res =
-    (await api.listProperties(areaCoords, { limit: 1, offset: 0 })).properties || [];
+    (await api.listProperties(areaCoords, { limit: 1, offset: 0 }))
+      .properties || [];
 
   if (!res || res.length === 0) {
     return null;
@@ -65,44 +72,29 @@ export const neighbourhoodsWithin = async (
   api: UplandApi
 ) => {
   const neighbourhoods = await fetchAll(api);
-  const polygon = areaCoordsToPolygon(area);
+  const polygon = Geo.areaCoordsToPolygon(area);
 
   return Object.values(neighbourhoods).filter((hood) => {
     if (!hood?.boundaries) return false;
 
-    const points = boundariesToPolygon(hood.boundaries);
-    return anyOverlap(polygon, points);
+    const points = Geo.boundariesToPolygon(hood.boundaries);
+    return Geo.anyOverlap(polygon, points);
   }) as Neighbourhood[];
 };
 
-const anyOverlap = (polygonA: Coords[], polygonB: Coords[]) => {
-  return !!(polygonA.find(isIn(polygonB)) || polygonB.find(isIn(polygonA)));
-};
+export const screenCoordsFor = (
+  hood: Hood,
+  area: AreaCoords,
+  screenDimensions?: ScreenDimensions | null
+) => {
+  const boundaries = Geo.areaCoordsToPolygon(area);
 
-const isIn = (polygon: Coords[]) => (point: Coords) =>
-  Geo.isPointInPolygon(point, polygon);
+  if (!hood.center?.coordinates) return;
 
-const areaCoordsToPolygon = (area: AreaCoords) => {
-  return [
-    { latitude: area.north, longitude: area.west },
-    { latitude: area.north, longitude: area.east },
-    { latitude: area.south, longitude: area.east },
-    { latitude: area.south, longitude: area.west },
-  ];
-};
-
-const boundariesToPolygon = (boundaries: Boundaries): Coords[] => {
-  return boundaries.coordinates.flat().map((coords) => ({
-    latitude: coords[1] as number,
-    longitude: coords[0] as number,
-  }));
-};
-
-const areaCoordsFrom = ([long, lat]: number[]): AreaCoords => {
-  return {
-    north: lat + 0.002,
-    south: lat - 0.002,
-    east: long + 0.002,
-    west: long - 0.002,
+  const coords = {
+    latitude: hood.center.coordinates[1],
+    longitude: hood.center.coordinates[0],
   };
+  if (!Geo.isIn(boundaries)(coords)) return;
+  return Geo.toXY(hood.center?.coordinates, area, screenDimensions);
 };

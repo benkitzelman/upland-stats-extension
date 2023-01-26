@@ -1,4 +1,4 @@
-import type { GetSessionSettings } from "./client/messages";
+import type { GetSessionSettings, ScreenDimensions } from "./client/messages";
 import type { Neighbourhood } from "./api/types";
 
 const SharedState = {
@@ -11,6 +11,8 @@ const SharedState = {
   currentPropertyId: undefined as number | undefined,
 
   viewableNeighbourhoods: [] as Neighbourhood[],
+
+  screenDimensions: undefined as ScreenDimensions | undefined,
 };
 
 export default SharedState;
