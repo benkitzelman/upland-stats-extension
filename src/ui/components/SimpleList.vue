@@ -157,7 +157,7 @@ export default {
     sort() {
       if (!this.sortBy) return;
 
-      const comparitor = this.colForProp(this.sortByProp)?.sortFn || compare;
+      const comparitor = this.colForProp(this.sortBy.prop)?.sortFn || compare;
 
       this.rows.sort((a: any, b: any) => {
         const res = comparitor(a, b, this.sortBy.prop);

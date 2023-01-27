@@ -6,5 +6,8 @@ export const compare = (a: any, b: any, prop: string, formatVal?: (val: any) => 
 };
 
 export const compareNumeric = (a: any, b: any, prop: string) => {
-  return compare(a, b, prop, (val) => Number(val || 0));
+  return compare(a, b, prop, (val) => {
+    const numStr = (String(val).match(/\d+(\.?\d+)/) || [])[0];
+    return Number(numStr) || 0;
+  });
 };

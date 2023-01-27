@@ -1,10 +1,11 @@
 import * as store from "../lib/storage";
 import * as Geo from "../services/geo";
 
-import type { AreaCoords, default as UplandApi } from "@/lib/api";
-import type { Neighbourhood } from "@/lib/api/types";
+import type { AreaCoords, default as UplandApi } from "../lib/api";
+import type { Neighbourhood } from "../lib/api/types";
 import type { NeighbourhoodYieldMap } from "../lib/storage";
-import type { ScreenDimensions } from "@/lib/client/messages";
+import type { ScreenDimensions } from "../lib/client/messages";
+import type SharedState from "../lib/shared_state";
 
 export type NeighbourhoodMap = { [id: number]: Neighbourhood };
 
@@ -80,6 +81,20 @@ export const neighbourhoodsWithin = async (
     const points = Geo.boundariesToPolygon(hood.boundaries);
     return Geo.anyOverlap(polygon, points);
   }) as Neighbourhood[];
+};
+
+export const decorate = (hoods: (Hood | Neighbourhood)[], state: typeof SharedState, api: UplandApi): Promise<Hood[]> => {
+  const promises = hoods.map(async (hood) => {
+    const upx = await monthlyRentPerUnitFor(hood.id, api);
+
+    return {
+      ...hood,
+      monthlyYield: (hood as Hood).monthlyYield || (upx ? parseFloat(upx.toFixed(2)) : null),
+      screenCoords: (hood as Hood).screenCoords || screenCoordsFor(hood, state.currentCoordinates as any, state.screenDimensions),
+    };
+  });
+
+  return Promise.all(promises);
 };
 
 export const screenCoordsFor = (

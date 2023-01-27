@@ -20,6 +20,8 @@ export const getTab = async () => {
   })) || [])[0];
 };
 
+const isRespondingToRequest = (msg: Messages.ClientMessage): msg is Messages.ClientResponseMessage => !!msg.eventId;
+
 const createClientMonitor = async function (tab: any, state: any) {
   try {
     await chrome.scripting.executeScript({
@@ -46,9 +48,13 @@ const createClientMonitor = async function (tab: any, state: any) {
         msg: Messages.ClientMessage,
         sender: any
       ) {
-        const resolver = messageResolvers[msg.eventId];
-        resolver && resolver(msg);
-        delete messageResolvers[msg.eventId];
+        if (msg.action === "windowResize") {
+          state.screenDimensions = msg.data;
+        } else if (isRespondingToRequest(msg)) {
+          const resolver = messageResolvers[msg.eventId];
+          resolver && resolver(msg);
+          delete messageResolvers[msg.eventId];
+        }
       });
     },
 

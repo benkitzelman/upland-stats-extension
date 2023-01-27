@@ -1,13 +1,14 @@
 import type { Hood } from "@/services/neighbourhood";
 
-type Message = { eventId: number };
+type ResponseMessage = { eventId: number };
+type PageMessage = { eventId: undefined };
 
-export type GetPageSourceMsg = Message & {
+export type GetPageSourceMsg = ResponseMessage & {
   action: "getPageSource";
   data: string;
 };
 
-export type GetSessionSettings = Message & {
+export type GetSessionSettings = ResponseMessage & {
   action: "getSessionSettings";
   data: {
     auth_token: string;
@@ -22,12 +23,12 @@ export type GetSessionSettings = Message & {
   };
 };
 
-export type MarkNeighbourhoodsMessage = Message & {
+export type MarkNeighbourhoodsMessage = ResponseMessage & {
   action: "markNeighbourhoods";
   ok: boolean;
 };
 
-export type GetScreenDimensions = Message & {
+export type GetScreenDimensions = ResponseMessage & {
   action: "getScreenDimensions";
   data: {
     width: number;
@@ -35,13 +36,22 @@ export type GetScreenDimensions = Message & {
   };
 };
 
+export type WindowResizeMessage = PageMessage & {
+  action: "windowResize";
+  data: { width: number; height: number };
+};
+
 export type ScreenDimensions = GetScreenDimensions["data"];
 
-export type ClientMessage =
+export type ClientResponseMessage =
   | GetPageSourceMsg
   | GetScreenDimensions
   | GetSessionSettings
   | MarkNeighbourhoodsMessage;
+
+export type ClientEventMessage = WindowResizeMessage;
+
+export type ClientMessage = ClientResponseMessage | ClientEventMessage;
 
 export function getPageSource(eventId: number): GetPageSourceMsg {
   return window.UplandStats.getPageSource(eventId);

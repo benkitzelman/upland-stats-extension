@@ -29,7 +29,7 @@ export default {
     return {
       state,
       loading: false,
-      hoods: state.viewableNeighbourhoods as Hood[],
+      hoods: [] as Hood[],
       cols: [
         { prop: "name", header: "Neighbourhood" },
         {
@@ -44,23 +44,12 @@ export default {
 
   watch: {
     "state.viewableNeighbourhoods"(newHoods: Neighbourhood[]) {
-      this.hoods = newHoods;
-
-      for (const hood of newHoods) {
-        if (this.hoods.findIndex(({ id }) => id === hood.id) > -1) continue;
-        this.hoods.push(hood);
-      }
-
-      this.hoods = this.hoods.filter(
-        ({ id }) => newHoods.findIndex((p) => id === p.id) !== -1
-      );
-
-      this.updateHoods();
+      this.updateHoods(newHoods);
     },
   },
 
   created() {
-    this.updateHoods();
+    this.updateHoods(this.state.viewableNeighbourhoods);
   },
 
   methods: {
@@ -72,20 +61,12 @@ export default {
       (await ClientMonitor.instance(state)).markNeighbourhoods([]);
     },
 
-    async updateHoods() {
-      if (!state.session?.auth_token || !state.currentCoordinates || !this.hoods) return;
+    async updateHoods(hoods: (Neighbourhood | Hood)[]) {
+      if (!state.session?.auth_token || !state.currentCoordinates || !hoods) return;
 
       this.loading = true;
 
-      const api = new Api(state.session?.auth_token);
-
-      const promises = this.hoods.map(async (hood) => {
-        const upx = await service.monthlyRentPerUnitFor(hood.id, api);
-        hood.monthlyYield ||= upx ? parseFloat(upx.toFixed(2)) : null;
-        hood.screenCoords ||= service.screenCoordsFor(hood, state.currentCoordinates as any, state.screenDimensions)
-      });
-
-      await Promise.all(promises);
+      this.hoods = await service.decorate(hoods, state, new Api(state.session?.auth_token));
 
       (this.$refs as any).list?.sort();
 

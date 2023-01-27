@@ -97,4 +97,11 @@ if (!window.UplandStats) {
       return sendOk();
     },
   };
+
+  window.addEventListener("resize", () => {
+    sendMessage(undefined, "windowResize", {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  });
 }
