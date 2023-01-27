@@ -1,6 +1,6 @@
 <template>
   <div class="Title">
-    <h1 class="green">Upland Stats</h1>
+    <h2 class="green">Upland Stats</h2>
     <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
   </div>
 
