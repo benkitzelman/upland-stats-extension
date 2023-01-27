@@ -59,7 +59,8 @@ export default {
         { prop: "full_address", header: "Address" },
         { prop: "roi", header: "ROI", sortFn: compareNumeric },
         { prop: "monthlyRentUPX", header: "UPX / Mo", sortFn: compareNumeric },
-        { prop: "priceUPX", header: "Price", sortFn: compareNumeric },
+        { prop: "priceUPX", header: "UPX Price", sortFn: compareNumeric },
+        { prop: "currency", header: "Pay in" },
       ],
     };
   },
