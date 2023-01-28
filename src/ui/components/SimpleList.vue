@@ -1,5 +1,9 @@
 <template>
   <div class="SimpleList">
+    <div class="Filter">
+      <input @input="onFilterInput" placeholder="Filter results..." />
+    </div>
+
     <table>
       <thead>
         <tr>
@@ -23,8 +27,8 @@
       </thead>
 
       <tbody>
-        <template v-for="({ __id, expanded, ...item }, index) in rows" :key="index">
-          <tr class="Row" @click="onClick(rows[index])" @mouseover="onMouseOver(rows[index])" @mouseleave="onMouseLeave(rows[index])">
+        <template v-for="({ __id, expanded, hidden, ...item }, index) in rows" :key="index">
+          <tr :class="hidden ? 'Hidden' : ''" :data-id="__id" @click="onClick(rows[index])" @mouseover="onMouseOver(rows[index])" @mouseleave="onMouseLeave(rows[index])">
             <td
               v-for="(val, prop) in item"
               :key="prop"
@@ -99,6 +103,7 @@ export default {
     return {
       ...this.parseTableData(this.items),
       sortBy: this.sorting as Sort | null,
+      filter: null as string | null,
     };
   },
 
@@ -165,6 +170,17 @@ export default {
       });
     },
 
+    toggleExpand(item: any) {
+      if (this.expandable) item.expanded = !item.expanded;
+    },
+
+    applyFilter() {
+      [...this.$el.querySelectorAll("tbody tr")].forEach((el) => {
+        const item  = this.rows.find((row: any) => String(el.dataset["id"]) === String(row.__id));
+        item.hidden = !((el.innerText || "").toLowerCase().indexOf((this.filter || "").toLowerCase()) > -1);
+      });
+    },
+
     onClick(item: any) {
       this.toggleExpand(item);
       this.$emit("item-click", this.itemWithId(item.__id));
@@ -173,18 +189,27 @@ export default {
     onMouseOver(item: any) {
       this.$emit("item-hover-on", this.itemWithId(item.__id));
     },
+
     onMouseLeave(item: any) {
       this.$emit("item-hover-off", this.itemWithId(item.__id));
     },
 
-    toggleExpand(item: any) {
-      if (this.expandable) item.expanded = !item.expanded;
+    onFilterInput(e: any) {
+      this.filter = e.currentTarget.value;
+      this.applyFilter();
     },
   },
 };
 </script>
 
 <style scoped>
+.SimpleList > .Filter {
+  text-align: right;
+}
+.SimpleList > .Filter input {
+  border-radius: 4px;
+  padding: 3px 5px;
+}
 .SimpleList > table {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top-left-radius: 10px;
@@ -220,5 +245,8 @@ export default {
 .SimpleList > table > tbody > tr > td {
   padding: 0 5px;
   border-bottom: 1px dotted #2f2f2f;
+}
+.SimpleList > table > tbody .Hidden {
+  display: none;
 }
 </style>
