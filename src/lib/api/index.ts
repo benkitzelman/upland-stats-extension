@@ -15,12 +15,10 @@ export type Page = {
 };
 
 export default class UplandApi {
-  readonly authToken: string;
+  readonly authToken: string | undefined;
 
-  private promiseMap: { [url: string]: Promise<any> } = {};
-
-  constructor(authToken: string) {
-    this.authToken = authToken;
+  constructor(authToken?: string | null) {
+    this.authToken = authToken || undefined;
   }
 
   headers() {
@@ -38,7 +36,7 @@ export default class UplandApi {
     return singleInvoke(url, async () => {
       const resp = await fetch(url, {
         method: "GET",
-        headers: { ...this.headers(), ...extraHeaders },
+        headers: { ...this.headers(), ...extraHeaders } as any,
       });
 
       return resp.json();

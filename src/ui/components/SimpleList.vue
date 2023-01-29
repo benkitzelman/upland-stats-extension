@@ -1,8 +1,9 @@
 <template>
   <div class="SimpleList">
-    <div class="Filter">
-      <input @input="onFilterInput" placeholder="Filter results..." />
-    </div>
+    <label class="Filter">
+      Filter:
+      <input @input="onFilterInput" placeholder="Enter text..." />
+    </label>
 
     <table>
       <thead>
@@ -204,6 +205,7 @@ export default {
 
 <style scoped>
 .SimpleList > .Filter {
+  display: block;
   text-align: right;
 }
 .SimpleList > .Filter input {

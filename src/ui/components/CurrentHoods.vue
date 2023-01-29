@@ -49,6 +49,7 @@ export default {
   },
 
   created() {
+    console.log("Updating -");
     this.updateHoods(this.state.viewableNeighbourhoods);
   },
 
@@ -62,7 +63,7 @@ export default {
     },
 
     async updateHoods(hoods: (Neighbourhood | Hood)[]) {
-      if (!state.session?.auth_token || !state.currentCoordinates || !hoods) return;
+      if (!state.currentCoordinates || !hoods) return;
 
       this.loading = true;
 

@@ -1,16 +1,14 @@
 <template>
   <main>
-    <template v-if="state.session">
-      <PageStats />
-      <Neighbourhoods v-if="state.viewableNeighbourhoods?.length > 1" />
-      <Properties
-        v-else-if="state.viewableNeighbourhoods?.length === 1"
-        :hood="state.viewableNeighbourhoods[0]"
-      />
-      <div v-else class="Info">
-        <p>Move the viewscreen to an area with properties on the map...</p>
-      </div>
-    </template>
+    <PageStats />
+    <Neighbourhoods v-if="state.viewableNeighbourhoods?.length > 1" />
+    <Properties
+      v-else-if="state.viewableNeighbourhoods?.length === 1"
+      :hood="state.viewableNeighbourhoods[0]"
+    />
+    <div v-else class="Info">
+      <p>Move the viewscreen to an area with properties on the map...</p>
+    </div>
   </main>
 </template>
 

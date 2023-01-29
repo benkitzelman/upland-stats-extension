@@ -3,13 +3,20 @@ import type { State } from "./state";
 
 export default (state: State) => {
   listenForStateRequests(state);
-  state.on("changed", (newState) => syncState(newState));
   return state;
 };
 
+let isSyncing = false;
 const listenForStateRequests = (state: State) => {
   chrome.runtime.onMessage.addListener(function (msg: UIMessage) {
-    if (msg.action === "get-state") syncState(state);
+    if (msg.action === "get-state") {
+      syncState(state);
+
+      if (!isSyncing) {
+        state.on("changed", (newState) => syncState(newState));
+        isSyncing = true;
+      }
+    }
   });
 };
 

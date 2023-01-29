@@ -1,15 +1,12 @@
 <template>
-  <div class="Title">
-    <h2 class="green">Upland Stats</h2>
-    <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
-  </div>
-
   <header>
+    <h2 class="green">Upland Stats</h2>
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Live</RouterLink>
         <RouterLink to="/stash">Stashed Properties</RouterLink>
       </nav>
+      <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
     </div>
   </header>
 
@@ -37,22 +34,32 @@ export default {
 </script>
 
 <style scoped>
-.Title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 header {
   line-height: 1.5;
   max-height: 100vh;
+  justify-content: space-between;
+  display: flex;
+  place-items: center;
+  align-items: baseline;
+  width: 100%;
 }
 
+header .wrapper {
+  display: flex;
+  place-items: flex-start;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+header h2 {
+  margin-right: 60px;
+}
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
   margin-top: 2rem;
+  text-align: left;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
 }
 
 nav a.router-link-exact-active {
@@ -67,26 +74,5 @@ nav a {
   display: inline-block;
   padding: 0 1rem;
   border-left: 1px solid var(--color-border);
-}
-
-header {
-  display: flex;
-  place-items: center;
-  width: 100%;
-}
-
-header .wrapper {
-  display: flex;
-  place-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
-nav {
-  text-align: left;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  margin-top: 0;
-  width: 100%;
 }
 </style>

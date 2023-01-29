@@ -40,7 +40,7 @@ const createClientMonitor = async function (tab: any, state: any) {
   return {
     listen() {
       chrome.webRequest.onCompleted.addListener(
-        WebRequestListener.onCompletedHandler(state),
+        WebRequestListener.onCompletedHandler(state, this),
         { urls: [Constants.API_BASE_URL + "/*"] }
       );
 

@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-cond-assign */
 
+import type { Monitor } from "..";
+
 export type OnCompletedDetails = {
   url: string;
 };
@@ -17,10 +19,17 @@ const storeCurrentCoordinates = (url: URL, state: any) => {
   );
 };
 
-export const onCompletedHandler = (state: any) => ({ url }: OnCompletedDetails) => {
+const storeSession = async (state: any, monitor: Monitor) => {
+  state.session = await monitor.getSession();
+};
+
+export const onCompletedHandler = (state: any, monitor: Monitor) => ({ url }: OnCompletedDetails) => {
   console.log(">>", url);
 
   if (url.indexOf("/api/map?") > -1) {
     storeCurrentCoordinates(new URL(url), state)
+  }
+  if (url.indexOf("/api/authentication") > -1) {
+    storeSession(state, monitor).catch((err) => console.warn("Error updating session:", err));
   }
 };
