@@ -1,9 +1,13 @@
 import * as Constants from "@/lib/constants";
-import type { Property, PropertySummary } from "../types";
+import { yieldPerMonth } from "@/lib/calc";
+import type { Property, PropertySummary, MyProperty } from "../types";
 
 export type PropertySummaryModel = ReturnType<typeof Model>;
 
-const Model = (obj: Property | PropertySummary, rentUPXPerUnitPerMo?: number | null) => ({
+export const isMyProperty = (prop: any): prop is MyProperty => typeof prop.yield_per_hour !== "undefined";
+export const isPropertySumamry = (prop: any): prop is PropertySummary => typeof prop.currency !== "undefined";
+
+const Model = (obj: Property | PropertySummary | MyProperty, rentUPXPerUnitPerMo?: number | null) => ({
   rentUPXPerUnitPerMo,
 
   attrs() {
@@ -11,13 +15,21 @@ const Model = (obj: Property | PropertySummary, rentUPXPerUnitPerMo?: number | n
   },
 
   monthlyRentUPX() {
+    const attrs = this.attrs();
+    if (isMyProperty(attrs)) return Number(yieldPerMonth(attrs.yield_per_hour).toFixed(2));
+
     return this.rentUPXPerUnitPerMo
-      ? Number((this.attrs().area * this.rentUPXPerUnitPerMo).toFixed(2))
+      ? Number((attrs.area * this.rentUPXPerUnitPerMo).toFixed(2))
       : undefined;
   },
 
   currency() {
-    const { on_market, currency } = this.attrs();
+    const attrs = this.attrs();
+    if (isMyProperty(attrs)) {
+      return attrs.sale_fiat_price !== null ? "USD" : "UPX";
+    }
+
+    const { on_market, currency } = attrs;
     return on_market?.currency || currency;
   },
 

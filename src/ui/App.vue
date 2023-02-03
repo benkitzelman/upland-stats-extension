@@ -4,7 +4,8 @@
     <div class="wrapper">
       <nav>
         <RouterLink to="/">Live</RouterLink>
-        <RouterLink to="/stash">Stashed Properties</RouterLink>
+        <RouterLink to="/stash">Stashed</RouterLink>
+        <RouterLink to="/me">Me</RouterLink>
       </nav>
       <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
     </div>

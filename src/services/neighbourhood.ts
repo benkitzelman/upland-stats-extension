@@ -1,5 +1,6 @@
 import * as store from "../lib/storage";
 import * as Geo from "../services/geo";
+import { yieldPerMonth } from "../lib/calc";
 
 import type { AreaCoords, default as UplandApi } from "../lib/api";
 import type { Neighbourhood } from "../lib/api/types";
@@ -59,7 +60,7 @@ export const monthlyRentPerUnitFor = async (
   const propertySummary = res[0];
   const property = await api.property(propertySummary.prop_id);
 
-  const monthlyRent = property.yield_per_hour * 24 * 30;
+  const monthlyRent = yieldPerMonth(property.yield_per_hour);
   const amt = monthlyRent / property.area;
 
   rents[neighbourhoodId] = amt;

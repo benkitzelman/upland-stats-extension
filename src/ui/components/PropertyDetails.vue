@@ -1,18 +1,19 @@
 <template>
   <div v-if="property" class="PropertyDetails">
-    <div v-for="(prop, index) in keys" :key="index" class="Prop">
-      <label>{{ prop }}:</label> {{ property[prop] }}
-    </div>
+    <Field v-for="(prop, index) in keys" :key="index" class="Prop" :label="prop" :value="property[prop]" />
   </div>
 </template>
 
 <script lang="ts">
+import Field from "./LabelAndField.vue";
 import state from "../state";
 import Api from "../../lib/api";
 
 import type { Property } from "../../lib/api/types";
 
 export default {
+  components: { Field },
+
   props: {
     id: {
       type: Number,

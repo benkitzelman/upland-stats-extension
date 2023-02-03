@@ -1,23 +1,25 @@
 <template>
-  <h3 v-if="title" class="green">{{ title }}</h3>
-  <List
-    v-if="loading || (properties && properties.length > 0)"
-    :items="properties"
-    :cols="cols"
-    :loading="loading"
-    :actionsCol="true"
-    :sorting="{ prop: 'priceUPX', dir: 'asc' }"
-    :expandable="true"
-    idKey="prop_id"
-    ref="list"
-  >
-    <template #actions="{ item }">
-      <slot name="actions" :property="item" />
-    </template>
-    <template #expanded="{ item }">
-      <PropertyDetails :id="item.prop_id" />
-    </template>
-  </List>
+  <div class="PropertiesList">
+    <h3 v-if="title" class="green TableTitle">{{ title }}</h3>
+    <List
+      v-if="loading || (properties && properties.length > 0)"
+      :items="properties"
+      :cols="cols"
+      :loading="loading"
+      :actionsCol="true"
+      :sorting="{ prop: 'priceUPX', dir: 'asc' }"
+      :expandable="true"
+      idKey="prop_id"
+      ref="list"
+    >
+      <template #actions="{ item }">
+        <slot name="actions" :property="item" />
+      </template>
+      <template #expanded="{ item }">
+        <PropertyDetails :id="item.prop_id" />
+      </template>
+    </List>
+  </div>
 </template>
 
 <script lang="ts">
@@ -72,3 +74,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.TableTitle {
+  position: absolute;
+}
+</style>

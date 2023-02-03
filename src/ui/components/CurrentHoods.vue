@@ -49,7 +49,6 @@ export default {
   },
 
   created() {
-    console.log("Updating -");
     this.updateHoods(this.state.viewableNeighbourhoods);
   },
 

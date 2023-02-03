@@ -64,4 +64,20 @@ export default class UplandApi {
   collections() {
     return this.get("/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1");
   }
+
+  myCollections() {
+    return this.get<Api.MyCollectionsResp>("/dashboard/collections");
+  }
+
+  myProperties() {
+    return this.get<Api.MyPropertiesResp>("/properties/mine/detailed");
+  }
+
+  myYield() {
+    return this.get<Api.MyYieldResp>("/yield/mine");
+  }
+
+  myDashboard() {
+    return this.get<Api.MyDashboardResp>("/dashboard");
+  }
 }

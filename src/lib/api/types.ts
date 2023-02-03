@@ -1,5 +1,3 @@
-export type PropertyStatus = "For sale" | "Ownwed" | "Unlocked";
-
 export interface City {
   id: number;
   name: string;
@@ -117,3 +115,94 @@ export type ListPropertiesResp = {
 };
 
 export type NeighbourhoodsResp = Neighbourhood[];
+
+export interface MyCollectionsResp {
+  collections: PropertyCollection[];
+  previouslyCompletedCollections: PropertyCollection[];
+}
+
+export interface PropertyCollection {
+  id: number;
+  name: string;
+  image: string;
+  image_thumbnail: string;
+  city_id: number | null;
+}
+
+export interface MyProperty {
+  prop_id: number;
+  full_address: string;
+  PropertyStatus: PropertyStatus;
+  price: number;
+  initial_price: number;
+  boundaries: string;
+  centerlat: string;
+  centerlng: string;
+  fiat_price: null;
+  feature: null;
+  street: City;
+  state: City;
+  city: City;
+  collection_boost: number;
+  yield_per_hour: number;
+  is_offering: boolean;
+  is_blocked: boolean;
+  constructionPropertyStatus: null | string;
+  construction: Construction | null;
+  nftID: number | null;
+  building_image: null | string;
+  building_type: null | string;
+  neighborhood_name: string;
+  sale_upx_price: number | null;
+  sale_fiat_price: number | null;
+}
+
+export type MyPropertiesResp = MyProperty[];
+
+export interface City {
+  id: number;
+  name: string;
+}
+
+export interface Construction {
+  propModelID: number;
+  stackedSparks: number;
+  totalSparksRequired: number;
+  progressInSparks: number;
+  rentedSparks: number;
+  startedAt: Date;
+  finishedAt: Date;
+}
+
+export interface MyYieldResp {
+  sum: number;
+  teleport_fees: any[];
+  street: City;
+  city: City;
+  state: City;
+  full_address: string;
+  PropertyStatus: PropertyStatus;
+  prop_id: number;
+  collection_boost: number;
+  last_yield_time: Date;
+  hours_since_last_yield: number;
+  initial_price: number;
+  yield: number;
+  yield_per_hour: number;
+  hours_till_next_yield: number;
+  next_yield_tick_time: number;
+}
+
+export enum PropertyStatus {
+  ForSale = "For sale",
+  Owned = "Owned",
+  Unlocked = "Unlocked",
+}
+
+export interface MyDashboardResp {
+  networth: number;
+  property: number;
+  upx: number;
+  earning: number;
+  collections: number;
+}
