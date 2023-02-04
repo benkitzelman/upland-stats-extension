@@ -4,10 +4,15 @@ import type { Property, PropertySummary, MyProperty } from "../types";
 
 export type PropertySummaryModel = ReturnType<typeof Model>;
 
-export const isMyProperty = (prop: any): prop is MyProperty => typeof prop.yield_per_hour !== "undefined";
-export const isPropertySumamry = (prop: any): prop is PropertySummary => typeof prop.currency !== "undefined";
+export const isMyProperty = (prop: any): prop is MyProperty =>
+  typeof prop.yield_per_hour !== "undefined";
+export const isPropertySumamry = (prop: any): prop is PropertySummary =>
+  typeof prop.currency !== "undefined";
 
-const Model = (obj: Property | PropertySummary | MyProperty, rentUPXPerUnitPerMo?: number | null) => ({
+const Model = (
+  obj: Property | PropertySummary | MyProperty,
+  rentUPXPerUnitPerMo?: number | null
+) => ({
   rentUPXPerUnitPerMo,
 
   attrs() {
@@ -16,7 +21,8 @@ const Model = (obj: Property | PropertySummary | MyProperty, rentUPXPerUnitPerMo
 
   monthlyRentUPX() {
     const attrs = this.attrs();
-    if (isMyProperty(attrs)) return Number(yieldPerMonth(attrs.yield_per_hour).toFixed(2));
+    if (isMyProperty(attrs))
+      return Number(yieldPerMonth(attrs.yield_per_hour).toFixed(2));
 
     return this.rentUPXPerUnitPerMo
       ? Number((attrs.area * this.rentUPXPerUnitPerMo).toFixed(2))
@@ -34,16 +40,23 @@ const Model = (obj: Property | PropertySummary | MyProperty, rentUPXPerUnitPerMo
   },
 
   priceUPX() {
-    const { price } = this.attrs();
+    const attrs = this.attrs();
+
+    if (isMyProperty(attrs)) {
+      if (attrs.sale_fiat_price) return attrs.sale_fiat_price * Constants.UPX_EXCHANGE_RATE
+      if (attrs.sale_upx_price) return attrs.sale_upx_price;
+    }
 
     return this.currency() === "USD"
-      ? price * Constants.UPX_EXCHANGE_RATE
-      : price;
+      ? attrs.price * Constants.UPX_EXCHANGE_RATE
+      : attrs.price;
   },
 
   roi() {
     const rent = this.monthlyRentUPX();
-    return rent ? `${((rent * 12 / this.priceUPX()) * 100).toFixed(3)}%` : undefined;
+    return rent
+      ? `${(((rent * 12) / this.priceUPX()) * 100).toFixed(3)}%`
+      : undefined;
   },
 
   toJSON() {
