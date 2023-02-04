@@ -6,7 +6,7 @@ Get neighbourhood rental rates as you nav around Upland:
 
 <img width="450" alt="Screen Shot 2023-02-03 at 7 26 54 pm" src="https://user-images.githubusercontent.com/705261/216741975-f2e73fae-1b71-47c9-8165-3c23fe3784ba.png">
 
-Zoom viewscreen into a neighbourhood (must be only 1 nighbourhood in viewscreen), and get property data.
+Zoom viewscreen into a neighbourhood (must be only 1 nighbourhood in viewscreen), and get property data. Filter by atttribute like USD / UPX purchasable properties
 
 <img width="450" alt="Screen Shot 2023-02-03 at 7 27 25 pm" src="https://user-images.githubusercontent.com/705261/216741979-66e82688-62d4-4cc2-9f33-10f581682154.png">
 
