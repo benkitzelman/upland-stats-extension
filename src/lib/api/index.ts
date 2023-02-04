@@ -1,3 +1,5 @@
+// TODO: Return ./models instances instead of raw properties for each call
+
 import * as Constants from "../constants";
 import singleInvoke from "../single_invocation";
 import type * as Api from "./types";
