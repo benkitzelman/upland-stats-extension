@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="green">Property Details</h3>
+    <h3 class="Green">Property Details</h3>
 
     <div class="Stat">
       <label>UPX / mo:</label>

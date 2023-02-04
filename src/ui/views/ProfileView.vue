@@ -5,7 +5,11 @@
     <Field label="Net Worth (UPX)" :value="profile.dashboard.networth" />
     <Field label="Properties (UPX)" :value="profile.dashboard.property" />
     <Field label="Wallet (UPX)" :value="profile.dashboard.upx" />
-    <PropertiesList class="MyProperties" :properties="profile.properties" title="My Properties" />
+    <PropertiesList
+      class="MyProperties"
+      :properties="profile.properties"
+      title="My Properties"
+    />
   </div>
 </template>
 
@@ -42,6 +46,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .MyProperties {
   margin-top: 15px;

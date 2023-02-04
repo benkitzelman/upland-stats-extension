@@ -62,7 +62,9 @@ export default class UplandApi {
   }
 
   collections() {
-    return this.get("/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1");
+    return this.get(
+      "/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1"
+    );
   }
 
   myCollections() {

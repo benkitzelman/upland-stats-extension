@@ -35,7 +35,11 @@ export const areaCoordsFrom = ([long, lat]: number[]): AreaCoords => {
   };
 };
 
-export const toXY = (longLat: number[] | undefined | null, area: AreaCoords, screenDimensions?: ScreenDimensions | null) => {
+export const toXY = (
+  longLat: number[] | undefined | null,
+  area: AreaCoords,
+  screenDimensions?: ScreenDimensions | null
+) => {
   if (!longLat || longLat.length !== 2 || !screenDimensions) return undefined;
 
   const ratio = (geoMin: number, geoMax: number, geoCoord: number) => {

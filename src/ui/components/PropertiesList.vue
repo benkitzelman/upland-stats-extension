@@ -1,6 +1,6 @@
 <template>
   <div class="PropertiesList">
-    <h3 v-if="title" class="green TableTitle">{{ title }}</h3>
+    <h3 v-if="title" class="Green TableTitle">{{ title }}</h3>
     <List
       v-if="loading || (properties && properties.length > 0)"
       :items="properties"

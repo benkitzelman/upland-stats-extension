@@ -1,8 +1,11 @@
+import * as Hood from "../services/neighbourhood";
+import { debounce } from "../lib/single_invocation";
 import type { StateChangeMessage, UIMessage } from "@/types/worker_messaging";
 import type { State } from "./state";
 
 export default (state: State) => {
   listenForStateRequests(state);
+  trackVisibleNeighbourhoods(state);
   return state;
 };
 
@@ -29,4 +32,22 @@ const syncState = async (state: State) => {
   } catch (err) {
     console.warn("Worker send message:", err);
   }
+};
+
+const trackVisibleNeighbourhoods = (state: State) => {
+  state.on(
+    "changed:currentCoordinates",
+    debounce(500, async (newCoords) => {
+      if (!state.api) return;
+
+      state.loading = true;
+
+      state.viewableNeighbourhoods = await Hood.neighbourhoodsWithin(
+        newCoords,
+        state.api
+      );
+
+      state.loading = false;
+    })
+  );
 };

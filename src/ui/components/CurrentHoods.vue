@@ -66,7 +66,11 @@ export default {
 
       this.loading = true;
 
-      this.hoods = await service.decorate(hoods, state, new Api(state.session?.auth_token));
+      this.hoods = await service.decorate(
+        hoods,
+        state,
+        new Api(state.session?.auth_token)
+      );
 
       (this.$refs as any).list?.sort();
 

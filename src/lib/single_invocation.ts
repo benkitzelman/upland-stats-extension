@@ -10,6 +10,7 @@ export default function<R, T extends ((...args: any[]) => Promise<R>)>(key: stri
 
   return invocations[key] as Promise<R>;
 }
+
 export function debounce<T extends ((...args: any[]) => any)>(timeout: number, func: T): (...args: Parameters<T>) => void {
   let timer: any;
   return (...args: Parameters<T>) => {

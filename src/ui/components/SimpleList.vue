@@ -28,8 +28,17 @@
       </thead>
 
       <tbody>
-        <template v-for="({ __id, expanded, hidden, ...item }, index) in rows" :key="index">
-          <tr :class="hidden ? 'Hidden' : ''" :data-id="__id" @click="onClick(rows[index])" @mouseover="onMouseOver(rows[index])" @mouseleave="onMouseLeave(rows[index])">
+        <template
+          v-for="({ __id, expanded, hidden, ...item }, index) in rows"
+          :key="index"
+        >
+          <tr
+            :class="hidden ? 'Hidden' : ''"
+            :data-id="__id"
+            @click="onClick(rows[index])"
+            @mouseover="onMouseOver(rows[index])"
+            @mouseleave="onMouseLeave(rows[index])"
+          >
             <td
               v-for="(val, prop) in item"
               :key="prop"
@@ -177,8 +186,14 @@ export default {
 
     applyFilter() {
       [...this.$el.querySelectorAll("tbody tr")].forEach((el) => {
-        const item  = this.rows.find((row: any) => String(el.dataset["id"]) === String(row.__id));
-        item.hidden = !((el.innerText || "").toLowerCase().indexOf((this.filter || "").toLowerCase()) > -1);
+        const item = this.rows.find(
+          (row: any) => String(el.dataset["id"]) === String(row.__id)
+        );
+        item.hidden = !(
+          (el.innerText || "")
+            .toLowerCase()
+            .indexOf((this.filter || "").toLowerCase()) > -1
+        );
       });
     },
 

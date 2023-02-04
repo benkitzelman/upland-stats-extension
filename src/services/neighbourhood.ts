@@ -1,5 +1,6 @@
 import * as store from "../lib/storage";
 import * as Geo from "../services/geo";
+import { ServiceError } from "../lib/errors";
 import { yieldPerMonth } from "../lib/calc";
 
 import type { AreaCoords, default as UplandApi } from "../lib/api";
@@ -15,6 +16,12 @@ export type Hood = Neighbourhood & {
   screenCoords?: { x: number; y: number };
   key?: number;
 };
+
+class Error extends ServiceError {
+  constructor(msg: string) {
+    super(msg, "neighbourhood");
+  }
+}
 
 let rents: NeighbourhoodYieldMap | null = null;
 let hoods: NeighbourhoodMap | null = null;
@@ -84,14 +91,27 @@ export const neighbourhoodsWithin = async (
   }) as Neighbourhood[];
 };
 
-export const decorate = (hoods: (Hood | Neighbourhood)[], state: typeof SharedState, api: UplandApi): Promise<Hood[]> => {
+export const decorate = (
+  hoods: (Hood | Neighbourhood)[],
+  state: typeof SharedState,
+  api: UplandApi
+): Promise<Hood[]> => {
   const promises = hoods.map(async (hood) => {
     const upx = await monthlyRentPerUnitFor(hood.id, api);
 
     return {
       ...hood,
-      monthlyYield: (hood as Hood).monthlyYield || (upx ? parseFloat(upx.toFixed(2)) : null),
-      screenCoords: (hood as Hood).screenCoords || screenCoordsFor(hood, state.currentCoordinates as any, state.screenDimensions),
+      monthlyYield:
+        (hood as Hood).monthlyYield ||
+        (upx ? parseFloat(upx.toFixed(2)) : null),
+
+      screenCoords:
+        (hood as Hood).screenCoords ||
+        screenCoordsFor(
+          hood,
+          state.currentCoordinates as any,
+          state.screenDimensions
+        ),
     };
   });
 

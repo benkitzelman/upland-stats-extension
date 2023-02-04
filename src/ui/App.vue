@@ -1,13 +1,18 @@
 <template>
   <header>
-    <h2 class="green">Upland Stats</h2>
-    <div class="wrapper">
+    <h2 class="Green">Upland Stats</h2>
+    <div class="Links">
       <nav>
         <RouterLink to="/">Live</RouterLink>
         <RouterLink to="/stash">Stashed</RouterLink>
         <RouterLink to="/me">Me</RouterLink>
       </nav>
-      <Spinner :loading="state.loading" color="#3AB982" size="25px" class="Spinner" />
+      <Spinner
+        :loading="state.loading"
+        color="#3AB982"
+        size="25px"
+        class="Spinner"
+      />
     </div>
   </header>
 
@@ -35,7 +40,6 @@ export default {
 </script>
 
 <style scoped>
-
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -46,7 +50,7 @@ header {
   width: 100%;
 }
 
-header .wrapper {
+header .Links {
   display: flex;
   place-items: flex-start;
   flex-wrap: wrap;
