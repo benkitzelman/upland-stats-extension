@@ -2,7 +2,35 @@
 
 A Chrome extension to give additional property and neighbourhood stats for play.upland.me
 
-Upland Stats uses Vue 3 in Vite.
+Get neighbourhood rental rates as you nav around Upland:
+
+<img width="450" alt="Screen Shot 2023-02-03 at 7 26 54 pm" src="https://user-images.githubusercontent.com/705261/216741975-f2e73fae-1b71-47c9-8165-3c23fe3784ba.png">
+
+Zoom viewscreen into a neighbourhood (must be only 1 nighbourhood in viewscreen), and get property data.
+
+<img width="450" alt="Screen Shot 2023-02-03 at 7 27 25 pm" src="https://user-images.githubusercontent.com/705261/216741979-66e82688-62d4-4cc2-9f33-10f581682154.png">
+
+Save properties to your stash to track and compare.
+
+<img width="450" alt="Screen Shot 2023-02-04 at 12 39 55 pm" src="https://user-images.githubusercontent.com/705261/216742228-acc1954f-2493-4f10-a643-a71605bd9bd3.png">
+
+Compare your property list and track the base Return on Investment (ROI) on each.
+
+<img width="450" alt="Screen Shot 2023-02-04 at 12 40 07 pm" src="https://user-images.githubusercontent.com/705261/216742230-723a22b9-55e4-430b-a3a8-72b9fca77f82.png">
+
+## Layout & Tech
+
+* Typescript + JS
+* Chrome Extension Manifest v3
+* Lib / Services Layer - plumbing coordinating upland api calls
+* UI - The Upland Stats extension popup uses Vue 3 in Vite
+* Worker - A background worker is responsible for monitoring play.upland.me nd echoes state to the UI's vue reactive store. Specifically it:
+  * Monitors play.upland.me requests for viewing context
+  * Can fetch / parse play.upland.me html on demand
+
+## State of things
+
+ATM its just a POC / hack for fun thing - no tests (yet ;)) - tho feel free to add any needed - Playwright and vitest are setup.
 
 ## Recommended IDE Setup
 
@@ -40,6 +68,7 @@ npm run dev
 ```sh
 npm run build
 ```
+
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
