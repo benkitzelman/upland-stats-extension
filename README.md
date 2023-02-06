@@ -18,6 +18,16 @@ Compare your property list and track the base Return on Investment (ROI) on each
 
 <img width="450" alt="Screen Shot 2023-02-04 at 12 40 07 pm" src="https://user-images.githubusercontent.com/705261/216742230-723a22b9-55e4-430b-a3a8-72b9fca77f82.png">
 
+## Installation
+
+To install the extension as is, either pull with GIT or:
+* [download a zip](https://github.com/benkitzelman/upland-stats-extension/tags) and extract
+* In Chrom(ium) visit chrome://extensions
+* Click Load unpacked
+* Select the `./dist` folder from wherever you extracted to
+
+Finally, when visiting play.upland.me - open the extension from the extensions menu (or pin it)... its in dev - still highly buggy - so if you have loading issues pre logging in - visit the chrome://extensions page agin and hit refresh to reload the extension..
+
 ## Layout & Tech
 
 * Typescript + JS
