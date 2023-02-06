@@ -1,0 +1,317 @@
+
+.v-spinner .v-bounce
+{
+}
+.v-spinner .v-bounce1
+{
+}
+.v-spinner .v-bounce2
+{
+
+    -webkit-animation: v-bounceStretchDelay 2s 1s infinite ease-in-out;
+            animation: v-bounceStretchDelay 2s 1s infinite ease-in-out;
+    -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+}
+.v-spinner .v-bounce3
+{
+    -webkit-animation: v-bounceStretchDelay 2s 0s infinite ease-in-out;
+            animation: v-bounceStretchDelay 2s 0s infinite ease-in-out;
+    -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+}
+@-webkit-keyframes v-bounceStretchDelay
+{
+0%,
+    100%
+    {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+}
+50%
+    { 
+        -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+}
+}
+@keyframes v-bounceStretchDelay
+{
+0%,
+    100%
+    {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+}
+50%
+    { 
+        -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+}
+}
+
+header[data-v-d85b2f6e] {
+  line-height: 1.5;
+  max-height: 100vh;
+  justify-content: space-between;
+  display: flex;
+  place-items: center;
+  align-items: baseline;
+  width: 100%;
+}
+header .Links[data-v-d85b2f6e] {
+  display: flex;
+  place-items: flex-start;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+header h2[data-v-d85b2f6e] {
+  margin-right: 60px;
+}
+nav[data-v-d85b2f6e] {
+  margin-top: 2rem;
+  text-align: left;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+nav a.router-link-exact-active[data-v-d85b2f6e] {
+  color: var(--color-text);
+}
+nav a.router-link-exact-active[data-v-d85b2f6e]:hover {
+  background-color: transparent;
+}
+nav a[data-v-d85b2f6e] {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.Stat[data-v-7d77c629] {
+  padding: 5px 0;
+}
+.Stat label[data-v-7d77c629] {
+  font-weight: 800;
+  width: 135px;
+  display: inline-block;
+}
+.Stat span[data-v-7d77c629] {
+  font-weight: 400;
+  margin-left: 5px;
+  display: inline-block;
+}
+
+.PageStats[data-v-687d10c9] {
+  padding-top: 1rem;
+}
+
+.SimpleList > .Filter[data-v-629d5c5b] {
+  display: block;
+  text-align: right;
+}
+.SimpleList > .Filter input[data-v-629d5c5b] {
+  border-radius: 4px;
+  padding: 3px 5px;
+}
+.SimpleList > table[data-v-629d5c5b] {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 10px 0 0 0;
+  border-spacing: 0;
+  width: 100%;
+}
+.SimpleList > table > thead > tr > th[data-v-629d5c5b] {
+  font-weight: 800;
+  background: #254545;
+  color: hsla(160, 100%, 37%, 1);
+  padding: 5px;
+}
+.SimpleList > table > thead > tr > th[data-v-629d5c5b]:first-child {
+  border-top-left-radius: 10px;
+}
+.SimpleList > table > thead > tr > th[data-v-629d5c5b]:last-child {
+  border-top-right-radius: 10px;
+}
+.SimpleList > table > thead > tr > th > .Header[data-v-629d5c5b] {
+  display: flex;
+}
+.SimpleList > table > thead > tr > th > .Header .Sort[data-v-629d5c5b] {
+  margin-left: 5px;
+}
+.SimpleList > table > tbody[data-v-629d5c5b] {
+  border: 1px solid hsla(160, 100%, 37%, 1);
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.SimpleList > table > tbody > tr > td[data-v-629d5c5b] {
+  padding: 0 5px;
+  border-bottom: 1px dotted #2f2f2f;
+}
+.SimpleList > table > tbody .Hidden[data-v-629d5c5b] {
+  display: none;
+}
+
+.Hood[data-v-16dbd700] {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.Hood .Yield[data-v-16dbd700] {
+  max-width: 100px;
+}
+.EmptyMsg[data-v-16dbd700] {
+  text-align: center;
+}
+
+.LabelAndField[data-v-a08e4abd] {
+  display: flex;
+}
+.LabelAndField > label[data-v-a08e4abd] {
+  width: 150px;
+}
+
+.PropertyDetails[data-v-5ab331c7] {
+  padding: 15px;
+  background: #2f2f2f;
+}
+.PropertyDetails .Prop[data-v-5ab331c7] {
+  display: flex;
+}
+.PropertyDetails .Prop label[data-v-5ab331c7] {
+  width: 200px;
+}
+
+.TableTitle[data-v-2127e730] {
+  position: absolute;
+}
+
+.Info[data-v-05e53e55] {
+  text-align: center;
+}
+
+.EmptyMsg[data-v-c380296c] {
+  text-align: center;
+}
+
+.MyProperties[data-v-421c4931] {
+  margin-top: 15px;
+}
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f2f2;
+
+  --vt-c-black: #181818;
+  --vt-c-black-soft: #222222;
+  --vt-c-black-mute: #282828;
+
+  --vt-c-indigo: #2c3e50;
+
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-dark-1: var(--vt-c-white);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+}
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--vt-c-white);
+  --color-background-soft: var(--vt-c-white-soft);
+  --color-background-mute: var(--vt-c-white-mute);
+
+  --color-border: var(--vt-c-divider-light-2);
+  --color-border-hover: var(--vt-c-divider-light-1);
+
+  --color-heading: var(--vt-c-text-light-1);
+  --color-text: var(--vt-c-text-light-1);
+
+  --section-gap: 160px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--vt-c-black);
+    --color-background-soft: var(--vt-c-black-soft);
+    --color-background-mute: var(--vt-c-black-mute);
+
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+
+    --color-heading: var(--vt-c-text-dark-1);
+    --color-text: var(--vt-c-text-dark-2);
+  }
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 12px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#app {
+  max-width: 1280px;
+  min-width: 550px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+a,
+.Green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+}
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+}
+h2 {
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+
+  }
+}
+.Icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.Icon svg {
+  max-width: 25px;
+  max-height: 25px;
+  min-width: 20px;
+  min-height: 20px;
+}

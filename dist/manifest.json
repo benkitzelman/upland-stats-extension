@@ -1,0 +1,18 @@
+{
+  "name": "Upland Stats",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Provide additional world stats for play.upland.me",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
+  "permissions": ["tabs", "activeTab", "scripting", "webRequest"],
+  "host_permissions": ["*://*.upland.me/"],
+  "externally_connectable": {
+    "matches": ["*://*.upland.me/"]
+  }
+}
