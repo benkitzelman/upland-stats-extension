@@ -5,9 +5,13 @@ import type { Property, PropertySummary, MyProperty } from "../types";
 export type PropertySummaryModel = ReturnType<typeof Model>;
 
 export const isMyProperty = (prop: any): prop is MyProperty =>
-  typeof prop.yield_per_hour !== "undefined";
+  typeof prop.owner === "undefined";
+
 export const isPropertySumamry = (prop: any): prop is PropertySummary =>
   typeof prop.currency !== "undefined";
+
+export const isProperty = (prop: any): prop is Property =>
+  typeof prop.owner !== "undefined";
 
 const Model = (
   obj: Property | PropertySummary | MyProperty,

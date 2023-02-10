@@ -7486,7 +7486,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   }, _hoisted_5$1, 8, _hoisted_1$5);
 }
 const TickIcon = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
-const isMyProperty = (prop) => typeof prop.yield_per_hour !== "undefined";
+const isMyProperty = (prop) => typeof prop.owner === "undefined";
 const Model = (obj, rentUPXPerUnitPerMo) => ({
   rentUPXPerUnitPerMo,
   attrs() {
