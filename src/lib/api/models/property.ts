@@ -3,6 +3,7 @@ import { yieldPerMonth } from "@/lib/calc";
 import type { Property, PropertySummary, MyProperty } from "../types";
 
 export type PropertySummaryModel = ReturnType<typeof Model>;
+export type ExtendedProperty = ReturnType<PropertySummaryModel["toJSON"]>;
 
 export const isMyProperty = (prop: any): prop is MyProperty =>
   typeof prop.owner === "undefined";

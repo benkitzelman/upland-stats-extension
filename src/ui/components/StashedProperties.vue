@@ -66,8 +66,8 @@ export default {
 
       this.loading = false;
     },
-    unstash({ prop_id }: PropertySummary) {
-      const props = storage.getStashedProperties();
+    async unstash({ prop_id }: PropertySummary) {
+      const props = await storage.getStashedProperties();
       const idx = props.findIndex(({ id }) => id === prop_id);
       props.splice(idx, 1);
       this.properties.splice(idx, 1);

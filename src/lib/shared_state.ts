@@ -1,5 +1,6 @@
 import type { GetSessionSettings, ScreenDimensions } from "./client/messages";
 import type { Neighbourhood } from "./api/types";
+import type { ExtendedProperty } from "./api/models/property";
 
 const SharedState = {
   loading: false,
@@ -11,6 +12,8 @@ const SharedState = {
   currentPropertyId: undefined as number | undefined,
 
   viewableNeighbourhoods: [] as Neighbourhood[],
+
+  viewableProperties: [] as ExtendedProperty[] | undefined,
 
   screenDimensions: undefined as ScreenDimensions | undefined,
 };

@@ -20,8 +20,8 @@ export const propertiesWithRent = async (
   return properties.map((attrs) => Property(attrs, rentUpx).toJSON());
 };
 
-export const stashedProperties = (api: UplandApi) => {
-  const properties = storage.getStashedProperties();
+export const stashedProperties = async (api: UplandApi) => {
+  const properties = await storage.getStashedProperties();
 
   return Promise.all(
     properties.map(async ({ id, hoodId }) => {

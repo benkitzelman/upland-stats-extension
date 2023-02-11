@@ -1,4 +1,5 @@
 import * as Hood from "../services/neighbourhood";
+import * as Property from "../services/property";
 import { debounce } from "../lib/single_invocation";
 import type { StateChangeMessage, UIMessage } from "@/types/worker_messaging";
 import type { State } from "./state";
@@ -46,6 +47,15 @@ const trackVisibleNeighbourhoods = (state: State) => {
         newCoords,
         state.api
       );
+
+      state.viewableProperties =
+        state.viewableNeighbourhoods?.length === 1
+          ? (await Property.propertiesWithRent(
+              state.viewableNeighbourhoods,
+              newCoords,
+              state.api
+            )) || []
+          : undefined;
 
       state.loading = false;
     })

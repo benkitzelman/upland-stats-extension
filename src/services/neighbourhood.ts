@@ -43,7 +43,7 @@ export const monthlyRentPerUnitFor = async (
   neighbourhoodId: number,
   api: UplandApi
 ) => {
-  rents ||= store.getNeighbourhoodYields();
+  rents ||= await store.getNeighbourhoodYields();
 
   const rent = rents[neighbourhoodId];
   if (rent) return rent;

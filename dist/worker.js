@@ -1,4 +1,4 @@
-import { S as SharedState, b as debounce, n as neighbourhoodsWithin, i as instance, U as UplandApi } from "./index.js";
+import { S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, i as instance, U as UplandApi } from "./property.js";
 const state = {
   ...SharedState,
   api: void 0,
@@ -74,6 +74,7 @@ const trackVisibleNeighbourhoods = (state2) => {
   state2.on(
     "changed:currentCoordinates",
     debounce(500, async (newCoords) => {
+      var _a;
       if (!state2.api)
         return;
       state2.loading = true;
@@ -81,6 +82,11 @@ const trackVisibleNeighbourhoods = (state2) => {
         newCoords,
         state2.api
       );
+      state2.viewableProperties = ((_a = state2.viewableNeighbourhoods) == null ? void 0 : _a.length) === 1 ? await propertiesWithRent(
+        state2.viewableNeighbourhoods,
+        newCoords,
+        state2.api
+      ) || [] : void 0;
       state2.loading = false;
     })
   );

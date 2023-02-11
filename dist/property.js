@@ -10,6 +10,7 @@ const SharedState = {
   currentCoordinates: void 0,
   currentPropertyId: void 0,
   viewableNeighbourhoods: [],
+  viewableProperties: [],
   screenDimensions: void 0
 };
 const API_BASE_URL = "https://api.prod.upland.me/api";
@@ -88,32 +89,24 @@ class UplandApi {
     return this.get("/dashboard");
   }
 }
-const get$1 = (key) => {
-  return localStorage.getItem(key);
+const get$1 = async (key) => {
+  return (await chrome.storage.local.get([key]))[key];
 };
-const set = (key, val2) => {
-  return val2 === null || typeof val2 === "undefined" ? localStorage.removeItem(key) : localStorage.setItem(key, val2);
+const set = async (keyVal) => {
+  await chrome.storage.local.set(keyVal);
 };
 const getNeighbourhoodYields = () => {
-  const str = get$1("neighbourhoodMonthlyYields");
-  return str ? JSON.parse(str) : {};
+  return get$1("neighbourhoodMonthlyYields");
 };
-const setNeighbourhoodYields = (yields) => {
-  set(
-    "neighbourhoodMonthlyYields",
-    yields !== null ? JSON.stringify(yields) : null
-  );
+const setNeighbourhoodYields = async (yields) => {
+  await set({ neighbourhoodMonthlyYields: yields });
   return yields || {};
 };
-const getStashedProperties = () => {
-  const props = get$1("stashedProperties");
-  return props ? JSON.parse(props) : [];
+const getStashedProperties = async () => {
+  return await get$1("stashedProperties") || [];
 };
-const setStashedProperties = (props) => {
-  set(
-    "stashedProperties",
-    props ? JSON.stringify(props.filter(Boolean)) : null
-  );
+const setStashedProperties = async (props) => {
+  await set({ stashedProperties: (props || []).filter(Boolean) });
 };
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -1454,7 +1447,7 @@ const fetchAll = async (api) => {
   return hoods;
 };
 const monthlyRentPerUnitFor = async (neighbourhoodId, api) => {
-  rents || (rents = getNeighbourhoodYields());
+  rents || (rents = await getNeighbourhoodYields());
   const rent = rents[neighbourhoodId];
   if (rent)
     return rent;
@@ -14832,16 +14825,77 @@ const instance = async (state, tab) => {
   monitor == null ? void 0 : monitor.listen();
   return monitor;
 };
+const isMyProperty = (prop2) => typeof prop2.owner === "undefined";
+const Model = (obj, rentUPXPerUnitPerMo) => ({
+  rentUPXPerUnitPerMo,
+  attrs() {
+    return { ...obj };
+  },
+  monthlyRentUPX() {
+    const attrs = this.attrs();
+    if (isMyProperty(attrs))
+      return Number(yieldPerMonth(attrs.yield_per_hour).toFixed(2));
+    return this.rentUPXPerUnitPerMo ? Number((attrs.area * this.rentUPXPerUnitPerMo).toFixed(2)) : void 0;
+  },
+  currency() {
+    const attrs = this.attrs();
+    if (isMyProperty(attrs)) {
+      return attrs.sale_fiat_price !== null ? "USD" : "UPX";
+    }
+    const { on_market, currency } = attrs;
+    return (on_market == null ? void 0 : on_market.currency) || currency;
+  },
+  priceUPX() {
+    const attrs = this.attrs();
+    if (isMyProperty(attrs)) {
+      if (attrs.sale_fiat_price)
+        return attrs.sale_fiat_price * UPX_EXCHANGE_RATE;
+      if (attrs.sale_upx_price)
+        return attrs.sale_upx_price;
+    }
+    return this.currency() === "USD" ? attrs.price * UPX_EXCHANGE_RATE : attrs.price;
+  },
+  roi() {
+    const rent = this.monthlyRentUPX();
+    return rent ? `${(rent * 12 / this.priceUPX() * 100).toFixed(3)}%` : void 0;
+  },
+  toJSON() {
+    return {
+      ...this.attrs(),
+      monthlyRentUPX: this.monthlyRentUPX(),
+      roi: this.roi(),
+      priceUPX: this.priceUPX(),
+      currency: this.currency()
+    };
+  }
+});
+const propertiesWithRent = async (hoods2, area, api) => {
+  if (hoods2.length !== 1)
+    return;
+  const hood = hoods2[0];
+  const rentUpx = await monthlyRentPerUnitFor(hood.id, api);
+  const properties = (await api.listAllProperties(area)).properties;
+  return properties.map((attrs) => Model(attrs, rentUpx).toJSON());
+};
+const stashedProperties = async (api) => {
+  const properties = await getStashedProperties();
+  return Promise.all(
+    properties.map(async ({ id, hoodId }) => {
+      const rentUpx = await monthlyRentPerUnitFor(hoodId, api);
+      return Model(await api.property(id), rentUpx);
+    })
+  );
+};
 export {
+  Model as M,
   SharedState as S,
   UplandApi as U,
-  UPX_EXCHANGE_RATE as a,
+  stashedProperties as a,
   debounce as b,
   decorate as d,
   getStashedProperties as g,
   instance as i,
-  monthlyRentPerUnitFor as m,
   neighbourhoodsWithin as n,
-  setStashedProperties as s,
-  yieldPerMonth as y
+  propertiesWithRent as p,
+  setStashedProperties as s
 };

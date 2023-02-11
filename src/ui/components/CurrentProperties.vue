@@ -25,8 +25,6 @@ import PlusIcon from "./icons/PlusIcon.vue";
 import TickIcon from "./icons/TickIcon.vue";
 import state from "../state";
 import * as storage from "../../lib/storage";
-import Api from "../../lib/api";
-import * as service from "../../services/property";
 
 export default {
   components: { List, PlusIcon, TickIcon },
@@ -47,8 +45,8 @@ export default {
   },
 
   watch: {
-    "state.viewableNeighbourhoods"(hoods) {
-      this.state.viewableNeighbourhoods = hoods;
+    "state.viewableProperties"(properties) {
+      this.state.viewableProperties = properties;
       this.loadProperties();
     },
   },
@@ -59,27 +57,20 @@ export default {
 
   methods: {
     async loadProperties() {
-      if (!this.state.session?.auth_token || !this.state.currentCoordinates)
-        return;
+      if (!this.state.viewableProperties) return;
 
       this.loading = true;
 
-      const api = new Api(this.state.session.auth_token);
-      const properties =
-        (await service.propertiesWithRent(
-          this.state.viewableNeighbourhoods,
-          this.state.currentCoordinates,
-          api
-        )) || [];
+      const stash = await storage.getStashedProperties();
 
-      for (const prop of properties) {
+      for (const prop of this.state.viewableProperties) {
         if (this.properties.findIndex((p) => p.prop_id == prop.prop_id) > -1) {
           continue;
         }
 
         this.properties.push({
           ...prop,
-          stashed: this.isStashed(prop.prop_id),
+          stashed: stash.find(({ id }) => id === prop.prop_id)
         });
       }
 
@@ -87,20 +78,17 @@ export default {
 
       this.loading = false;
     },
-    isStashed(prop_id: number) {
-      return !!storage.getStashedProperties().find(({ id }) => id === prop_id);
-    },
-    stash(property: any) {
-      storage.setStashedProperties(
-        storage
-          .getStashedProperties()
-          .concat({ id: property.prop_id, hoodId: this.hood.id })
+    async stash(property: any) {
+      const stash = await storage.getStashedProperties();
+
+      await storage.setStashedProperties(
+        stash.concat({ id: property.prop_id, hoodId: this.hood.id })
       );
 
       property.stashed = true;
     },
-    unstash(property: any) {
-      const properties = storage.getStashedProperties();
+    async unstash(property: any) {
+      const properties = await storage.getStashedProperties();
 
       storage.setStashedProperties(
         properties.filter(({ id }) => id !== property.prop_id)

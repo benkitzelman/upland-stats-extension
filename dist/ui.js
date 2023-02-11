@@ -1,4 +1,4 @@
-import { S as SharedState, U as UplandApi, i as instance, d as decorate, y as yieldPerMonth, a as UPX_EXCHANGE_RATE, m as monthlyRentPerUnitFor, g as getStashedProperties, s as setStashedProperties } from "./index.js";
+import { S as SharedState, U as UplandApi, i as instance, d as decorate, g as getStashedProperties, s as setStashedProperties, a as stashedProperties, M as Model } from "./property.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -7486,67 +7486,6 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
   }, _hoisted_5$1, 8, _hoisted_1$5);
 }
 const TickIcon = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
-const isMyProperty = (prop) => typeof prop.owner === "undefined";
-const Model = (obj, rentUPXPerUnitPerMo) => ({
-  rentUPXPerUnitPerMo,
-  attrs() {
-    return { ...obj };
-  },
-  monthlyRentUPX() {
-    const attrs = this.attrs();
-    if (isMyProperty(attrs))
-      return Number(yieldPerMonth(attrs.yield_per_hour).toFixed(2));
-    return this.rentUPXPerUnitPerMo ? Number((attrs.area * this.rentUPXPerUnitPerMo).toFixed(2)) : void 0;
-  },
-  currency() {
-    const attrs = this.attrs();
-    if (isMyProperty(attrs)) {
-      return attrs.sale_fiat_price !== null ? "USD" : "UPX";
-    }
-    const { on_market, currency } = attrs;
-    return (on_market == null ? void 0 : on_market.currency) || currency;
-  },
-  priceUPX() {
-    const attrs = this.attrs();
-    if (isMyProperty(attrs)) {
-      if (attrs.sale_fiat_price)
-        return attrs.sale_fiat_price * UPX_EXCHANGE_RATE;
-      if (attrs.sale_upx_price)
-        return attrs.sale_upx_price;
-    }
-    return this.currency() === "USD" ? attrs.price * UPX_EXCHANGE_RATE : attrs.price;
-  },
-  roi() {
-    const rent = this.monthlyRentUPX();
-    return rent ? `${(rent * 12 / this.priceUPX() * 100).toFixed(3)}%` : void 0;
-  },
-  toJSON() {
-    return {
-      ...this.attrs(),
-      monthlyRentUPX: this.monthlyRentUPX(),
-      roi: this.roi(),
-      priceUPX: this.priceUPX(),
-      currency: this.currency()
-    };
-  }
-});
-const propertiesWithRent = async (hoods, area, api) => {
-  if (hoods.length !== 1)
-    return;
-  const hood = hoods[0];
-  const rentUpx = await monthlyRentPerUnitFor(hood.id, api);
-  const properties = (await api.listAllProperties(area)).properties;
-  return properties.map((attrs) => Model(attrs, rentUpx).toJSON());
-};
-const stashedProperties = (api) => {
-  const properties = getStashedProperties();
-  return Promise.all(
-    properties.map(async ({ id, hoodId }) => {
-      const rentUpx = await monthlyRentPerUnitFor(hoodId, api);
-      return Model(await api.property(id), rentUpx);
-    })
-  );
-};
 const _sfc_main$5 = {
   components: { List: PropertiesList, PlusIcon, TickIcon },
   props: {
@@ -7563,8 +7502,8 @@ const _sfc_main$5 = {
     };
   },
   watch: {
-    "state.viewableNeighbourhoods"(hoods) {
-      this.state.viewableNeighbourhoods = hoods;
+    "state.viewableProperties"(properties) {
+      this.state.viewableProperties = properties;
       this.loadProperties();
     }
   },
@@ -7573,39 +7512,32 @@ const _sfc_main$5 = {
   },
   methods: {
     async loadProperties() {
-      var _a2, _b;
-      if (!((_a2 = this.state.session) == null ? void 0 : _a2.auth_token) || !this.state.currentCoordinates)
+      var _a2;
+      if (!this.state.viewableProperties)
         return;
       this.loading = true;
-      const api = new UplandApi(this.state.session.auth_token);
-      const properties = await propertiesWithRent(
-        this.state.viewableNeighbourhoods,
-        this.state.currentCoordinates,
-        api
-      ) || [];
-      for (const prop of properties) {
+      const stash = await getStashedProperties();
+      for (const prop of this.state.viewableProperties) {
         if (this.properties.findIndex((p2) => p2.prop_id == prop.prop_id) > -1) {
           continue;
         }
         this.properties.push({
           ...prop,
-          stashed: this.isStashed(prop.prop_id)
+          stashed: stash.find(({ id }) => id === prop.prop_id)
         });
       }
-      (_b = this.$refs.list) == null ? void 0 : _b.sort();
+      (_a2 = this.$refs.list) == null ? void 0 : _a2.sort();
       this.loading = false;
     },
-    isStashed(prop_id) {
-      return !!getStashedProperties().find(({ id }) => id === prop_id);
-    },
-    stash(property) {
-      setStashedProperties(
-        getStashedProperties().concat({ id: property.prop_id, hoodId: this.hood.id })
+    async stash(property) {
+      const stash = await getStashedProperties();
+      await setStashedProperties(
+        stash.concat({ id: property.prop_id, hoodId: this.hood.id })
       );
       property.stashed = true;
     },
-    unstash(property) {
-      const properties = getStashedProperties();
+    async unstash(property) {
+      const properties = await getStashedProperties();
       setStashedProperties(
         properties.filter(({ id }) => id !== property.prop_id)
       );
@@ -7822,8 +7754,8 @@ const _sfc_main$2 = {
       (_b = this.$refs.list) == null ? void 0 : _b.sort();
       this.loading = false;
     },
-    unstash({ prop_id }) {
-      const props = getStashedProperties();
+    async unstash({ prop_id }) {
+      const props = await getStashedProperties();
       const idx = props.findIndex(({ id }) => id === prop_id);
       props.splice(idx, 1);
       this.properties.splice(idx, 1);
@@ -7831,7 +7763,7 @@ const _sfc_main$2 = {
     }
   }
 };
-const StashedProperties_vue_vue_type_style_index_0_scoped_c380296c_lang = "";
+const StashedProperties_vue_vue_type_style_index_0_scoped_55c12f7d_lang = "";
 const _hoisted_1$1 = { class: "Icon" };
 const _hoisted_2 = {
   key: 1,
@@ -7861,7 +7793,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     !$data.loading && $data.properties && $data.properties.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_2, " You have no stashed properties. ")) : createCommentVNode("", true)
   ], 64);
 }
-const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-c380296c"]]);
+const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-55c12f7d"]]);
 const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "StashView",
   setup(__props) {

@@ -10,7 +10,7 @@
     "service_worker": "worker.js",
     "type": "module"
   },
-  "permissions": ["tabs", "activeTab", "scripting", "webRequest"],
+  "permissions": ["tabs", "activeTab", "scripting", "webRequest", "storage"],
   "host_permissions": ["*://*.upland.me/"],
   "externally_connectable": {
     "matches": ["*://*.upland.me/"]

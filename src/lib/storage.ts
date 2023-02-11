@@ -7,40 +7,31 @@ export type StoredData = {
   stashedProperties: StashedProperty[] | null;
 };
 
-export const get = (key: keyof StoredData) => {
-  return localStorage.getItem(key);
+export const get = async <T>(key: keyof StoredData): Promise<T> => {
+  return (await chrome.storage.local.get([key]))[key];
 };
 
-export const set = (key: keyof StoredData, val: string | null | undefined) => {
-  return val === null || typeof val === "undefined"
-    ? localStorage.removeItem(key)
-    : localStorage.setItem(key, val);
+export const set = async (keyVal: Object) => {
+  await chrome.storage.local.set(keyVal);
 };
 
-export const getNeighbourhoodYields = ():
-  | StoredData["neighbourhoodMonthlyYields"] => {
-  const str = get("neighbourhoodMonthlyYields");
-  return str ? JSON.parse(str) : {};
+export const getNeighbourhoodYields = (): Promise<
+  StoredData["neighbourhoodMonthlyYields"]
+> => {
+  return get("neighbourhoodMonthlyYields");
 };
 
-export const setNeighbourhoodYields = (
+export const setNeighbourhoodYields = async (
   yields: NeighbourhoodYieldMap
-): NeighbourhoodYieldMap => {
-  set(
-    "neighbourhoodMonthlyYields",
-    yields !== null ? JSON.stringify(yields) : null
-  );
+): Promise<NeighbourhoodYieldMap> => {
+  await set({ neighbourhoodMonthlyYields: yields });
   return yields || {};
 };
 
-export const getStashedProperties = (): StashedProperty[] => {
-  const props = get("stashedProperties");
-  return props ? JSON.parse(props) : [];
+export const getStashedProperties = async (): Promise<StashedProperty[]> => {
+  return (await get("stashedProperties")) || [];
 };
 
-export const setStashedProperties = (props: StashedProperty[] | null) => {
-  set(
-    "stashedProperties",
-    props ? JSON.stringify(props.filter(Boolean)) : null
-  );
+export const setStashedProperties = async (props: StashedProperty[] | null) => {
+  await set({ stashedProperties: (props || []).filter(Boolean) });
 };
