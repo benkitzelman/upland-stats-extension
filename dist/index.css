@@ -104,15 +104,15 @@ nav a[data-v-d85b2f6e] {
   padding-top: 1rem;
 }
 
-.SimpleList > .Filter[data-v-629d5c5b] {
+.SimpleList > .Filter[data-v-95f59965] {
   display: block;
   text-align: right;
 }
-.SimpleList > .Filter input[data-v-629d5c5b] {
+.SimpleList > .Filter input[data-v-95f59965] {
   border-radius: 4px;
   padding: 3px 5px;
 }
-.SimpleList > table[data-v-629d5c5b] {
+.SimpleList > table[data-v-95f59965] {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -120,35 +120,38 @@ nav a[data-v-d85b2f6e] {
   border-spacing: 0;
   width: 100%;
 }
-.SimpleList > table > thead > tr > th[data-v-629d5c5b] {
+.SimpleList > table > thead > tr > th[data-v-95f59965] {
   font-weight: 800;
   background: #254545;
   color: hsla(160, 100%, 37%, 1);
   padding: 5px;
 }
-.SimpleList > table > thead > tr > th[data-v-629d5c5b]:first-child {
+.SimpleList > table > thead > tr > th[data-v-95f59965]:first-child {
   border-top-left-radius: 10px;
 }
-.SimpleList > table > thead > tr > th[data-v-629d5c5b]:last-child {
+.SimpleList > table > thead > tr > th[data-v-95f59965]:last-child {
   border-top-right-radius: 10px;
 }
-.SimpleList > table > thead > tr > th > .Header[data-v-629d5c5b] {
+.SimpleList > table > thead > tr > th > .Header[data-v-95f59965] {
   display: flex;
 }
-.SimpleList > table > thead > tr > th > .Header .Sort[data-v-629d5c5b] {
+.SimpleList > table > thead > tr > th > .Header .Sort[data-v-95f59965] {
   margin-left: 5px;
 }
-.SimpleList > table > tbody[data-v-629d5c5b] {
+.SimpleList > table > tbody[data-v-95f59965] {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.SimpleList > table > tbody > tr > td[data-v-629d5c5b] {
+.SimpleList > table > tbody > tr.Expandable[data-v-95f59965] {
+  cursor: pointer;
+}
+.SimpleList > table > tbody > tr > td[data-v-95f59965] {
   padding: 0 5px;
   border-bottom: 1px dotted #2f2f2f;
 }
-.SimpleList > table > tbody .Hidden[data-v-629d5c5b] {
+.SimpleList > table > tbody .Hidden[data-v-95f59965] {
   display: none;
 }
 
@@ -164,21 +167,28 @@ nav a[data-v-d85b2f6e] {
   text-align: center;
 }
 
-.LabelAndField[data-v-a08e4abd] {
+.LabelAndField[data-v-c0530f4a] {
   display: flex;
 }
-.LabelAndField > label[data-v-a08e4abd] {
+.LabelAndField > label[data-v-c0530f4a] {
   width: 150px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.LabelAndField > div[data-v-c0530f4a] {
+  overflow-x: auto;
 }
 
-.PropertyDetails[data-v-5ab331c7] {
+.PropertyDetails[data-v-42f95ba9] {
   padding: 15px;
   background: #2f2f2f;
+  box-shadow: inset 0px 6px 12px rgb(0 0 0 / 50%);
 }
-.PropertyDetails .Prop[data-v-5ab331c7] {
+.PropertyDetails .Prop[data-v-42f95ba9] {
   display: flex;
+  border-bottom: 1px dotted #5f5f5f;
 }
-.PropertyDetails .Prop label[data-v-5ab331c7] {
+.PropertyDetails .Prop label[data-v-42f95ba9] {
   width: 200px;
 }
 
@@ -190,7 +200,7 @@ nav a[data-v-d85b2f6e] {
   text-align: center;
 }
 
-.EmptyMsg[data-v-55c12f7d] {
+.EmptyMsg[data-v-f76d8303] {
   text-align: center;
 }
 

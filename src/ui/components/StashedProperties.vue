@@ -9,7 +9,7 @@
   >
     <template #actions="{ property }">
       <div class="Icon">
-        <TrashIcon @click="unstash(property)" />
+        <TrashIcon @click.stop="unstash(property)" />
       </div>
     </template>
   </List>

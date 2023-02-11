@@ -6851,9 +6851,9 @@ const _sfc_main$f = {
   }
 };
 const App_vue_vue_type_style_index_0_scoped_d85b2f6e_lang = "";
-const _withScopeId$3 = (n) => (pushScopeId("data-v-d85b2f6e"), n = n(), popScopeId(), n);
-const _hoisted_1$c = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("h2", { class: "Green" }, "Upland Stats", -1));
-const _hoisted_2$9 = { class: "Links" };
+const _withScopeId$4 = (n) => (pushScopeId("data-v-d85b2f6e"), n = n(), popScopeId(), n);
+const _hoisted_1$c = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("h2", { class: "Green" }, "Upland Stats", -1));
+const _hoisted_2$a = { class: "Links" };
 function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_RouterLink = resolveComponent("RouterLink");
   const _component_Spinner = resolveComponent("Spinner");
@@ -6861,7 +6861,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("header", null, [
       _hoisted_1$c,
-      createBaseVNode("div", _hoisted_2$9, [
+      createBaseVNode("div", _hoisted_2$a, [
         createBaseVNode("nav", null, [
           createVNode(_component_RouterLink, { to: "/" }, {
             default: withCtx(() => [
@@ -6921,23 +6921,23 @@ const _sfc_main$e = {
   }
 };
 const PropertyDetails_vue_vue_type_style_index_0_scoped_7d77c629_lang = "";
-const _withScopeId$2 = (n) => (pushScopeId("data-v-7d77c629"), n = n(), popScopeId(), n);
-const _hoisted_1$b = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
-const _hoisted_2$8 = { class: "Stat" };
-const _hoisted_3$5 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
+const _withScopeId$3 = (n) => (pushScopeId("data-v-7d77c629"), n = n(), popScopeId(), n);
+const _hoisted_1$b = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
+const _hoisted_2$9 = { class: "Stat" };
+const _hoisted_3$5 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
 const _hoisted_4$3 = { class: "Stat" };
-const _hoisted_5$4 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
+const _hoisted_5$4 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
 const _hoisted_6$2 = { class: "Stat" };
-const _hoisted_7$2 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI:", -1));
+const _hoisted_7$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI:", -1));
 const _hoisted_8$2 = { class: "Stat" };
-const _hoisted_9$2 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI (max):", -1));
+const _hoisted_9$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI (max):", -1));
 const _hoisted_10$2 = { class: "Stat" };
-const _hoisted_11$2 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("label", null, "Cost:", -1));
+const _hoisted_11$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Cost:", -1));
 function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   var _a2, _b, _c, _d;
   return openBlock(), createElementBlock("div", null, [
     _hoisted_1$b,
-    createBaseVNode("div", _hoisted_2$8, [
+    createBaseVNode("div", _hoisted_2$9, [
       _hoisted_3$5,
       createBaseVNode("span", null, toDisplayString((_a2 = _ctx.baseMonthlyUPX) == null ? void 0 : _a2.toFixed(0)), 1)
     ]),
@@ -7114,10 +7114,10 @@ const _sfc_main$c = {
     }
   }
 };
-const SimpleList_vue_vue_type_style_index_0_scoped_629d5c5b_lang = "";
-const _withScopeId$1 = (n) => (pushScopeId("data-v-629d5c5b"), n = n(), popScopeId(), n);
+const SimpleList_vue_vue_type_style_index_0_scoped_95f59965_lang = "";
+const _withScopeId$2 = (n) => (pushScopeId("data-v-95f59965"), n = n(), popScopeId(), n);
 const _hoisted_1$a = { class: "SimpleList" };
-const _hoisted_2$7 = { class: "Filter" };
+const _hoisted_2$8 = { class: "Filter" };
 const _hoisted_3$4 = ["onClick"];
 const _hoisted_4$2 = { class: "Header" };
 const _hoisted_5$3 = { class: "Name" };
@@ -7128,7 +7128,7 @@ const _hoisted_6$1 = {
 const _hoisted_7$1 = { key: 0 };
 const _hoisted_8$1 = { key: 1 };
 const _hoisted_9$1 = { key: 0 };
-const _hoisted_10$1 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("div", { class: "Header" }, null, -1));
+const _hoisted_10$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "Header" }, null, -1));
 const _hoisted_11$1 = [
   _hoisted_10$1
 ];
@@ -7138,7 +7138,7 @@ const _hoisted_14 = { key: 0 };
 const _hoisted_15 = ["colspan"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$a, [
-    createBaseVNode("label", _hoisted_2$7, [
+    createBaseVNode("label", _hoisted_2$8, [
       createTextVNode(" Filter: "),
       createBaseVNode("input", {
         onInput: _cache[0] || (_cache[0] = (...args) => $options.onFilterInput && $options.onFilterInput(...args)),
@@ -7169,7 +7169,9 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
         (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.rows, ({ __id, expanded, hidden, ...item }, index) => {
           return openBlock(), createElementBlock(Fragment, { key: index }, [
             createBaseVNode("tr", {
-              class: normalizeClass(hidden ? "Hidden" : ""),
+              class: normalizeClass(
+                [hidden ? "Hidden" : "", $props.expandable ? "Expandable" : ""].join(" ")
+              ),
               "data-id": __id,
               onClick: ($event) => $options.onClick(_ctx.rows[index]),
               onMouseover: ($event) => $options.onMouseOver(_ctx.rows[index]),
@@ -7204,7 +7206,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const List = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-629d5c5b"]]);
+const List = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-95f59965"]]);
 const _sfc_main$b = {
   components: { List },
   data() {
@@ -7284,7 +7286,7 @@ const _sfc_main$a = {
     }
   }
 };
-const LabelAndField_vue_vue_type_style_index_0_scoped_a08e4abd_lang = "";
+const LabelAndField_vue_vue_type_style_index_0_scoped_c0530f4a_lang = "";
 const _hoisted_1$9 = { class: "LabelAndField" };
 function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$9, [
@@ -7292,7 +7294,7 @@ function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
     createBaseVNode("div", null, toDisplayString($props.value), 1)
   ]);
 }
-const Field = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-a08e4abd"]]);
+const Field = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-c0530f4a"]]);
 const _sfc_main$9 = {
   components: { Field },
   props: {
@@ -7329,14 +7331,17 @@ const _sfc_main$9 = {
     }
   }
 };
-const PropertyDetails_vue_vue_type_style_index_0_scoped_5ab331c7_lang = "";
+const PropertyDetails_vue_vue_type_style_index_0_scoped_42f95ba9_lang = "";
+const _withScopeId$1 = (n) => (pushScopeId("data-v-42f95ba9"), n = n(), popScopeId(), n);
 const _hoisted_1$8 = {
   key: 0,
   class: "PropertyDetails"
 };
+const _hoisted_2$7 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Field = resolveComponent("Field");
   return $data.property ? (openBlock(), createElementBlock("div", _hoisted_1$8, [
+    _hoisted_2$7,
     (openBlock(true), createElementBlock(Fragment, null, renderList($data.keys, (prop, index) => {
       return openBlock(), createBlock(_component_Field, {
         key: index,
@@ -7347,7 +7352,7 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     }), 128))
   ])) : createCommentVNode("", true);
 }
-const PropertyDetails = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-5ab331c7"]]);
+const PropertyDetails = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-42f95ba9"]]);
 const _sfc_main$8 = {
   components: { List, PropertyDetails },
   props: {
@@ -7763,7 +7768,7 @@ const _sfc_main$2 = {
     }
   }
 };
-const StashedProperties_vue_vue_type_style_index_0_scoped_55c12f7d_lang = "";
+const StashedProperties_vue_vue_type_style_index_0_scoped_f76d8303_lang = "";
 const _hoisted_1$1 = { class: "Icon" };
 const _hoisted_2 = {
   key: 1,
@@ -7784,7 +7789,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       actions: withCtx(({ property }) => [
         createBaseVNode("div", _hoisted_1$1, [
           createVNode(_component_TrashIcon, {
-            onClick: ($event) => $options.unstash(property)
+            onClick: withModifiers(($event) => $options.unstash(property), ["stop"])
           }, null, 8, ["onClick"])
         ])
       ]),
@@ -7793,7 +7798,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     !$data.loading && $data.properties && $data.properties.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_2, " You have no stashed properties. ")) : createCommentVNode("", true)
   ], 64);
 }
-const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-55c12f7d"]]);
+const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-f76d8303"]]);
 const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "StashView",
   setup(__props) {

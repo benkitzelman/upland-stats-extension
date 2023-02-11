@@ -31,6 +31,10 @@ export default {
 
 .LabelAndField > label {
   width: 150px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.LabelAndField > div {
+  overflow-x: auto;
 }
 </style>
-

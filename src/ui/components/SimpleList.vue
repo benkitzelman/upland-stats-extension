@@ -33,7 +33,9 @@
           :key="index"
         >
           <tr
-            :class="hidden ? 'Hidden' : ''"
+            :class="
+              [hidden ? 'Hidden' : '', expandable ? 'Expandable' : ''].join(' ')
+            "
             :data-id="__id"
             @click="onClick(rows[index])"
             @mouseover="onMouseOver(rows[index])"
@@ -258,6 +260,9 @@ export default {
   border-top: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+.SimpleList > table > tbody > tr.Expandable {
+  cursor: pointer;
 }
 .SimpleList > table > tbody > tr > td {
   padding: 0 5px;

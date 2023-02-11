@@ -1,5 +1,6 @@
 <template>
   <div v-if="property" class="PropertyDetails">
+    <h3 class="Green">Property Details</h3>
     <Field v-for="(prop, index) in keys" :key="index" class="Prop" :label="prop" :value="property[prop]" />
   </div>
 </template>
@@ -58,9 +59,11 @@ export default {
 .PropertyDetails {
   padding: 15px;
   background: #2f2f2f;
+  box-shadow: inset 0px 6px 12px rgb(0 0 0 / 50%);
 }
 .PropertyDetails .Prop {
   display: flex;
+  border-bottom: 1px dotted #5f5f5f;
 }
 .PropertyDetails .Prop label {
   width: 200px;
