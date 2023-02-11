@@ -6,7 +6,7 @@ import type { State } from "./state";
 
 export default (state: State) => {
   listenForStateRequests(state);
-  trackVisibleNeighbourhoods(state);
+  trackViewportState(state);
   return state;
 };
 
@@ -35,7 +35,7 @@ const syncState = async (state: State) => {
   }
 };
 
-const trackVisibleNeighbourhoods = (state: State) => {
+const trackViewportState = (state: State) => {
   state.on(
     "changed:currentCoordinates",
     debounce(500, async (newCoords) => {
@@ -43,11 +43,13 @@ const trackVisibleNeighbourhoods = (state: State) => {
 
       state.loading = true;
 
+      // track visible neighbourhoods
       state.viewableNeighbourhoods = await Hood.neighbourhoodsWithin(
         newCoords,
         state.api
       );
 
+      // track visible properties if we can deduce the neighbourhood yield
       state.viewableProperties =
         state.viewableNeighbourhoods?.length === 1
           ? (await Property.propertiesWithRent(

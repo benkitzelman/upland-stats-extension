@@ -1,4 +1,4 @@
-import { S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, i as instance, U as UplandApi } from "./property.js";
+import { S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, c as getTab, i as instance, U as UplandApi } from "./property.js";
 const state = {
   ...SharedState,
   api: void 0,
@@ -45,7 +45,7 @@ const State = Object.assign(stateProxy, {
 });
 const keepInSyncWithUI = (state2) => {
   listenForStateRequests(state2);
-  trackVisibleNeighbourhoods(state2);
+  trackViewportState(state2);
   return state2;
 };
 let isSyncing = false;
@@ -70,7 +70,7 @@ const syncState = async (state2) => {
     console.warn("Worker send message:", err);
   }
 };
-const trackVisibleNeighbourhoods = (state2) => {
+const trackViewportState = (state2) => {
   state2.on(
     "changed:currentCoordinates",
     debounce(500, async (newCoords) => {
@@ -92,17 +92,29 @@ const trackVisibleNeighbourhoods = (state2) => {
   );
 };
 async function monitorUpland(state2) {
-  state2.loading = true;
-  keepInSyncWithUI(state2);
-  state2.monitor = await instance(state2);
-  state2.screenDimensions = await state2.monitor.getScreenDimensions();
-  if (!state2.monitor)
-    throw new Error("Couldnt load client");
-  state2.session = await state2.monitor.getSession();
-  if (state2.session)
-    state2.api = new UplandApi(state2.session.auth_token);
-  state2.loading = false;
+  chrome.tabs.onUpdated.addListener(() => start(state2));
+  chrome.tabs.onActivated.addListener(() => start(state2));
+  return start(state2);
 }
+const start = async (state2) => {
+  try {
+    const tab = await getTab();
+    if (!tab)
+      return;
+    state2.loading = true;
+    keepInSyncWithUI(state2);
+    state2.monitor = await instance(state2, tab);
+    state2.screenDimensions = await state2.monitor.getScreenDimensions();
+    if (!state2.monitor)
+      throw new Error("Couldnt load client");
+    state2.session = await state2.monitor.getSession();
+    if (state2.session)
+      state2.api = new UplandApi(state2.session.auth_token);
+    state2.loading = false;
+  } catch (err) {
+    console.error("Could not start worker:", err);
+  }
+};
 console.log("Starting worker...");
 monitorUpland(State).then(
   () => console.log("Worker started"),

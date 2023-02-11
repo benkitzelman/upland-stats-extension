@@ -13,6 +13,7 @@ const SharedState = {
   viewableProperties: [],
   screenDimensions: void 0
 };
+const TAB_URL = "*://*.upland.me/";
 const API_BASE_URL = "https://api.prod.upland.me/api";
 const UPX_EXCHANGE_RATE = 1e3;
 const DAYS_IN_MONTH = 30;
@@ -14739,9 +14740,7 @@ const onCompletedHandler = (state, monitor2) => ({ url }) => {
 };
 const MESSAGE_TIMEOUT_MS = 5 * 1e3;
 const getTab = async () => {
-  return (await chrome.tabs.query({
-    url: "*://*.upland.me/"
-  }) || [])[0];
+  return (await chrome.tabs.query({ url: TAB_URL, active: true, currentWindow: true }) || [])[0];
 };
 const isRespondingToRequest = (msg) => !!msg.eventId;
 const createClientMonitor = async function(tab, state) {
@@ -14892,6 +14891,7 @@ export {
   UplandApi as U,
   stashedProperties as a,
   debounce as b,
+  getTab as c,
   decorate as d,
   getStashedProperties as g,
   instance as i,

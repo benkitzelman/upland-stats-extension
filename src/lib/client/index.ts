@@ -15,9 +15,7 @@ export type Monitor = PromisedType<ReturnType<typeof createClientMonitor>>;
 const MESSAGE_TIMEOUT_MS = 5 * 1000;
 
 export const getTab = async () => {
-  return ((await chrome.tabs.query({
-    url: "*://*.upland.me/",
-  })) || [])[0];
+  return ((await chrome.tabs.query({ url: Constants.TAB_URL, active: true, currentWindow: true })) || [])[0];
 };
 
 const isRespondingToRequest = (msg: Messages.ClientMessage): msg is Messages.ClientResponseMessage => !!msg.eventId;
