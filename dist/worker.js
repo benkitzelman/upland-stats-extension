@@ -1,4 +1,4 @@
-import { S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, c as getTab, i as instance, U as UplandApi } from "./property.js";
+import { S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, c as getTab, e as stop, i as instance, U as UplandApi } from "./property.js";
 const state = {
   ...SharedState,
   api: void 0,
@@ -92,15 +92,18 @@ const trackViewportState = (state2) => {
   );
 };
 async function monitorUpland(state2) {
-  chrome.tabs.onUpdated.addListener(() => start(state2));
-  chrome.tabs.onActivated.addListener(() => start(state2));
-  return start(state2);
+  chrome.tabs.onUpdated.addListener(() => startOrStop(state2));
+  chrome.tabs.onActivated.addListener(() => startOrStop(state2));
+  return startOrStop(state2);
 }
-const start = async (state2) => {
+const startOrStop = async (state2) => {
   try {
     const tab = await getTab();
-    if (!tab)
-      return;
+    if (!tab) {
+      state2.offline = true;
+      return stop();
+    }
+    state2.offline = false;
     state2.loading = true;
     keepInSyncWithUI(state2);
     state2.monitor = await instance(state2, tab);

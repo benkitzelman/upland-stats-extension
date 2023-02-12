@@ -3,6 +3,8 @@ import type { Neighbourhood } from "./api/types";
 import type { ExtendedProperty } from "./api/models/property";
 
 const SharedState = {
+  offline: true,
+
   loading: false,
 
   session: undefined as GetSessionSettings["data"] | undefined,

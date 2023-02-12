@@ -5,18 +5,22 @@ import type { State } from "./state";
 
 // Start monitoring the Upland tab for changes
 export default async function (state: State) {
-  chrome.tabs.onUpdated.addListener(() => start(state));
+  chrome.tabs.onUpdated.addListener(() => startOrStop(state));
 
-  chrome.tabs.onActivated.addListener(() => start(state));
+  chrome.tabs.onActivated.addListener(() => startOrStop(state));
 
-  return start(state);
+  return startOrStop(state);
 }
 
-const start = async (state: State) => {
+const startOrStop = async (state: State) => {
   try {
     const tab = await ClientMonitor.getTab();
-    if (!tab) return;
+    if (!tab) {
+      state.offline = true;
+      return ClientMonitor.stop();
+    }
 
+    state.offline = false;
     state.loading = true;
 
     // Ensure state changes are also updated in the UI state

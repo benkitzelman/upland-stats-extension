@@ -6,8 +6,11 @@
       v-else-if="state.viewableNeighbourhoods?.length === 1"
       :hood="state.viewableNeighbourhoods[0]"
     />
-    <div v-else class="Info">
+    <div v-else-if="!state.loading" class="Info">
       <p>Move the viewscreen to an area with properties on the map...</p>
+    </div>
+    <div v-else class="Info">
+      <p>Loading...</p>
     </div>
   </main>
 </template>

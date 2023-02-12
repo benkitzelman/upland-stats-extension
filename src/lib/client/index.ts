@@ -15,10 +15,16 @@ export type Monitor = PromisedType<ReturnType<typeof createClientMonitor>>;
 const MESSAGE_TIMEOUT_MS = 5 * 1000;
 
 export const getTab = async () => {
-  return ((await chrome.tabs.query({ url: Constants.TAB_URL, active: true, currentWindow: true })) || [])[0];
+  return ((await chrome.tabs.query({
+    url: Constants.TAB_URL,
+    active: true,
+    currentWindow: true,
+  })) || [])[0];
 };
 
-const isRespondingToRequest = (msg: Messages.ClientMessage): msg is Messages.ClientResponseMessage => !!msg.eventId;
+const isRespondingToRequest = (
+  msg: Messages.ClientMessage
+): msg is Messages.ClientResponseMessage => !!msg.eventId;
 
 const createClientMonitor = async function (tab: any, state: any) {
   try {
@@ -36,6 +42,12 @@ const createClientMonitor = async function (tab: any, state: any) {
   const messageResolvers: { [eventId: number]: Function } = {};
 
   return {
+    stop() {
+      console.log("Stopping client monitor...");
+      chrome.webRequest.onCompleted.removeListener();
+      chrome.runtime.onMessage.removeListener();
+    },
+
     listen() {
       chrome.webRequest.onCompleted.addListener(
         WebRequestListener.onCompletedHandler(state, this),
@@ -123,6 +135,11 @@ export const instance = async (state?: any, tab?: any) => {
   monitor = await createClientMonitor(currentTab, state);
   monitor?.listen();
   return monitor;
+};
+
+export const stop = () => {
+  monitor?.stop();
+  monitor = undefined;
 };
 
 export default createClientMonitor;

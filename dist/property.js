@@ -5,6 +5,7 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 const SharedState = {
+  offline: true,
   loading: false,
   session: void 0,
   currentCoordinates: void 0,
@@ -14740,7 +14741,11 @@ const onCompletedHandler = (state, monitor2) => ({ url }) => {
 };
 const MESSAGE_TIMEOUT_MS = 5 * 1e3;
 const getTab = async () => {
-  return (await chrome.tabs.query({ url: TAB_URL, active: true, currentWindow: true }) || [])[0];
+  return (await chrome.tabs.query({
+    url: TAB_URL,
+    active: true,
+    currentWindow: true
+  }) || [])[0];
 };
 const isRespondingToRequest = (msg) => !!msg.eventId;
 const createClientMonitor = async function(tab, state) {
@@ -14756,6 +14761,11 @@ const createClientMonitor = async function(tab, state) {
   let eventId = 0;
   const messageResolvers = {};
   return {
+    stop() {
+      console.log("Stopping client monitor...");
+      chrome.webRequest.onCompleted.removeListener();
+      chrome.runtime.onMessage.removeListener();
+    },
     listen() {
       chrome.webRequest.onCompleted.addListener(
         onCompletedHandler(state, this),
@@ -14823,6 +14833,10 @@ const instance = async (state, tab) => {
   monitor = await createClientMonitor(currentTab, state);
   monitor == null ? void 0 : monitor.listen();
   return monitor;
+};
+const stop = () => {
+  monitor == null ? void 0 : monitor.stop();
+  monitor = void 0;
 };
 const isMyProperty = (prop2) => typeof prop2.owner === "undefined";
 const Model = (obj, rentUPXPerUnitPerMo) => ({
@@ -14893,6 +14907,7 @@ export {
   debounce as b,
   getTab as c,
   decorate as d,
+  stop as e,
   getStashedProperties as g,
   instance as i,
   neighbourhoodsWithin as n,

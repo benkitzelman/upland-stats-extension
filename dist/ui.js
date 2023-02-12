@@ -6850,10 +6850,21 @@ const _sfc_main$f = {
     }
   }
 };
-const App_vue_vue_type_style_index_0_scoped_d85b2f6e_lang = "";
-const _withScopeId$4 = (n) => (pushScopeId("data-v-d85b2f6e"), n = n(), popScopeId(), n);
+const App_vue_vue_type_style_index_0_scoped_719ce579_lang = "";
+const _withScopeId$4 = (n) => (pushScopeId("data-v-719ce579"), n = n(), popScopeId(), n);
 const _hoisted_1$c = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("h2", { class: "Green" }, "Upland Stats", -1));
-const _hoisted_2$a = { class: "Links" };
+const _hoisted_2$9 = {
+  key: 0,
+  class: "Links"
+};
+const _hoisted_3$5 = {
+  key: 0,
+  class: "Offline"
+};
+const _hoisted_4$5 = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("a", {
+  href: "https://play.upland.me",
+  target: "upland"
+}, "Upland", -1));
 function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_RouterLink = resolveComponent("RouterLink");
   const _component_Spinner = resolveComponent("Spinner");
@@ -6861,7 +6872,7 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("header", null, [
       _hoisted_1$c,
-      createBaseVNode("div", _hoisted_2$a, [
+      !$data.state.offline ? (openBlock(), createElementBlock("div", _hoisted_2$9, [
         createBaseVNode("nav", null, [
           createVNode(_component_RouterLink, { to: "/" }, {
             default: withCtx(() => [
@@ -6875,12 +6886,15 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
             ]),
             _: 1
           }),
-          createVNode(_component_RouterLink, { to: "/me" }, {
+          $data.state.session ? (openBlock(), createBlock(_component_RouterLink, {
+            key: 0,
+            to: "/me"
+          }, {
             default: withCtx(() => [
               createTextVNode("Me")
             ]),
             _: 1
-          })
+          })) : createCommentVNode("", true)
         ]),
         createVNode(_component_Spinner, {
           loading: $data.state.loading,
@@ -6888,12 +6902,15 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
           size: "25px",
           class: "Spinner"
         }, null, 8, ["loading"])
-      ])
+      ])) : createCommentVNode("", true)
     ]),
-    createVNode(_component_RouterView)
+    $data.state.offline ? (openBlock(), createElementBlock("p", _hoisted_3$5, [
+      createTextVNode(" Open the stats extension while on "),
+      _hoisted_4$5
+    ])) : (openBlock(), createBlock(_component_RouterView, { key: 1 }))
   ], 64);
 }
-const App = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-d85b2f6e"]]);
+const App = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-719ce579"]]);
 const _sfc_main$e = {
   props: {
     page: Object
@@ -6923,11 +6940,11 @@ const _sfc_main$e = {
 const PropertyDetails_vue_vue_type_style_index_0_scoped_7d77c629_lang = "";
 const _withScopeId$3 = (n) => (pushScopeId("data-v-7d77c629"), n = n(), popScopeId(), n);
 const _hoisted_1$b = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
-const _hoisted_2$9 = { class: "Stat" };
-const _hoisted_3$5 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
-const _hoisted_4$3 = { class: "Stat" };
-const _hoisted_5$4 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
-const _hoisted_6$2 = { class: "Stat" };
+const _hoisted_2$8 = { class: "Stat" };
+const _hoisted_3$4 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
+const _hoisted_4$4 = { class: "Stat" };
+const _hoisted_5$5 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
+const _hoisted_6$3 = { class: "Stat" };
 const _hoisted_7$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI:", -1));
 const _hoisted_8$2 = { class: "Stat" };
 const _hoisted_9$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI (max):", -1));
@@ -6937,15 +6954,15 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   var _a2, _b, _c, _d;
   return openBlock(), createElementBlock("div", null, [
     _hoisted_1$b,
-    createBaseVNode("div", _hoisted_2$9, [
-      _hoisted_3$5,
+    createBaseVNode("div", _hoisted_2$8, [
+      _hoisted_3$4,
       createBaseVNode("span", null, toDisplayString((_a2 = _ctx.baseMonthlyUPX) == null ? void 0 : _a2.toFixed(0)), 1)
     ]),
-    createBaseVNode("div", _hoisted_4$3, [
-      _hoisted_5$4,
+    createBaseVNode("div", _hoisted_4$4, [
+      _hoisted_5$5,
       createBaseVNode("span", null, toDisplayString((_b = _ctx.maxMonthlyUPX) == null ? void 0 : _b.toFixed(0)), 1)
     ]),
-    createBaseVNode("div", _hoisted_6$2, [
+    createBaseVNode("div", _hoisted_6$3, [
       _hoisted_7$2,
       createBaseVNode("span", null, toDisplayString((_c = _ctx.baseMonthlyROI) == null ? void 0 : _c.toFixed(2)) + "%", 1)
     ]),
@@ -6996,6 +7013,10 @@ const compareNumeric = (a, b, prop) => {
 };
 const _sfc_main$c = {
   props: {
+    title: {
+      type: String,
+      required: false
+    },
     items: {
       type: Array,
       required: true
@@ -7114,36 +7135,44 @@ const _sfc_main$c = {
     }
   }
 };
-const SimpleList_vue_vue_type_style_index_0_scoped_95f59965_lang = "";
-const _withScopeId$2 = (n) => (pushScopeId("data-v-95f59965"), n = n(), popScopeId(), n);
+const SimpleList_vue_vue_type_style_index_0_scoped_83b1c488_lang = "";
+const _withScopeId$2 = (n) => (pushScopeId("data-v-83b1c488"), n = n(), popScopeId(), n);
 const _hoisted_1$a = { class: "SimpleList" };
-const _hoisted_2$8 = { class: "Filter" };
-const _hoisted_3$4 = ["onClick"];
-const _hoisted_4$2 = { class: "Header" };
-const _hoisted_5$3 = { class: "Name" };
-const _hoisted_6$1 = {
+const _hoisted_2$7 = { class: "ListHeader" };
+const _hoisted_3$3 = {
+  key: 0,
+  class: "Green"
+};
+const _hoisted_4$3 = { class: "Filter" };
+const _hoisted_5$4 = ["onClick"];
+const _hoisted_6$2 = { class: "Header" };
+const _hoisted_7$1 = { class: "Name" };
+const _hoisted_8$1 = {
   key: 0,
   class: "Sort"
 };
-const _hoisted_7$1 = { key: 0 };
-const _hoisted_8$1 = { key: 1 };
 const _hoisted_9$1 = { key: 0 };
-const _hoisted_10$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "Header" }, null, -1));
-const _hoisted_11$1 = [
-  _hoisted_10$1
+const _hoisted_10$1 = { key: 1 };
+const _hoisted_11$1 = { key: 0 };
+const _hoisted_12$1 = /* @__PURE__ */ _withScopeId$2(() => /* @__PURE__ */ createBaseVNode("div", { class: "Header" }, null, -1));
+const _hoisted_13$1 = [
+  _hoisted_12$1
 ];
-const _hoisted_12$1 = ["data-id", "onClick", "onMouseover", "onMouseleave"];
-const _hoisted_13$1 = { key: 0 };
-const _hoisted_14 = { key: 0 };
-const _hoisted_15 = ["colspan"];
+const _hoisted_14 = ["data-id", "onClick", "onMouseover", "onMouseleave"];
+const _hoisted_15 = { key: 0 };
+const _hoisted_16 = { key: 0 };
+const _hoisted_17 = ["colspan"];
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", _hoisted_1$a, [
-    createBaseVNode("label", _hoisted_2$8, [
-      createTextVNode(" Filter: "),
-      createBaseVNode("input", {
-        onInput: _cache[0] || (_cache[0] = (...args) => $options.onFilterInput && $options.onFilterInput(...args)),
-        placeholder: "Enter text..."
-      }, null, 32)
+    createBaseVNode("div", _hoisted_2$7, [
+      $props.title ? (openBlock(), createElementBlock("h3", _hoisted_3$3, toDisplayString($props.title), 1)) : createCommentVNode("", true),
+      createBaseVNode("label", _hoisted_4$3, [
+        createTextVNode(" Filter: "),
+        createBaseVNode("input", {
+          onInput: _cache[0] || (_cache[0] = (...args) => $options.onFilterInput && $options.onFilterInput(...args)),
+          placeholder: "Enter text..."
+        }, null, 32)
+      ])
     ]),
     createBaseVNode("table", null, [
       createBaseVNode("thead", null, [
@@ -7154,15 +7183,15 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
               key: index,
               onClick: ($event) => $options.sortByProp($props.cols[index].prop)
             }, [
-              createBaseVNode("div", _hoisted_4$2, [
-                createBaseVNode("div", _hoisted_5$3, toDisplayString(header), 1),
-                ((_a2 = $data.sortBy) == null ? void 0 : _a2.prop) === $props.cols[index].prop ? (openBlock(), createElementBlock("div", _hoisted_6$1, [
-                  $data.sortBy.dir === "asc" ? (openBlock(), createElementBlock("span", _hoisted_7$1, "▲")) : (openBlock(), createElementBlock("span", _hoisted_8$1, "▼"))
+              createBaseVNode("div", _hoisted_6$2, [
+                createBaseVNode("div", _hoisted_7$1, toDisplayString(header), 1),
+                ((_a2 = $data.sortBy) == null ? void 0 : _a2.prop) === $props.cols[index].prop ? (openBlock(), createElementBlock("div", _hoisted_8$1, [
+                  $data.sortBy.dir === "asc" ? (openBlock(), createElementBlock("span", _hoisted_9$1, "▲")) : (openBlock(), createElementBlock("span", _hoisted_10$1, "▼"))
                 ])) : createCommentVNode("", true)
               ])
-            ], 8, _hoisted_3$4);
+            ], 8, _hoisted_5$4);
           }), 128)),
-          $props.actionsCol ? (openBlock(), createElementBlock("th", _hoisted_9$1, _hoisted_11$1)) : createCommentVNode("", true)
+          $props.actionsCol ? (openBlock(), createElementBlock("th", _hoisted_11$1, _hoisted_13$1)) : createCommentVNode("", true)
         ])
       ]),
       createBaseVNode("tbody", null, [
@@ -7185,20 +7214,20 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                   style: normalizeStyle((_a2 = $options.colForProp(prop)) == null ? void 0 : _a2.style)
                 }, toDisplayString(val), 7);
               }), 128)),
-              $props.actionsCol ? (openBlock(), createElementBlock("td", _hoisted_13$1, [
+              $props.actionsCol ? (openBlock(), createElementBlock("td", _hoisted_15, [
                 renderSlot(_ctx.$slots, "actions", {
                   item: $options.itemWithId(__id)
                 }, void 0, true)
               ])) : createCommentVNode("", true)
-            ], 42, _hoisted_12$1),
-            $props.expandable && expanded ? (openBlock(), createElementBlock("tr", _hoisted_14, [
+            ], 42, _hoisted_14),
+            $props.expandable && expanded ? (openBlock(), createElementBlock("tr", _hoisted_16, [
               createBaseVNode("td", {
                 colspan: Object.keys(item).length
               }, [
                 renderSlot(_ctx.$slots, "expanded", {
                   item: $options.itemWithId(__id)
                 }, void 0, true)
-              ], 8, _hoisted_15)
+              ], 8, _hoisted_17)
             ])) : createCommentVNode("", true)
           ], 64);
         }), 128))
@@ -7206,7 +7235,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const List = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-95f59965"]]);
+const List = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-83b1c488"]]);
 const _sfc_main$b = {
   components: { List },
   data() {
@@ -7255,11 +7284,12 @@ const _sfc_main$b = {
     }
   }
 };
-const CurrentHoods_vue_vue_type_style_index_0_scoped_16dbd700_lang = "";
+const CurrentHoods_vue_vue_type_style_index_0_scoped_870a772f_lang = "";
 function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_List = resolveComponent("List");
   return $data.loading || $data.hoods && $data.hoods.length > 0 ? (openBlock(), createBlock(_component_List, {
     key: 0,
+    title: "Neighbourhoods",
     items: $data.hoods,
     cols: $data.cols,
     loading: $data.loading,
@@ -7269,7 +7299,7 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "list"
   }, null, 8, ["items", "cols", "loading", "onItemHoverOn", "onItemHoverOff"])) : createCommentVNode("", true);
 }
-const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-16dbd700"]]);
+const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-870a772f"]]);
 const _sfc_main$a = {
   props: {
     label: {
@@ -7337,11 +7367,11 @@ const _hoisted_1$8 = {
   key: 0,
   class: "PropertyDetails"
 };
-const _hoisted_2$7 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
+const _hoisted_2$6 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
 function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Field = resolveComponent("Field");
   return $data.property ? (openBlock(), createElementBlock("div", _hoisted_1$8, [
-    _hoisted_2$7,
+    _hoisted_2$6,
     (openBlock(true), createElementBlock(Fragment, null, renderList($data.keys, (prop, index) => {
       return openBlock(), createBlock(_component_Field, {
         key: index,
@@ -7398,19 +7428,14 @@ const _sfc_main$8 = {
     }
   }
 };
-const PropertiesList_vue_vue_type_style_index_0_scoped_2127e730_lang = "";
 const _hoisted_1$7 = { class: "PropertiesList" };
-const _hoisted_2$6 = {
-  key: 0,
-  class: "Green TableTitle"
-};
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_PropertyDetails = resolveComponent("PropertyDetails");
   const _component_List = resolveComponent("List");
   return openBlock(), createElementBlock("div", _hoisted_1$7, [
-    $props.title ? (openBlock(), createElementBlock("h3", _hoisted_2$6, toDisplayString($props.title), 1)) : createCommentVNode("", true),
     $props.loading || $props.properties && $props.properties.length > 0 ? (openBlock(), createBlock(_component_List, {
-      key: 1,
+      key: 0,
+      title: $props.title,
       items: $props.properties,
       cols: $data.cols,
       loading: $props.loading,
@@ -7421,7 +7446,7 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
       ref: "list"
     }, {
       actions: withCtx(({ item }) => [
-        renderSlot(_ctx.$slots, "actions", { property: item }, void 0, true)
+        renderSlot(_ctx.$slots, "actions", { property: item })
       ]),
       expanded: withCtx(({ item }) => [
         createVNode(_component_PropertyDetails, {
@@ -7429,10 +7454,10 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, ["id"])
       ]),
       _: 3
-    }, 8, ["items", "cols", "loading"])) : createCommentVNode("", true)
+    }, 8, ["title", "items", "cols", "loading"])) : createCommentVNode("", true)
   ]);
 }
-const PropertiesList = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7], ["__scopeId", "data-v-2127e730"]]);
+const PropertiesList = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["render", _sfc_render$7]]);
 const _sfc_main$7 = {
   props: {
     color: {
@@ -7447,18 +7472,18 @@ const _hoisted_2$5 = /* @__PURE__ */ createBaseVNode("g", {
   id: "SVGRepo_bgCarrier",
   "stroke-width": "0"
 }, null, -1);
-const _hoisted_3$3 = /* @__PURE__ */ createBaseVNode("g", {
+const _hoisted_3$2 = /* @__PURE__ */ createBaseVNode("g", {
   id: "SVGRepo_tracerCarrier",
   "stroke-linecap": "round",
   "stroke-linejoin": "round"
 }, null, -1);
-const _hoisted_4$1 = /* @__PURE__ */ createBaseVNode("g", { id: "SVGRepo_iconCarrier" }, [
+const _hoisted_4$2 = /* @__PURE__ */ createBaseVNode("g", { id: "SVGRepo_iconCarrier" }, [
   /* @__PURE__ */ createBaseVNode("path", { d: "M12 17H10V12H5V10H10V5H12V10H17V12H12Z" })
 ], -1);
-const _hoisted_5$2 = [
+const _hoisted_5$3 = [
   _hoisted_2$5,
-  _hoisted_3$3,
-  _hoisted_4$1
+  _hoisted_3$2,
+  _hoisted_4$2
 ];
 function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("svg", {
@@ -7466,7 +7491,7 @@ function _sfc_render$6(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 22 22",
     xmlns: "http://www.w3.org/2000/svg",
     id: "memory-plus"
-  }, _hoisted_5$2, 8, _hoisted_1$6);
+  }, _hoisted_5$3, 8, _hoisted_1$6);
 }
 const PlusIcon = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["render", _sfc_render$6]]);
 const _sfc_main$6 = {
@@ -7480,7 +7505,7 @@ const _sfc_main$6 = {
 };
 const _hoisted_1$5 = ["fill"];
 const _hoisted_2$4 = /* @__PURE__ */ createStaticVNode('<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><rect x="0" fill="none" width="20" height="20"></rect><g><path d="M15.3 5.3l-6.8 6.8-2.8-2.8-1.4 1.4 4.2 4.2 8.2-8.2"></path></g></g>', 3);
-const _hoisted_5$1 = [
+const _hoisted_5$2 = [
   _hoisted_2$4
 ];
 function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
@@ -7488,7 +7513,7 @@ function _sfc_render$5(_ctx, _cache, $props, $setup, $data, $options) {
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg",
     fill: $props.color
-  }, _hoisted_5$1, 8, _hoisted_1$5);
+  }, _hoisted_5$2, 8, _hoisted_1$5);
 }
 const TickIcon = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["render", _sfc_render$5]]);
 const _sfc_main$5 = {
@@ -7516,6 +7541,9 @@ const _sfc_main$5 = {
     this.loadProperties();
   },
   methods: {
+    title() {
+      return `${(State.viewableNeighbourhoods || []).map(({ name }) => name).join(", ")} properties`;
+    },
     async loadProperties() {
       var _a2;
       if (!this.state.viewableProperties)
@@ -7550,12 +7578,11 @@ const _sfc_main$5 = {
     }
   }
 };
-const _hoisted_1$4 = { class: "green" };
-const _hoisted_2$3 = {
+const _hoisted_1$4 = {
   key: 0,
   class: "Icon"
 };
-const _hoisted_3$2 = {
+const _hoisted_2$3 = {
   key: 1,
   class: "Icon"
 };
@@ -7563,30 +7590,28 @@ function _sfc_render$4(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_TickIcon = resolveComponent("TickIcon");
   const _component_PlusIcon = resolveComponent("PlusIcon");
   const _component_List = resolveComponent("List");
-  return openBlock(), createElementBlock(Fragment, null, [
-    createBaseVNode("h3", _hoisted_1$4, toDisplayString($props.hood.name) + " Properties", 1),
-    $data.loading || $data.properties && $data.properties.length > 0 ? (openBlock(), createBlock(_component_List, {
-      key: 0,
-      properties: $data.properties,
-      loading: $data.loading,
-      actionsCol: true,
-      sorting: { prop: "priceUPX", dir: "asc" },
-      ref: "list"
-    }, {
-      actions: withCtx(({ property }) => [
-        property.stashed ? (openBlock(), createElementBlock("div", _hoisted_2$3, [
-          createVNode(_component_TickIcon, {
-            onClick: withModifiers(($event) => $options.unstash(property), ["stop"])
-          }, null, 8, ["onClick"])
-        ])) : (openBlock(), createElementBlock("div", _hoisted_3$2, [
-          createVNode(_component_PlusIcon, {
-            onClick: withModifiers(($event) => $options.stash(property), ["stop"])
-          }, null, 8, ["onClick"])
-        ]))
-      ]),
-      _: 1
-    }, 8, ["properties", "loading"])) : createCommentVNode("", true)
-  ], 64);
+  return $data.loading || $data.properties && $data.properties.length > 0 ? (openBlock(), createBlock(_component_List, {
+    key: 0,
+    title: $options.title(),
+    properties: $data.properties,
+    loading: $data.loading,
+    actionsCol: true,
+    sorting: { prop: "priceUPX", dir: "asc" },
+    ref: "list"
+  }, {
+    actions: withCtx(({ property }) => [
+      property.stashed ? (openBlock(), createElementBlock("div", _hoisted_1$4, [
+        createVNode(_component_TickIcon, {
+          onClick: withModifiers(($event) => $options.unstash(property), ["stop"])
+        }, null, 8, ["onClick"])
+      ])) : (openBlock(), createElementBlock("div", _hoisted_2$3, [
+        createVNode(_component_PlusIcon, {
+          onClick: withModifiers(($event) => $options.stash(property), ["stop"])
+        }, null, 8, ["onClick"])
+      ]))
+    ]),
+    _: 1
+  }, 8, ["title", "properties", "loading"])) : createCommentVNode("", true);
 }
 const Properties = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$4]]);
 const _sfc_main$4 = {
@@ -7597,8 +7622,8 @@ const _sfc_main$4 = {
     };
   }
 };
-const LiveView_vue_vue_type_style_index_0_scoped_05e53e55_lang = "";
-const _withScopeId = (n) => (pushScopeId("data-v-05e53e55"), n = n(), popScopeId(), n);
+const LiveView_vue_vue_type_style_index_0_scoped_b4a4f271_lang = "";
+const _withScopeId = (n) => (pushScopeId("data-v-b4a4f271"), n = n(), popScopeId(), n);
 const _hoisted_1$3 = {
   key: 2,
   class: "Info"
@@ -7606,6 +7631,14 @@ const _hoisted_1$3 = {
 const _hoisted_2$2 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, "Move the viewscreen to an area with properties on the map...", -1));
 const _hoisted_3$1 = [
   _hoisted_2$2
+];
+const _hoisted_4$1 = {
+  key: 3,
+  class: "Info"
+};
+const _hoisted_5$1 = /* @__PURE__ */ _withScopeId(() => /* @__PURE__ */ createBaseVNode("p", null, "Loading...", -1));
+const _hoisted_6$1 = [
+  _hoisted_5$1
 ];
 function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
   var _a2, _b;
@@ -7617,10 +7650,10 @@ function _sfc_render$3(_ctx, _cache, $props, $setup, $data, $options) {
     ((_a2 = $data.state.viewableNeighbourhoods) == null ? void 0 : _a2.length) > 1 ? (openBlock(), createBlock(_component_Neighbourhoods, { key: 0 })) : ((_b = $data.state.viewableNeighbourhoods) == null ? void 0 : _b.length) === 1 ? (openBlock(), createBlock(_component_Properties, {
       key: 1,
       hood: $data.state.viewableNeighbourhoods[0]
-    }, null, 8, ["hood"])) : (openBlock(), createElementBlock("div", _hoisted_1$3, _hoisted_3$1))
+    }, null, 8, ["hood"])) : !$data.state.loading ? (openBlock(), createElementBlock("div", _hoisted_1$3, _hoisted_3$1)) : (openBlock(), createElementBlock("div", _hoisted_4$1, _hoisted_6$1))
   ]);
 }
-const Live = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-05e53e55"]]);
+const Live = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["render", _sfc_render$3], ["__scopeId", "data-v-b4a4f271"]]);
 const _sfc_main$3 = {
   props: {
     color: {

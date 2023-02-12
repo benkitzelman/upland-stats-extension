@@ -1,8 +1,8 @@
 <template>
   <div class="PropertiesList">
-    <h3 v-if="title" class="Green TableTitle">{{ title }}</h3>
     <List
       v-if="loading || (properties && properties.length > 0)"
+      :title="title"
       :items="properties"
       :cols="cols"
       :loading="loading"
@@ -74,9 +74,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.TableTitle {
-  position: absolute;
-}
-</style>

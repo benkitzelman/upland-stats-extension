@@ -1,7 +1,7 @@
 <template>
-  <h3 class="green">{{ hood.name }} Properties</h3>
   <List
     v-if="loading || (properties && properties.length > 0)"
+    :title="title()"
     :properties="properties"
     :loading="loading"
     :actionsCol="true"
@@ -56,6 +56,10 @@ export default {
   },
 
   methods: {
+    title() {
+      return `${(state.viewableNeighbourhoods || []).map(({ name }) => name).join(", ")} properties`;
+    },
+
     async loadProperties() {
       if (!this.state.viewableProperties) return;
 

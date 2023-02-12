@@ -1,9 +1,12 @@
 <template>
   <div class="SimpleList">
-    <label class="Filter">
-      Filter:
-      <input @input="onFilterInput" placeholder="Enter text..." />
-    </label>
+    <div class="ListHeader">
+      <h3 v-if="title" class="Green">{{ title }}</h3>
+      <label class="Filter">
+        Filter:
+        <input @input="onFilterInput" placeholder="Enter text..." />
+      </label>
+    </div>
 
     <table>
       <thead>
@@ -81,6 +84,10 @@ export type Sort = {
 
 export default {
   props: {
+    title: {
+      type: String,
+      required: false,
+    },
     items: {
       type: Array,
       required: true,
@@ -221,6 +228,10 @@ export default {
 </script>
 
 <style scoped>
+.SimpleList > .ListHeader {
+  display: flex;
+  justify-content: space-between;
+}
 .SimpleList > .Filter {
   display: block;
   text-align: right;

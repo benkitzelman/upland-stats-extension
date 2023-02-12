@@ -1,6 +1,7 @@
 <template>
   <List
     v-if="loading || (hoods && hoods.length > 0)"
+    title="Neighbourhoods"
     :items="hoods"
     :cols="cols"
     :loading="loading"
