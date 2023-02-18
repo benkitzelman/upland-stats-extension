@@ -5561,7 +5561,6 @@ const syncState = async (state2) => {
 };
 let controller;
 const abortExistingRequestsAndReset = () => {
-  controller == null ? void 0 : controller.abort();
   controller = new AbortController();
   controller.signal.addEventListener(
     "abort",

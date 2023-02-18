@@ -54,8 +54,10 @@ if (!window.UplandStats) {
     return document.getElementById(MARKER_LAYER_ID);
   };
 
+  const markerIdFor = (hood) => `hood-${hood.id}`;
+
   const hoodMarkerHtml = (hood) => {
-    return `<div class="hood" style="position:absolute;left:${hood.screenCoords?.x}px;top:${hood.screenCoords?.y}px;color:hsla(160, 100%, 37%, 1)">${hood.name}</div>`;
+    return `<div class="hood" id="${markerIdFor(hood)}" style="position:absolute;-webkit-text-stroke: 1px black;font-weight: bolder;text-shadow: 0px 0px 5px black;z-index:999;transform: translate(-50%, -50%);left:${hood.screenCoords?.x}px;top:${hood.screenCoords?.y}px;color:hsla(160, 100%, 37%, 1)">${hood.name}</div>`;
   };
 
   let markerLayerClrTimeout;
@@ -90,21 +92,19 @@ if (!window.UplandStats) {
         });
       };
 
+      if (!hoods || hoods.length === 0) return sendOk();
+
       const el = markerLayer();
 
       // auto remove it after
       if (markerLayerClrTimeout) clearTimeout(markerLayerClrTimeout);
-      setTimeout(() => el.remove(), 3000);
+      setTimeout(() => el.remove(), 1800);
 
-      if (!hoods || hoods.length === 0) {
-        el.remove();
-        return sendOk();
-      }
-
-      el.innerHTML = "";
+      // el.innerHTML = "";
 
       for (const hood of hoods) {
         el.innerHTML += hoodMarkerHtml(hood);
+        setTimeout(() => document.getElementById(markerIdFor(hood))?.remove(), 1500);
       }
 
       return sendOk();
