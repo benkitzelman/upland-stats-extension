@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-cond-assign */
-
+import Api from "../../api";
 import type { Monitor } from "..";
 
 export type OnCompletedDetails = {
@@ -21,6 +21,7 @@ const storeCurrentCoordinates = (url: URL, state: any) => {
 
 const storeSession = async (state: any, monitor: Monitor) => {
   state.session = await monitor.getSession();
+  if (state.session) state.api = new Api(state.session.auth_token);
 };
 
 export const onCompletedHandler = (state: any, monitor: Monitor) => ({ url }: OnCompletedDetails) => {

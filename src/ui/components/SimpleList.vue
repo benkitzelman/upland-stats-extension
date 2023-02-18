@@ -53,7 +53,9 @@
               {{ val }}
             </td>
             <td v-if="actionsCol">
-              <slot name="actions" :item="itemWithId(__id)" />
+              <div class="Actions">
+                <slot name="actions" :item="itemWithId(__id)" />
+              </div>
             </td>
           </tr>
           <tr v-if="expandable && expanded">
@@ -127,7 +129,7 @@ export default {
   },
 
   created() {
-    this.sort();
+    this.rerender();
   },
 
   watch: {
@@ -136,7 +138,7 @@ export default {
         const data = this.parseTableData(newItems);
         this.headers = data.headers;
         this.rows = data.rows;
-        this.sort();
+        this.rerender();
       },
       deep: true,
     },
@@ -204,6 +206,15 @@ export default {
             .indexOf((this.filter || "").toLowerCase()) > -1
         );
       });
+    },
+
+    rerender() {
+      try {
+        this.applyFilter();
+        this.sort();
+      } catch (e) {
+        console.warn(e);
+      }
     },
 
     onClick(item: any) {
@@ -278,6 +289,9 @@ export default {
 .SimpleList > table > tbody > tr > td {
   padding: 0 5px;
   border-bottom: 1px dotted #2f2f2f;
+}
+.SimpleList > table > tbody > tr > td > .Actions {
+  display: flex;
 }
 .SimpleList > table > tbody .Hidden {
   display: none;

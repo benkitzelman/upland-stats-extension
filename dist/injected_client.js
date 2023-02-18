@@ -74,6 +74,13 @@ if (!window.UplandStats) {
       });
     },
 
+    changeUrl(eventId, newUrl) {
+      window.history.pushState(undefined, undefined, newUrl)
+      sendMessage(eventId, "changeUrl", {
+        ok: true,
+      });
+    },
+
     markNeighbourhoods(eventId, hoods) {
       const sendOk = () => {
         sendMessage(eventId, "markNeighbourhoods", {

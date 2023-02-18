@@ -8,6 +8,7 @@ import type { Neighbourhood } from "../lib/api/types";
 import type { NeighbourhoodYieldMap } from "../lib/storage";
 import type { ScreenDimensions } from "../lib/client/messages";
 import type SharedState from "../lib/shared_state";
+import type { ServiceOpts } from "./types";
 
 export type NeighbourhoodMap = { [id: number]: Neighbourhood };
 
@@ -26,10 +27,10 @@ class Error extends ServiceError {
 let rents: NeighbourhoodYieldMap | null = null;
 let hoods: NeighbourhoodMap | null = null;
 
-export const fetchAll = async (api: UplandApi) => {
+export const fetchAll = async (api: UplandApi, opts?: ServiceOpts) => {
   if (hoods) return hoods;
 
-  const all = await api.listNeighbourhoods();
+  const all = await api.listNeighbourhoods(opts);
 
   hoods = all.reduce((map, hood) => {
     map[hood.id] = hood;
@@ -41,14 +42,15 @@ export const fetchAll = async (api: UplandApi) => {
 
 export const monthlyRentPerUnitFor = async (
   neighbourhoodId: number,
-  api: UplandApi
+  api: UplandApi,
+  opts?: ServiceOpts
 ) => {
   rents ||= await store.getNeighbourhoodYields();
 
   const rent = rents[neighbourhoodId];
   if (rent) return rent;
 
-  const neighbourhoods = await fetchAll(api);
+  const neighbourhoods = await fetchAll(api, opts);
   const hood = neighbourhoods[neighbourhoodId];
 
   if (!hood) throw new Error(`Unknown hood (Id: ${neighbourhoodId})`);
@@ -57,7 +59,7 @@ export const monthlyRentPerUnitFor = async (
 
   const areaCoords = Geo.areaCoordsFrom(hood.center.coordinates);
   const res =
-    (await api.listProperties(areaCoords, { limit: 1, offset: 0 }))
+    (await api.listProperties(areaCoords, { limit: 1, offset: 0 }, "asc", opts))
       .properties || [];
 
   if (!res || res.length === 0) {
@@ -65,7 +67,7 @@ export const monthlyRentPerUnitFor = async (
   }
 
   const propertySummary = res[0];
-  const property = await api.property(propertySummary.prop_id);
+  const property = await api.property(propertySummary.prop_id, opts);
 
   const monthlyRent = yieldPerMonth(property.yield_per_hour);
   const amt = monthlyRent / property.area;
@@ -78,9 +80,10 @@ export const monthlyRentPerUnitFor = async (
 
 export const neighbourhoodsWithin = async (
   area: AreaCoords,
-  api: UplandApi
+  api: UplandApi,
+  opts?: ServiceOpts
 ) => {
-  const neighbourhoods = await fetchAll(api);
+  const neighbourhoods = await fetchAll(api, opts);
   const polygon = Geo.areaCoordsToPolygon(area);
 
   return Object.values(neighbourhoods).filter((hood) => {

@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import SharedState from "@/lib/shared_state";
 import type { Monitor } from "@/lib/client";
 import type Api from "@/lib/api";
@@ -43,13 +44,15 @@ const stateProxy = new Proxy(state, {
   },
 
   set(target: any, name: string, value: any, receiver: any) {
-    const hasSet = Reflect.set(target, name, value, receiver);
+    const needsUpdate = !isEqual(value, target[name]);
+    const hasSet = needsUpdate && Reflect.set(target, name, value, receiver);
+
     if (hasSet) {
       callEventHandlers(`changed:${name}`, value, target[name]);
       callEventHandlers("changed", target);
     }
 
-    return hasSet;
+    return true;
   },
 });
 

@@ -13,6 +13,9 @@
       ref="list"
     >
       <template #actions="{ item }">
+        <div class="Icon">
+          <OpenIcon @click.stop="onOpenClicked(item)" />
+        </div>
         <slot name="actions" :property="item" />
       </template>
       <template #expanded="{ item }">
@@ -25,10 +28,13 @@
 <script lang="ts">
 import List from "./SimpleList.vue";
 import PropertyDetails from "./PropertyDetails.vue";
+import OpenIcon from "./icons/OpenIcon.vue";
+import * as Constants from "../../lib/constants";
 import { compareNumeric } from "../../lib/comparitors";
+import type { Property } from "@/lib/api/types";
 
 export default {
-  components: { List, PropertyDetails },
+  components: { List, PropertyDetails, OpenIcon },
   props: {
     title: {
       type: String,
@@ -70,6 +76,11 @@ export default {
   methods: {
     sort(...args: any) {
       return (this.$refs as any).list?.sort(...args);
+    },
+    onOpenClicked(property: Property) {
+      chrome.tabs.update(undefined, {
+        url: `${Constants.APP_URL}?prop_id=${property.prop_id}`,
+      });
     },
   },
 };

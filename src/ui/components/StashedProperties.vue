@@ -5,6 +5,7 @@
     :loading="loading"
     :actionsCol="true"
     :sorting="{ prop: 'priceUPX', dir: 'asc' }"
+    title="Stashed Properties"
     ref="list"
   >
     <template #actions="{ property }">

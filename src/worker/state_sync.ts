@@ -35,31 +35,51 @@ const syncState = async (state: State) => {
   }
 };
 
+let controller: AbortController | undefined;
+const abortExistingRequestsAndReset = () => {
+  controller?.abort();
+  controller = new AbortController();
+  controller.signal.addEventListener("abort", (...args: any[]) =>
+    console.log("ABORTING", ...args)
+  );
+  return controller;
+};
+
 const trackViewportState = (state: State) => {
   state.on(
     "changed:currentCoordinates",
-    debounce(500, async (newCoords) => {
+    debounce(250, async (newCoords) => {
       if (!state.api) return;
+
+      const abortController = abortExistingRequestsAndReset();
+      const opts = { signal: abortController.signal };
 
       state.loading = true;
 
-      // track visible neighbourhoods
-      state.viewableNeighbourhoods = await Hood.neighbourhoodsWithin(
-        newCoords,
-        state.api
-      );
+      try {
+        // track visible neighbourhoods
+        state.viewableNeighbourhoods = await Hood.neighbourhoodsWithin(
+          newCoords,
+          state.api,
+          opts
+        );
 
-      // track visible properties if we can deduce the neighbourhood yield
-      state.viewableProperties =
-        state.viewableNeighbourhoods?.length === 1
-          ? (await Property.propertiesWithRent(
-              state.viewableNeighbourhoods,
-              newCoords,
-              state.api
-            )) || []
-          : undefined;
-
-      state.loading = false;
+        // track visible properties if we can deduce the neighbourhood yield
+        state.viewableProperties =
+          state.viewableNeighbourhoods?.length === 1
+            ? (await Property.propertiesWithRent(
+                state.viewableNeighbourhoods,
+                newCoords,
+                state.api,
+                opts
+              )) || []
+            : undefined;
+      } catch (err) {
+        console.warn(err);
+      } finally {
+        state.loading = false;
+        controller = undefined;
+      }
     })
   );
 };

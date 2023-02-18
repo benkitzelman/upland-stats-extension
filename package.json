@@ -17,6 +17,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
     "geolib": "^3.3.3",
+    "lodash": "^4.17.21",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
     "vue-spinner": "^1.0.4"
@@ -27,6 +28,7 @@
     "@types/chrome": "^0.0.198",
     "@types/geolib": "^2.0.23",
     "@types/jsdom": "^20.0.1",
+    "@types/lodash": "^4.14.191",
     "@types/node": "^18.11.12",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",

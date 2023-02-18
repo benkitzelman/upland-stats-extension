@@ -16,6 +16,8 @@ export type Page = {
   limit: number;
 };
 
+export type FetchOpts = RequestInit;
+
 export default class UplandApi {
   readonly authToken: string | undefined;
 
@@ -31,12 +33,13 @@ export default class UplandApi {
     };
   }
 
-  async get<T = any>(path: string, extraHeaders: object = {}): Promise<T> {
+  async get<T = any>(path: string, extraHeaders: object = {}, opts?: FetchOpts): Promise<T> {
     const url = Constants.API_BASE_URL + path;
 
     // ensure that while waiting for a response from a path, additional calls dont create additional requests
     return singleInvoke(url, async () => {
       const resp = await fetch(url, {
+        ...opts,
         method: "GET",
         headers: { ...this.headers(), ...extraHeaders } as any,
       });
@@ -45,43 +48,47 @@ export default class UplandApi {
     });
   }
 
-  property(id: number) {
-    return this.get<Api.Property>(`/properties/${id}`);
+  property(id: number, opts?: FetchOpts) {
+    return this.get<Api.Property>(`/properties/${id}`, {}, opts);
   }
 
-  listProperties(area: AreaCoords, page: Page, sort: "asc" | "desc" = "asc") {
+  listProperties(area: AreaCoords, page: Page, sort: "asc" | "desc" = "asc", opts?: FetchOpts) {
     return this.get<Api.ListPropertiesResp>(
-      `/properties/list-view?north=${area.north}&south=${area.south}&east=${area.east}&west=${area.west}&offset=${page.offset}&limit=${page.limit}&sort=${sort}`
+      `/properties/list-view?north=${area.north}&south=${area.south}&east=${area.east}&west=${area.west}&offset=${page.offset}&limit=${page.limit}&sort=${sort}`,
+      {},
+      opts
     );
   }
 
-  async listAllProperties(area: AreaCoords) {
-    return this.listProperties(area, { limit: 100, offset: 0 });
+  async listAllProperties(area: AreaCoords, opts?: FetchOpts) {
+    return this.listProperties(area, { limit: 100, offset: 0 }, "asc", opts);
   }
 
-  listNeighbourhoods() {
-    return this.get<Api.NeighbourhoodsResp>("/neighborhood");
+  listNeighbourhoods(opts?: FetchOpts) {
+    return this.get<Api.NeighbourhoodsResp>("/neighborhood", {}, opts);
   }
 
-  collections() {
+  collections(opts?: FetchOpts) {
     return this.get(
-      "/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1"
+      "/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1",
+      {},
+      opts
     );
   }
 
-  myCollections() {
-    return this.get<Api.MyCollectionsResp>("/dashboard/collections");
+  myCollections(opts?: FetchOpts) {
+    return this.get<Api.MyCollectionsResp>("/dashboard/collections", {}, opts);
   }
 
-  myProperties() {
-    return this.get<Api.MyPropertiesResp>("/properties/mine/detailed");
+  myProperties(opts?: FetchOpts) {
+    return this.get<Api.MyPropertiesResp>("/properties/mine/detailed", {}, opts);
   }
 
-  myYield() {
-    return this.get<Api.MyYieldResp>("/yield/mine");
+  myYield(opts?: FetchOpts) {
+    return this.get<Api.MyYieldResp>("/yield/mine", {}, opts);
   }
 
-  myDashboard() {
-    return this.get<Api.MyDashboardResp>("/dashboard");
+  myDashboard(opts?: FetchOpts) {
+    return this.get<Api.MyDashboardResp>("/dashboard", {}, opts);
   }
 }

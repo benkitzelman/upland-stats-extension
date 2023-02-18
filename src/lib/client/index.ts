@@ -113,6 +113,11 @@ const createClientMonitor = async function (tab: any, state: any) {
       const { ok } = await this.message("markNeighbourhoods", hoods);
       return ok;
     },
+
+    async changeUrl(newUrl: string) {
+      const { ok } = await this.message("changeUrl", newUrl);
+      return ok;
+    },
   };
 };
 

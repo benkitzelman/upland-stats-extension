@@ -15,6 +15,7 @@ const SharedState = {
   screenDimensions: void 0
 };
 const TAB_URL = "*://*.upland.me/";
+const APP_URL = "https://play.upland.me";
 const API_BASE_URL = "https://api.prod.upland.me/api";
 const UPX_EXCHANGE_RATE = 1e3;
 const DAYS_IN_MONTH = 30;
@@ -49,46 +50,51 @@ class UplandApi {
       redirect: "follow"
     };
   }
-  async get(path, extraHeaders = {}) {
+  async get(path, extraHeaders = {}, opts) {
     const url = API_BASE_URL + path;
     return singleInvoke(url, async () => {
       const resp = await fetch(url, {
+        ...opts,
         method: "GET",
         headers: { ...this.headers(), ...extraHeaders }
       });
       return resp.json();
     });
   }
-  property(id) {
-    return this.get(`/properties/${id}`);
+  property(id, opts) {
+    return this.get(`/properties/${id}`, {}, opts);
   }
-  listProperties(area, page, sort = "asc") {
+  listProperties(area, page, sort = "asc", opts) {
     return this.get(
-      `/properties/list-view?north=${area.north}&south=${area.south}&east=${area.east}&west=${area.west}&offset=${page.offset}&limit=${page.limit}&sort=${sort}`
+      `/properties/list-view?north=${area.north}&south=${area.south}&east=${area.east}&west=${area.west}&offset=${page.offset}&limit=${page.limit}&sort=${sort}`,
+      {},
+      opts
     );
   }
-  async listAllProperties(area) {
-    return this.listProperties(area, { limit: 100, offset: 0 });
+  async listAllProperties(area, opts) {
+    return this.listProperties(area, { limit: 100, offset: 0 }, "asc", opts);
   }
-  listNeighbourhoods() {
-    return this.get("/neighborhood");
+  listNeighbourhoods(opts) {
+    return this.get("/neighborhood", {}, opts);
   }
-  collections() {
+  collections(opts) {
     return this.get(
-      "/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1"
+      "/collections?$sort[category]=1&$sort[one_time_reward]=1&$sort[yield_boost]=1",
+      {},
+      opts
     );
   }
-  myCollections() {
-    return this.get("/dashboard/collections");
+  myCollections(opts) {
+    return this.get("/dashboard/collections", {}, opts);
   }
-  myProperties() {
-    return this.get("/properties/mine/detailed");
+  myProperties(opts) {
+    return this.get("/properties/mine/detailed", {}, opts);
   }
-  myYield() {
-    return this.get("/yield/mine");
+  myYield(opts) {
+    return this.get("/yield/mine", {}, opts);
   }
-  myDashboard() {
-    return this.get("/dashboard");
+  myDashboard(opts) {
+    return this.get("/dashboard", {}, opts);
   }
 }
 const get$1 = async (key) => {
@@ -110,6 +116,7 @@ const getStashedProperties = async () => {
 const setStashedProperties = async (props) => {
   await set({ stashedProperties: (props || []).filter(Boolean) });
 };
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -1438,42 +1445,42 @@ let Error$1 = class Error2 extends ServiceError {
 };
 let rents = null;
 let hoods = null;
-const fetchAll = async (api) => {
+const fetchAll = async (api, opts) => {
   if (hoods)
     return hoods;
-  const all = await api.listNeighbourhoods();
+  const all = await api.listNeighbourhoods(opts);
   hoods = all.reduce((map2, hood) => {
     map2[hood.id] = hood;
     return map2;
   }, {});
   return hoods;
 };
-const monthlyRentPerUnitFor = async (neighbourhoodId, api) => {
+const monthlyRentPerUnitFor = async (neighbourhoodId, api, opts) => {
   rents || (rents = await getNeighbourhoodYields());
   const rent = rents[neighbourhoodId];
   if (rent)
     return rent;
-  const neighbourhoods = await fetchAll(api);
+  const neighbourhoods = await fetchAll(api, opts);
   const hood = neighbourhoods[neighbourhoodId];
   if (!hood)
     throw new Error$1(`Unknown hood (Id: ${neighbourhoodId})`);
   if (!hood.center)
     throw new Error$1(`Hood has no center coords (Id: ${neighbourhoodId})`);
   const areaCoords = areaCoordsFrom(hood.center.coordinates);
-  const res = (await api.listProperties(areaCoords, { limit: 1, offset: 0 })).properties || [];
+  const res = (await api.listProperties(areaCoords, { limit: 1, offset: 0 }, "asc", opts)).properties || [];
   if (!res || res.length === 0) {
     return null;
   }
   const propertySummary = res[0];
-  const property = await api.property(propertySummary.prop_id);
+  const property = await api.property(propertySummary.prop_id, opts);
   const monthlyRent = yieldPerMonth(property.yield_per_hour);
   const amt = monthlyRent / property.area;
   rents[neighbourhoodId] = amt;
   setNeighbourhoodYields(rents);
   return amt;
 };
-const neighbourhoodsWithin = async (area, api) => {
-  const neighbourhoods = await fetchAll(api);
+const neighbourhoodsWithin = async (area, api, opts) => {
+  const neighbourhoods = await fetchAll(api, opts);
   const polygon = areaCoordsToPolygon(area);
   return Object.values(neighbourhoods).filter((hood) => {
     if (!(hood == null ? void 0 : hood.boundaries))
@@ -14639,8 +14646,12 @@ function getScreenDimensions(eventId) {
 function markNeighbourhoods(eventId, hoods2) {
   return window.UplandStats.markNeighbourhoods(eventId, hoods2);
 }
+function changeUrl(eventId, url) {
+  return window.UplandStats.changeUrl(eventId, url);
+}
 const Messages = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
+  changeUrl,
   getPageSource,
   getScreenDimensions,
   getSessionSettings,
@@ -14729,6 +14740,8 @@ const storeCurrentCoordinates = (url, state) => {
 };
 const storeSession = async (state, monitor2) => {
   state.session = await monitor2.getSession();
+  if (state.session)
+    state.api = new UplandApi(state.session.auth_token);
 };
 const onCompletedHandler = (state, monitor2) => ({ url }) => {
   console.log(">>", url);
@@ -14814,6 +14827,10 @@ const createClientMonitor = async function(tab, state) {
     async markNeighbourhoods(hoods2) {
       const { ok } = await this.message("markNeighbourhoods", hoods2);
       return ok;
+    },
+    async changeUrl(newUrl) {
+      const { ok } = await this.message("changeUrl", newUrl);
+      return ok;
     }
   };
 };
@@ -14882,32 +14899,34 @@ const Model = (obj, rentUPXPerUnitPerMo) => ({
     };
   }
 });
-const propertiesWithRent = async (hoods2, area, api) => {
+const propertiesWithRent = async (hoods2, area, api, opts) => {
   if (hoods2.length !== 1)
     return;
   const hood = hoods2[0];
-  const rentUpx = await monthlyRentPerUnitFor(hood.id, api);
-  const properties = (await api.listAllProperties(area)).properties;
+  const rentUpx = await monthlyRentPerUnitFor(hood.id, api, opts);
+  const properties = (await api.listAllProperties(area, opts)).properties;
   return properties.map((attrs) => Model(attrs, rentUpx).toJSON());
 };
-const stashedProperties = async (api) => {
+const stashedProperties = async (api, opts) => {
   const properties = await getStashedProperties();
   return Promise.all(
     properties.map(async ({ id, hoodId }) => {
-      const rentUpx = await monthlyRentPerUnitFor(hoodId, api);
-      return Model(await api.property(id), rentUpx);
+      const rentUpx = await monthlyRentPerUnitFor(hoodId, api, opts);
+      return Model(await api.property(id, opts), rentUpx);
     })
   );
 };
 export {
+  APP_URL as A,
   Model as M,
   SharedState as S,
   UplandApi as U,
   stashedProperties as a,
   debounce as b,
-  getTab as c,
+  commonjsGlobal as c,
   decorate as d,
-  stop as e,
+  getTab as e,
+  stop as f,
   getStashedProperties as g,
   instance as i,
   neighbourhoodsWithin as n,

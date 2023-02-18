@@ -1,4 +1,4 @@
-import { S as SharedState, U as UplandApi, i as instance, d as decorate, g as getStashedProperties, s as setStashedProperties, a as stashedProperties, M as Model } from "./property.js";
+import { S as SharedState, U as UplandApi, i as instance, d as decorate, A as APP_URL, g as getStashedProperties, s as setStashedProperties, a as stashedProperties, M as Model } from "./property.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -6756,7 +6756,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const _sfc_main$g = {
+const _sfc_main$h = {
   name: "BounceLoader",
   props: {
     loading: {
@@ -6804,9 +6804,9 @@ const _sfc_main$g = {
     }
   }
 };
-const _hoisted_1$d = { class: "v-spinner" };
-function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
-  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$d, [
+const _hoisted_1$e = { class: "v-spinner" };
+function _sfc_render$g(_ctx, _cache, $props, $setup, $data, $options) {
+  return withDirectives((openBlock(), createElementBlock("div", _hoisted_1$e, [
     createBaseVNode("div", {
       class: "v-bounce v-bounce1",
       style: normalizeStyle($options.spinnerBasicStyle)
@@ -6824,7 +6824,7 @@ function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, $props.loading]
   ]);
 }
-const Spinner = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f]]);
+const Spinner = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["render", _sfc_render$g]]);
 const State = reactive({
   ...SharedState
 });
@@ -6838,7 +6838,7 @@ const syncWithWorker = async function() {
   });
   await chrome.runtime.sendMessage({ action: "get-state" });
 };
-const _sfc_main$f = {
+const _sfc_main$g = {
   components: { RouterLink, RouterView, Spinner },
   data() {
     return {
@@ -6852,27 +6852,27 @@ const _sfc_main$f = {
 };
 const App_vue_vue_type_style_index_0_scoped_719ce579_lang = "";
 const _withScopeId$4 = (n) => (pushScopeId("data-v-719ce579"), n = n(), popScopeId(), n);
-const _hoisted_1$c = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("h2", { class: "Green" }, "Upland Stats", -1));
-const _hoisted_2$9 = {
+const _hoisted_1$d = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("h2", { class: "Green" }, "Upland Stats", -1));
+const _hoisted_2$b = {
   key: 0,
   class: "Links"
 };
-const _hoisted_3$5 = {
+const _hoisted_3$6 = {
   key: 0,
   class: "Offline"
 };
-const _hoisted_4$5 = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("a", {
+const _hoisted_4$6 = /* @__PURE__ */ _withScopeId$4(() => /* @__PURE__ */ createBaseVNode("a", {
   href: "https://play.upland.me",
   target: "upland"
 }, "Upland", -1));
-function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$f(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_RouterLink = resolveComponent("RouterLink");
   const _component_Spinner = resolveComponent("Spinner");
   const _component_RouterView = resolveComponent("RouterView");
   return openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("header", null, [
-      _hoisted_1$c,
-      !$data.state.offline ? (openBlock(), createElementBlock("div", _hoisted_2$9, [
+      _hoisted_1$d,
+      !$data.state.offline ? (openBlock(), createElementBlock("div", _hoisted_2$b, [
         createBaseVNode("nav", null, [
           createVNode(_component_RouterLink, { to: "/" }, {
             default: withCtx(() => [
@@ -6904,14 +6904,14 @@ function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
         }, null, 8, ["loading"])
       ])) : createCommentVNode("", true)
     ]),
-    $data.state.offline ? (openBlock(), createElementBlock("p", _hoisted_3$5, [
+    $data.state.offline ? (openBlock(), createElementBlock("p", _hoisted_3$6, [
       createTextVNode(" Open the stats extension while on "),
-      _hoisted_4$5
+      _hoisted_4$6
     ])) : (openBlock(), createBlock(_component_RouterView, { key: 1 }))
   ], 64);
 }
-const App = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-719ce579"]]);
-const _sfc_main$e = {
+const App = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["render", _sfc_render$f], ["__scopeId", "data-v-719ce579"]]);
+const _sfc_main$f = {
   props: {
     page: Object
   },
@@ -6939,27 +6939,27 @@ const _sfc_main$e = {
 };
 const PropertyDetails_vue_vue_type_style_index_0_scoped_7d77c629_lang = "";
 const _withScopeId$3 = (n) => (pushScopeId("data-v-7d77c629"), n = n(), popScopeId(), n);
-const _hoisted_1$b = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
-const _hoisted_2$8 = { class: "Stat" };
-const _hoisted_3$4 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
-const _hoisted_4$4 = { class: "Stat" };
-const _hoisted_5$5 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
+const _hoisted_1$c = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
+const _hoisted_2$a = { class: "Stat" };
+const _hoisted_3$5 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo:", -1));
+const _hoisted_4$5 = { class: "Stat" };
+const _hoisted_5$6 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "UPX / mo (max):", -1));
 const _hoisted_6$3 = { class: "Stat" };
 const _hoisted_7$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI:", -1));
 const _hoisted_8$2 = { class: "Stat" };
 const _hoisted_9$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Mo ROI (max):", -1));
 const _hoisted_10$2 = { class: "Stat" };
 const _hoisted_11$2 = /* @__PURE__ */ _withScopeId$3(() => /* @__PURE__ */ createBaseVNode("label", null, "Cost:", -1));
-function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$e(_ctx, _cache, $props, $setup, $data, $options) {
   var _a2, _b, _c, _d;
   return openBlock(), createElementBlock("div", null, [
-    _hoisted_1$b,
-    createBaseVNode("div", _hoisted_2$8, [
-      _hoisted_3$4,
+    _hoisted_1$c,
+    createBaseVNode("div", _hoisted_2$a, [
+      _hoisted_3$5,
       createBaseVNode("span", null, toDisplayString((_a2 = _ctx.baseMonthlyUPX) == null ? void 0 : _a2.toFixed(0)), 1)
     ]),
-    createBaseVNode("div", _hoisted_4$4, [
-      _hoisted_5$5,
+    createBaseVNode("div", _hoisted_4$5, [
+      _hoisted_5$6,
       createBaseVNode("span", null, toDisplayString((_b = _ctx.maxMonthlyUPX) == null ? void 0 : _b.toFixed(0)), 1)
     ]),
     createBaseVNode("div", _hoisted_6$3, [
@@ -6977,8 +6977,8 @@ function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const PropertyDetails$1 = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-7d77c629"]]);
-const _sfc_main$d = {
+const PropertyDetails$1 = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["render", _sfc_render$e], ["__scopeId", "data-v-7d77c629"]]);
+const _sfc_main$e = {
   components: { PropertyDetails: PropertyDetails$1 },
   data() {
     return {
@@ -6989,14 +6989,14 @@ const _sfc_main$d = {
   }
 };
 const PageStatsPanel_vue_vue_type_style_index_0_scoped_687d10c9_lang = "";
-function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$d(_ctx, _cache, $props, $setup, $data, $options) {
   return $data.page ? (openBlock(), createBlock(resolveDynamicComponent($data.page.type), {
     key: 0,
     page: $data.page,
     class: "PageStats"
   }, null, 8, ["page"])) : createCommentVNode("", true);
 }
-const PageStats = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-687d10c9"]]);
+const PageStats = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["render", _sfc_render$d], ["__scopeId", "data-v-687d10c9"]]);
 const compare = (a, b, prop, formatVal) => {
   const fmt = formatVal || ((val) => val);
   if (fmt(a[prop]) > fmt(b[prop]))
@@ -7011,7 +7011,7 @@ const compareNumeric = (a, b, prop) => {
     return Number(numStr) || 0;
   });
 };
-const _sfc_main$c = {
+const _sfc_main$d = {
   props: {
     title: {
       type: String,
@@ -7054,7 +7054,7 @@ const _sfc_main$c = {
     };
   },
   created() {
-    this.sort();
+    this.rerender();
   },
   watch: {
     items: {
@@ -7062,7 +7062,7 @@ const _sfc_main$c = {
         const data = this.parseTableData(newItems);
         this.headers = data.headers;
         this.rows = data.rows;
-        this.sort();
+        this.rerender();
       },
       deep: true
     }
@@ -7119,6 +7119,14 @@ const _sfc_main$c = {
         item.hidden = !((el.innerText || "").toLowerCase().indexOf((this.filter || "").toLowerCase()) > -1);
       });
     },
+    rerender() {
+      try {
+        this.applyFilter();
+        this.sort();
+      } catch (e) {
+        console.warn(e);
+      }
+    },
     onClick(item) {
       this.toggleExpand(item);
       this.$emit("item-click", this.itemWithId(item.__id));
@@ -7135,16 +7143,16 @@ const _sfc_main$c = {
     }
   }
 };
-const SimpleList_vue_vue_type_style_index_0_scoped_83b1c488_lang = "";
-const _withScopeId$2 = (n) => (pushScopeId("data-v-83b1c488"), n = n(), popScopeId(), n);
-const _hoisted_1$a = { class: "SimpleList" };
-const _hoisted_2$7 = { class: "ListHeader" };
-const _hoisted_3$3 = {
+const SimpleList_vue_vue_type_style_index_0_scoped_35fe65b8_lang = "";
+const _withScopeId$2 = (n) => (pushScopeId("data-v-35fe65b8"), n = n(), popScopeId(), n);
+const _hoisted_1$b = { class: "SimpleList" };
+const _hoisted_2$9 = { class: "ListHeader" };
+const _hoisted_3$4 = {
   key: 0,
   class: "Green"
 };
-const _hoisted_4$3 = { class: "Filter" };
-const _hoisted_5$4 = ["onClick"];
+const _hoisted_4$4 = { class: "Filter" };
+const _hoisted_5$5 = ["onClick"];
 const _hoisted_6$2 = { class: "Header" };
 const _hoisted_7$1 = { class: "Name" };
 const _hoisted_8$1 = {
@@ -7160,13 +7168,14 @@ const _hoisted_13$1 = [
 ];
 const _hoisted_14 = ["data-id", "onClick", "onMouseover", "onMouseleave"];
 const _hoisted_15 = { key: 0 };
-const _hoisted_16 = { key: 0 };
-const _hoisted_17 = ["colspan"];
-function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$a, [
-    createBaseVNode("div", _hoisted_2$7, [
-      $props.title ? (openBlock(), createElementBlock("h3", _hoisted_3$3, toDisplayString($props.title), 1)) : createCommentVNode("", true),
-      createBaseVNode("label", _hoisted_4$3, [
+const _hoisted_16 = { class: "Actions" };
+const _hoisted_17 = { key: 0 };
+const _hoisted_18 = ["colspan"];
+function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$b, [
+    createBaseVNode("div", _hoisted_2$9, [
+      $props.title ? (openBlock(), createElementBlock("h3", _hoisted_3$4, toDisplayString($props.title), 1)) : createCommentVNode("", true),
+      createBaseVNode("label", _hoisted_4$4, [
         createTextVNode(" Filter: "),
         createBaseVNode("input", {
           onInput: _cache[0] || (_cache[0] = (...args) => $options.onFilterInput && $options.onFilterInput(...args)),
@@ -7189,7 +7198,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                   $data.sortBy.dir === "asc" ? (openBlock(), createElementBlock("span", _hoisted_9$1, "▲")) : (openBlock(), createElementBlock("span", _hoisted_10$1, "▼"))
                 ])) : createCommentVNode("", true)
               ])
-            ], 8, _hoisted_5$4);
+            ], 8, _hoisted_5$5);
           }), 128)),
           $props.actionsCol ? (openBlock(), createElementBlock("th", _hoisted_11$1, _hoisted_13$1)) : createCommentVNode("", true)
         ])
@@ -7215,19 +7224,21 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
                 }, toDisplayString(val), 7);
               }), 128)),
               $props.actionsCol ? (openBlock(), createElementBlock("td", _hoisted_15, [
-                renderSlot(_ctx.$slots, "actions", {
-                  item: $options.itemWithId(__id)
-                }, void 0, true)
+                createBaseVNode("div", _hoisted_16, [
+                  renderSlot(_ctx.$slots, "actions", {
+                    item: $options.itemWithId(__id)
+                  }, void 0, true)
+                ])
               ])) : createCommentVNode("", true)
             ], 42, _hoisted_14),
-            $props.expandable && expanded ? (openBlock(), createElementBlock("tr", _hoisted_16, [
+            $props.expandable && expanded ? (openBlock(), createElementBlock("tr", _hoisted_17, [
               createBaseVNode("td", {
                 colspan: Object.keys(item).length
               }, [
                 renderSlot(_ctx.$slots, "expanded", {
                   item: $options.itemWithId(__id)
                 }, void 0, true)
-              ], 8, _hoisted_17)
+              ], 8, _hoisted_18)
             ])) : createCommentVNode("", true)
           ], 64);
         }), 128))
@@ -7235,8 +7246,8 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const List = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-83b1c488"]]);
-const _sfc_main$b = {
+const List = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-35fe65b8"]]);
+const _sfc_main$c = {
   components: { List },
   data() {
     return {
@@ -7285,7 +7296,7 @@ const _sfc_main$b = {
   }
 };
 const CurrentHoods_vue_vue_type_style_index_0_scoped_870a772f_lang = "";
-function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_List = resolveComponent("List");
   return $data.loading || $data.hoods && $data.hoods.length > 0 ? (openBlock(), createBlock(_component_List, {
     key: 0,
@@ -7299,8 +7310,8 @@ function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "list"
   }, null, 8, ["items", "cols", "loading", "onItemHoverOn", "onItemHoverOff"])) : createCommentVNode("", true);
 }
-const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-870a772f"]]);
-const _sfc_main$a = {
+const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-870a772f"]]);
+const _sfc_main$b = {
   props: {
     label: {
       type: String,
@@ -7317,15 +7328,15 @@ const _sfc_main$a = {
   }
 };
 const LabelAndField_vue_vue_type_style_index_0_scoped_c0530f4a_lang = "";
-const _hoisted_1$9 = { class: "LabelAndField" };
-function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$9, [
+const _hoisted_1$a = { class: "LabelAndField" };
+function _sfc_render$a(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("div", _hoisted_1$a, [
     createBaseVNode("label", null, toDisplayString($props.label), 1),
     createBaseVNode("div", null, toDisplayString($props.value), 1)
   ]);
 }
-const Field = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-c0530f4a"]]);
-const _sfc_main$9 = {
+const Field = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["render", _sfc_render$a], ["__scopeId", "data-v-c0530f4a"]]);
+const _sfc_main$a = {
   components: { Field },
   props: {
     id: {
@@ -7363,15 +7374,15 @@ const _sfc_main$9 = {
 };
 const PropertyDetails_vue_vue_type_style_index_0_scoped_42f95ba9_lang = "";
 const _withScopeId$1 = (n) => (pushScopeId("data-v-42f95ba9"), n = n(), popScopeId(), n);
-const _hoisted_1$8 = {
+const _hoisted_1$9 = {
   key: 0,
   class: "PropertyDetails"
 };
-const _hoisted_2$6 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
-function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+const _hoisted_2$8 = /* @__PURE__ */ _withScopeId$1(() => /* @__PURE__ */ createBaseVNode("h3", { class: "Green" }, "Property Details", -1));
+function _sfc_render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Field = resolveComponent("Field");
-  return $data.property ? (openBlock(), createElementBlock("div", _hoisted_1$8, [
-    _hoisted_2$6,
+  return $data.property ? (openBlock(), createElementBlock("div", _hoisted_1$9, [
+    _hoisted_2$8,
     (openBlock(true), createElementBlock(Fragment, null, renderList($data.keys, (prop, index) => {
       return openBlock(), createBlock(_component_Field, {
         key: index,
@@ -7382,9 +7393,50 @@ function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
     }), 128))
   ])) : createCommentVNode("", true);
 }
-const PropertyDetails = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8], ["__scopeId", "data-v-42f95ba9"]]);
+const PropertyDetails = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["render", _sfc_render$9], ["__scopeId", "data-v-42f95ba9"]]);
+const _sfc_main$9 = {
+  props: {
+    color: {
+      type: String,
+      required: false,
+      default: () => "hsl(160, 100%, 37%)"
+    }
+  }
+};
+const _hoisted_1$8 = {
+  viewBox: "0 0 512 512",
+  version: "1.1",
+  xmlns: "http://www.w3.org/2000/svg",
+  "xmlns:xlink": "http://www.w3.org/1999/xlink"
+};
+const _hoisted_2$7 = {
+  stroke: "none",
+  "stroke-width": "1",
+  fill: "none",
+  "fill-rule": "evenodd"
+};
+const _hoisted_3$3 = ["fill"];
+const _hoisted_4$3 = /* @__PURE__ */ createBaseVNode("path", {
+  d: "M128,63.999444 L128,106.666444 L42.6666667,106.666667 L42.6666667,320 L256,320 L256,234.666444 L298.666,234.666444 L298.666667,362.666667 L4.26325641e-14,362.666667 L4.26325641e-14,64 L128,63.999444 Z M362.666667,1.42108547e-14 L362.666667,170.666667 L320,170.666667 L320,72.835 L143.084945,249.751611 L112.915055,219.581722 L289.83,42.666 L192,42.6666667 L192,1.42108547e-14 L362.666667,1.42108547e-14 Z",
+  id: "Combined-Shape"
+}, null, -1);
+const _hoisted_5$4 = [
+  _hoisted_4$3
+];
+function _sfc_render$8(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createElementBlock("svg", _hoisted_1$8, [
+    createBaseVNode("g", _hoisted_2$7, [
+      createBaseVNode("g", {
+        id: "icon",
+        fill: $props.color,
+        transform: "translate(85.333333, 64.000000)"
+      }, _hoisted_5$4, 8, _hoisted_3$3)
+    ])
+  ]);
+}
+const OpenIcon = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["render", _sfc_render$8]]);
 const _sfc_main$8 = {
-  components: { List, PropertyDetails },
+  components: { List, PropertyDetails, OpenIcon },
   props: {
     title: {
       type: String,
@@ -7425,11 +7477,18 @@ const _sfc_main$8 = {
     sort(...args) {
       var _a2;
       return (_a2 = this.$refs.list) == null ? void 0 : _a2.sort(...args);
+    },
+    onOpenClicked(property) {
+      chrome.tabs.update(void 0, {
+        url: `${APP_URL}?prop_id=${property.prop_id}`
+      });
     }
   }
 };
 const _hoisted_1$7 = { class: "PropertiesList" };
+const _hoisted_2$6 = { class: "Icon" };
 function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_OpenIcon = resolveComponent("OpenIcon");
   const _component_PropertyDetails = resolveComponent("PropertyDetails");
   const _component_List = resolveComponent("List");
   return openBlock(), createElementBlock("div", _hoisted_1$7, [
@@ -7446,6 +7505,11 @@ function _sfc_render$7(_ctx, _cache, $props, $setup, $data, $options) {
       ref: "list"
     }, {
       actions: withCtx(({ item }) => [
+        createBaseVNode("div", _hoisted_2$6, [
+          createVNode(_component_OpenIcon, {
+            onClick: withModifiers(($event) => $options.onOpenClicked(item), ["stop"])
+          }, null, 8, ["onClick"])
+        ]),
         renderSlot(_ctx.$slots, "actions", { property: item })
       ]),
       expanded: withCtx(({ item }) => [
@@ -7801,7 +7865,7 @@ const _sfc_main$2 = {
     }
   }
 };
-const StashedProperties_vue_vue_type_style_index_0_scoped_f76d8303_lang = "";
+const StashedProperties_vue_vue_type_style_index_0_scoped_d0d9bc81_lang = "";
 const _hoisted_1$1 = { class: "Icon" };
 const _hoisted_2 = {
   key: 1,
@@ -7817,6 +7881,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       loading: $data.loading,
       actionsCol: true,
       sorting: { prop: "priceUPX", dir: "asc" },
+      title: "Stashed Properties",
       ref: "list"
     }, {
       actions: withCtx(({ property }) => [
@@ -7831,7 +7896,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     !$data.loading && $data.properties && $data.properties.length === 0 ? (openBlock(), createElementBlock("p", _hoisted_2, " You have no stashed properties. ")) : createCommentVNode("", true)
   ], 64);
 }
-const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-f76d8303"]]);
+const StashedProperties = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$1], ["__scopeId", "data-v-d0d9bc81"]]);
 const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "StashView",
   setup(__props) {
@@ -7842,12 +7907,12 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const fetch$1 = async (api) => {
+const fetch$1 = async (api, opts) => {
   const [dashboard, properties, yields, collections] = await Promise.all([
-    api.myDashboard(),
-    api.myProperties(),
-    api.myYield(),
-    api.myCollections()
+    api.myDashboard(opts),
+    api.myProperties(opts),
+    api.myYield(opts),
+    api.myCollections(opts)
   ]);
   const props = properties.map((attrs) => Model(attrs).toJSON());
   return { dashboard, properties: props, yields, collections };

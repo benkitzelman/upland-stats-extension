@@ -23,6 +23,11 @@ export type GetSessionSettings = ResponseMessage & {
   };
 };
 
+export type ChangeUrlMessage = ResponseMessage & {
+  action: "changeUrl";
+  ok: boolean;
+};
+
 export type MarkNeighbourhoodsMessage = ResponseMessage & {
   action: "markNeighbourhoods";
   ok: boolean;
@@ -47,7 +52,8 @@ export type ClientResponseMessage =
   | GetPageSourceMsg
   | GetScreenDimensions
   | GetSessionSettings
-  | MarkNeighbourhoodsMessage;
+  | MarkNeighbourhoodsMessage
+  | ChangeUrlMessage;
 
 export type ClientEventMessage = WindowResizeMessage;
 
@@ -67,4 +73,8 @@ export function getScreenDimensions(eventId: number): GetScreenDimensions {
 
 export function markNeighbourhoods(eventId: number, hoods: Hood[]): MarkNeighbourhoodsMessage {
   return window.UplandStats.markNeighbourhoods(eventId, hoods);
+}
+
+export function changeUrl(eventId: number, url: string): ChangeUrlMessage {
+  return window.UplandStats.changeUrl(eventId, url);
 }
