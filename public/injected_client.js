@@ -58,6 +58,8 @@ if (!window.UplandStats) {
     return `<div class="hood" style="position:absolute;left:${hood.screenCoords?.x}px;top:${hood.screenCoords?.y}px;color:hsla(160, 100%, 37%, 1)">${hood.name}</div>`;
   };
 
+  let markerLayerClrTimeout;
+
   window.UplandStats = {
     getSessionSettings(eventId) {
       return sendMessage(eventId, "getSessionSettings", window.sessionStorage);
@@ -89,6 +91,10 @@ if (!window.UplandStats) {
       };
 
       const el = markerLayer();
+
+      // auto remove it after
+      if (markerLayerClrTimeout) clearTimeout(markerLayerClrTimeout);
+      setTimeout(() => el.remove(), 3000);
 
       if (!hoods || hoods.length === 0) {
         el.remove();

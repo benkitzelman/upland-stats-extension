@@ -108,19 +108,19 @@ nav a[data-v-719ce579] {
   padding-top: 1rem;
 }
 
-.SimpleList > .ListHeader[data-v-35fe65b8] {
+.SimpleList > .ListHeader[data-v-3567a03d] {
   display: flex;
   justify-content: space-between;
 }
-.SimpleList > .Filter[data-v-35fe65b8] {
+.SimpleList > .Filter[data-v-3567a03d] {
   display: block;
   text-align: right;
 }
-.SimpleList > .Filter input[data-v-35fe65b8] {
+.SimpleList > .Filter input[data-v-3567a03d] {
   border-radius: 4px;
   padding: 3px 5px;
 }
-.SimpleList > table[data-v-35fe65b8] {
+.SimpleList > table[data-v-3567a03d] {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -128,41 +128,41 @@ nav a[data-v-719ce579] {
   border-spacing: 0;
   width: 100%;
 }
-.SimpleList > table > thead > tr > th[data-v-35fe65b8] {
+.SimpleList > table > thead > tr > th[data-v-3567a03d] {
   font-weight: 800;
   background: #254545;
   color: hsla(160, 100%, 37%, 1);
   padding: 5px;
 }
-.SimpleList > table > thead > tr > th[data-v-35fe65b8]:first-child {
+.SimpleList > table > thead > tr > th[data-v-3567a03d]:first-child {
   border-top-left-radius: 10px;
 }
-.SimpleList > table > thead > tr > th[data-v-35fe65b8]:last-child {
+.SimpleList > table > thead > tr > th[data-v-3567a03d]:last-child {
   border-top-right-radius: 10px;
 }
-.SimpleList > table > thead > tr > th > .Header[data-v-35fe65b8] {
+.SimpleList > table > thead > tr > th > .Header[data-v-3567a03d] {
   display: flex;
 }
-.SimpleList > table > thead > tr > th > .Header .Sort[data-v-35fe65b8] {
+.SimpleList > table > thead > tr > th > .Header .Sort[data-v-3567a03d] {
   margin-left: 5px;
 }
-.SimpleList > table > tbody[data-v-35fe65b8] {
+.SimpleList > table > tbody[data-v-3567a03d] {
   border: 1px solid hsla(160, 100%, 37%, 1);
   border-top: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.SimpleList > table > tbody > tr.Expandable[data-v-35fe65b8] {
+.SimpleList > table > tbody > tr.Expandable[data-v-3567a03d] {
   cursor: pointer;
 }
-.SimpleList > table > tbody > tr > td[data-v-35fe65b8] {
+.SimpleList > table > tbody > tr > td[data-v-3567a03d] {
   padding: 0 5px;
   border-bottom: 1px dotted #2f2f2f;
 }
-.SimpleList > table > tbody > tr > td > .Actions[data-v-35fe65b8] {
+.SimpleList > table > tbody > tr > td > .Actions[data-v-3567a03d] {
   display: flex;
 }
-.SimpleList > table > tbody .Hidden[data-v-35fe65b8] {
+.SimpleList > table > tbody .Hidden[data-v-3567a03d] {
   display: none;
 }
 

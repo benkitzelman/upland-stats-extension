@@ -7116,6 +7116,8 @@ const _sfc_main$d = {
         const item = this.rows.find(
           (row) => String(el.dataset["id"]) === String(row.__id)
         );
+        if (!item)
+          return;
         item.hidden = !((el.innerText || "").toLowerCase().indexOf((this.filter || "").toLowerCase()) > -1);
       });
     },
@@ -7143,8 +7145,8 @@ const _sfc_main$d = {
     }
   }
 };
-const SimpleList_vue_vue_type_style_index_0_scoped_35fe65b8_lang = "";
-const _withScopeId$2 = (n) => (pushScopeId("data-v-35fe65b8"), n = n(), popScopeId(), n);
+const SimpleList_vue_vue_type_style_index_0_scoped_3567a03d_lang = "";
+const _withScopeId$2 = (n) => (pushScopeId("data-v-3567a03d"), n = n(), popScopeId(), n);
 const _hoisted_1$b = { class: "SimpleList" };
 const _hoisted_2$9 = { class: "ListHeader" };
 const _hoisted_3$4 = {
@@ -7246,7 +7248,7 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const List = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-35fe65b8"]]);
+const List = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-3567a03d"]]);
 const _sfc_main$c = {
   components: { List },
   data() {

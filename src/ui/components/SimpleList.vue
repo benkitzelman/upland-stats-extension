@@ -200,6 +200,9 @@ export default {
         const item = this.rows.find(
           (row: any) => String(el.dataset["id"]) === String(row.__id)
         );
+
+        if (!item) return;
+
         item.hidden = !(
           (el.innerText || "")
             .toLowerCase()
