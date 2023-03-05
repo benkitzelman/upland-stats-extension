@@ -19,8 +19,31 @@ const APP_URL = "https://play.upland.me";
 const API_BASE_URL = "https://api.prod.upland.me/api";
 const UPX_EXCHANGE_RATE = 1e3;
 const DAYS_IN_MONTH = 30;
+const INDENT_CHARS = 2;
+const MAX_LEVEL = 4;
+const indent = (label, indent2, root2) => {
+  let str = `${root2 || ""}{${indent2}} - ${label} - [${Math.random()}]`;
+  for (let i = 0; i < (indent2 + 1) * INDENT_CHARS; i++)
+    str = ` ${str}`;
+  return str;
+};
+async function time(opts, fn) {
+  let indentLevel = opts.indent || 0;
+  const indentedLabel = indent(opts.label, indentLevel, opts.root);
+  const shouldLog = indentLevel <= MAX_LEVEL;
+  if (shouldLog) {
+    console.time(indentedLabel);
+    indentLevel++;
+  }
+  const res = await fn({ ...opts, indent: indentLevel });
+  if (shouldLog) {
+    indentLevel--;
+    console.timeEnd(indentedLabel);
+  }
+  return res;
+}
 const invocations = {};
-function singleInvoke(key, fn, ...args) {
+function singleInvocation(key, fn, ...args) {
   const existing = invocations[key];
   if (existing)
     return existing;
@@ -29,14 +52,9 @@ function singleInvoke(key, fn, ...args) {
   });
   return invocations[key];
 }
-function debounce(timeout, func) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.call(null, ...args);
-    }, timeout);
-  };
+function timedSingleInvocation(opts, fn) {
+  const key = [opts.root, opts.label].filter(Boolean).join(" - ");
+  return singleInvocation(key, () => time(opts, fn));
 }
 class UplandApi {
   constructor(authToken) {
@@ -52,7 +70,7 @@ class UplandApi {
   }
   async get(path, extraHeaders = {}, opts) {
     const url = API_BASE_URL + path;
-    return singleInvoke(url, async () => {
+    return singleInvocation(url, async () => {
       const resp = await fetch(url, {
         ...opts,
         method: "GET",
@@ -1077,8 +1095,8 @@ function _interopRequireDefault$4(obj) {
 var getSpeed = function getSpeed2(start, end2) {
   var distanceFn = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : _getDistance$2.default;
   var distance = distanceFn(start, end2);
-  var time = Number(end2.time) - Number(start.time);
-  var metersPerSecond = distance / time * 1e3;
+  var time2 = Number(end2.time) - Number(start.time);
+  var metersPerSecond = distance / time2 * 1e3;
   return metersPerSecond;
 };
 var _default$5 = getSpeed;
@@ -1405,12 +1423,12 @@ const boundariesToPolygon = (boundaries) => {
     longitude: coords[0]
   }));
 };
-const areaCoordsFrom = ([long, lat]) => {
+const areaCoordsFrom = ([long, lat], adjustment = 0) => {
   return {
-    north: lat + 2e-3,
-    south: lat - 2e-3,
-    east: long + 2e-3,
-    west: long - 2e-3
+    north: lat + adjustment,
+    south: lat - adjustment,
+    east: long + adjustment,
+    west: long - adjustment
   };
 };
 const toXY = (longLat, area, screenDimensions) => {
@@ -1443,66 +1461,79 @@ let Error$1 = class Error2 extends ServiceError {
     super(msg, "neighbourhood");
   }
 };
-let rents = null;
-let hoods = null;
+let rents;
+let hoods;
+const FUZZY_AREA_RADIUS = 5e-3;
 const fetchAll = async (api, opts) => {
   if (hoods)
     return hoods;
-  const all = await api.listNeighbourhoods(opts);
-  hoods = all.reduce((map2, hood) => {
-    map2[hood.id] = hood;
-    return map2;
-  }, {});
-  return hoods;
+  return await timedSingleInvocation({ ...opts == null ? void 0 : opts.timerOpts, label: "hood - fetchAll" }, async () => {
+    const all = await api.listNeighbourhoods(opts);
+    hoods = all.reduce((map2, hood) => {
+      map2[hood.id] = hood;
+      return map2;
+    }, {});
+    return hoods;
+  });
 };
 const monthlyRentPerUnitFor = async (neighbourhoodId, api, opts) => {
-  rents || (rents = await getNeighbourhoodYields());
-  const rent = rents[neighbourhoodId];
-  if (rent)
-    return rent;
-  const neighbourhoods = await fetchAll(api, opts);
-  const hood = neighbourhoods[neighbourhoodId];
-  if (!hood)
-    throw new Error$1(`Unknown hood (Id: ${neighbourhoodId})`);
-  if (!hood.center)
-    throw new Error$1(`Hood has no center coords (Id: ${neighbourhoodId})`);
-  const areaCoords = areaCoordsFrom(hood.center.coordinates);
-  const res = (await api.listProperties(areaCoords, { limit: 1, offset: 0 }, "asc", opts)).properties || [];
-  if (!res || res.length === 0) {
-    return null;
-  }
-  const propertySummary = res[0];
-  const property = await api.property(propertySummary.prop_id, opts);
-  const monthlyRent = yieldPerMonth(property.yield_per_hour);
-  const amt = monthlyRent / property.area;
-  rents[neighbourhoodId] = amt;
-  setNeighbourhoodYields(rents);
-  return amt;
+  return timedSingleInvocation({ ...opts == null ? void 0 : opts.timerOpts, label: `monthlyRentPerUnitFor ${neighbourhoodId}` }, async (timerOpts) => {
+    rents || (rents = await getNeighbourhoodYields());
+    const rent = rents[neighbourhoodId];
+    const hasAlreadyAttemptedToFetchRentThisSession = typeof rent !== "undefined";
+    if (rent || hasAlreadyAttemptedToFetchRentThisSession)
+      return rent;
+    const neighbourhoods = await fetchAll(api, { timerOpts, ...opts });
+    const hood = neighbourhoods[neighbourhoodId];
+    if (!hood)
+      throw new Error$1(`Unknown hood (Id: ${neighbourhoodId})`);
+    if (!hood.center)
+      throw new Error$1(`Hood has no center coords (Id: ${neighbourhoodId})`);
+    const hoodAreaCoords = areaCoordsFrom(
+      hood.center.coordinates,
+      FUZZY_AREA_RADIUS
+    );
+    const res = (await api.listProperties(hoodAreaCoords, { limit: 1, offset: 0 }, "asc", opts)).properties || [];
+    if (!res || res.length === 0) {
+      return null;
+    }
+    const propertySummary = res[0];
+    const property = await api.property(propertySummary.prop_id, opts);
+    const monthlyRent = yieldPerMonth(property.yield_per_hour);
+    const amt = monthlyRent / property.area;
+    rents[neighbourhoodId] = amt;
+    setNeighbourhoodYields(rents);
+    return amt;
+  });
 };
 const neighbourhoodsWithin = async (area, api, opts) => {
-  const neighbourhoods = await fetchAll(api, opts);
-  const polygon = areaCoordsToPolygon(area);
-  return Object.values(neighbourhoods).filter((hood) => {
-    if (!(hood == null ? void 0 : hood.boundaries))
-      return false;
-    const points = boundariesToPolygon(hood.boundaries);
-    return anyOverlap(polygon, points);
+  return await timedSingleInvocation({ ...opts == null ? void 0 : opts.timerOpts, label: "neighbourhoodsWithin" }, async (timerOpts) => {
+    const neighbourhoods = await fetchAll(api, { timerOpts, ...opts });
+    const polygon = areaCoordsToPolygon(area);
+    return Object.values(neighbourhoods).filter((hood) => {
+      if (!(hood == null ? void 0 : hood.boundaries))
+        return false;
+      const points = boundariesToPolygon(hood.boundaries);
+      return anyOverlap(polygon, points);
+    });
   });
 };
-const decorate = (hoods2, state, api) => {
-  const promises = hoods2.map(async (hood) => {
-    const upx = await monthlyRentPerUnitFor(hood.id, api);
-    return {
-      ...hood,
-      monthlyYield: hood.monthlyYield || (upx ? parseFloat(upx.toFixed(2)) : null),
-      screenCoords: hood.screenCoords || screenCoordsFor(
-        hood,
-        state.currentCoordinates,
-        state.screenDimensions
-      )
-    };
+const decorate = (hoods2, state, api, opts) => {
+  return timedSingleInvocation({ ...opts == null ? void 0 : opts.timerOpts, label: "neighbourhood decorate" }, async (timerOpts) => {
+    const promises = hoods2.map(async (hood) => {
+      const upx = await monthlyRentPerUnitFor(hood.id, api, { timerOpts });
+      return {
+        ...hood,
+        monthlyYield: hood.monthlyYield || (upx ? parseFloat(upx.toFixed(2)) : null),
+        screenCoords: hood.screenCoords || screenCoordsFor(
+          hood,
+          state.currentCoordinates,
+          state.screenDimensions
+        )
+      };
+    });
+    return Promise.all(promises);
   });
-  return Promise.all(promises);
 };
 const screenCoordsFor = (hood, area, screenDimensions) => {
   var _a2, _b;
@@ -14744,7 +14775,6 @@ const storeSession = async (state, monitor2) => {
     state.api = new UplandApi(state.session.auth_token);
 };
 const onCompletedHandler = (state, monitor2) => ({ url }) => {
-  console.log(">>", url);
   if (url.indexOf("/api/map?") > -1) {
     storeCurrentCoordinates(new URL(url), state);
   }
@@ -14900,21 +14930,25 @@ const Model = (obj, rentUPXPerUnitPerMo) => ({
   }
 });
 const propertiesWithRent = async (hoods2, area, api, opts) => {
-  if (hoods2.length !== 1)
-    return;
-  const hood = hoods2[0];
-  const rentUpx = await monthlyRentPerUnitFor(hood.id, api, opts);
-  const properties = (await api.listAllProperties(area, opts)).properties;
-  return properties.map((attrs) => Model(attrs, rentUpx).toJSON());
+  return await time({ ...opts == null ? void 0 : opts.timerOpts, label: "propertiesWithRent" }, async (timerOpts) => {
+    if (hoods2.length !== 1)
+      return;
+    const hood = hoods2[0];
+    const rentUpx = await monthlyRentPerUnitFor(hood.id, api, { timerOpts, ...opts });
+    const properties = (await api.listAllProperties(area, opts)).properties;
+    return properties.map((attrs) => Model(attrs, rentUpx).toJSON());
+  });
 };
 const stashedProperties = async (api, opts) => {
-  const properties = await getStashedProperties();
-  return Promise.all(
-    properties.map(async ({ id, hoodId }) => {
-      const rentUpx = await monthlyRentPerUnitFor(hoodId, api, opts);
-      return Model(await api.property(id, opts), rentUpx);
-    })
-  );
+  return await time({ label: "stashedProperties" }, async (timerOpts) => {
+    const properties = await getStashedProperties();
+    return Promise.all(
+      properties.map(async ({ id, hoodId }) => {
+        const rentUpx = await monthlyRentPerUnitFor(hoodId, api, { timerOpts, ...opts });
+        return Model(await api.property(id, opts), rentUpx);
+      })
+    );
+  });
 };
 export {
   APP_URL as A,
@@ -14922,14 +14956,14 @@ export {
   SharedState as S,
   UplandApi as U,
   stashedProperties as a,
-  debounce as b,
+  getTab as b,
   commonjsGlobal as c,
   decorate as d,
-  getTab as e,
-  stop as f,
+  stop as e,
   getStashedProperties as g,
   instance as i,
   neighbourhoodsWithin as n,
   propertiesWithRent as p,
-  setStashedProperties as s
+  setStashedProperties as s,
+  time as t
 };

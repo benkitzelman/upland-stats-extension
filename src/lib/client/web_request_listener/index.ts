@@ -25,7 +25,7 @@ const storeSession = async (state: any, monitor: Monitor) => {
 };
 
 export const onCompletedHandler = (state: any, monitor: Monitor) => ({ url }: OnCompletedDetails) => {
-  console.log(">>", url);
+  // console.log(">>", url);
 
   if (url.indexOf("/api/map?") > -1) {
     storeCurrentCoordinates(new URL(url), state)

@@ -196,7 +196,7 @@ export default {
     },
 
     applyFilter() {
-      [...this.$el.querySelectorAll("tbody tr")].forEach((el) => {
+      [...this.$el?.querySelectorAll("tbody tr")].forEach((el) => {
         const item = this.rows.find(
           (row: any) => String(el.dataset["id"]) === String(row.__id)
         );

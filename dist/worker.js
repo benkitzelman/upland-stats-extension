@@ -1,4 +1,4 @@
-import { c as commonjsGlobal, S as SharedState, b as debounce, n as neighbourhoodsWithin, p as propertiesWithRent, e as getTab, f as stop, i as instance, U as UplandApi } from "./property.js";
+import { c as commonjsGlobal, S as SharedState, t as time, n as neighbourhoodsWithin, p as propertiesWithRent, b as getTab, e as stop, i as instance, U as UplandApi } from "./property.js";
 var lodashExports = {};
 var lodash = {
   get exports() {
@@ -3832,7 +3832,7 @@ var lodash = {
         result2.placeholder = curryRight.placeholder;
         return result2;
       }
-      function debounce2(func, wait, options) {
+      function debounce(func, wait, options) {
         var lastArgs, lastThis, maxWait, result2, timerId, lastCallTime, lastInvokeTime = 0, leading = false, maxing = false, trailing = true;
         if (typeof func != "function") {
           throw new TypeError(FUNC_ERROR_TEXT);
@@ -3844,37 +3844,37 @@ var lodash = {
           maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
           trailing = "trailing" in options ? !!options.trailing : trailing;
         }
-        function invokeFunc(time) {
+        function invokeFunc(time2) {
           var args = lastArgs, thisArg = lastThis;
           lastArgs = lastThis = undefined$1;
-          lastInvokeTime = time;
+          lastInvokeTime = time2;
           result2 = func.apply(thisArg, args);
           return result2;
         }
-        function leadingEdge(time) {
-          lastInvokeTime = time;
+        function leadingEdge(time2) {
+          lastInvokeTime = time2;
           timerId = setTimeout(timerExpired, wait);
-          return leading ? invokeFunc(time) : result2;
+          return leading ? invokeFunc(time2) : result2;
         }
-        function remainingWait(time) {
-          var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
+        function remainingWait(time2) {
+          var timeSinceLastCall = time2 - lastCallTime, timeSinceLastInvoke = time2 - lastInvokeTime, timeWaiting = wait - timeSinceLastCall;
           return maxing ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke) : timeWaiting;
         }
-        function shouldInvoke(time) {
-          var timeSinceLastCall = time - lastCallTime, timeSinceLastInvoke = time - lastInvokeTime;
+        function shouldInvoke(time2) {
+          var timeSinceLastCall = time2 - lastCallTime, timeSinceLastInvoke = time2 - lastInvokeTime;
           return lastCallTime === undefined$1 || timeSinceLastCall >= wait || timeSinceLastCall < 0 || maxing && timeSinceLastInvoke >= maxWait;
         }
         function timerExpired() {
-          var time = now();
-          if (shouldInvoke(time)) {
-            return trailingEdge(time);
+          var time2 = now();
+          if (shouldInvoke(time2)) {
+            return trailingEdge(time2);
           }
-          timerId = setTimeout(timerExpired, remainingWait(time));
+          timerId = setTimeout(timerExpired, remainingWait(time2));
         }
-        function trailingEdge(time) {
+        function trailingEdge(time2) {
           timerId = undefined$1;
           if (trailing && lastArgs) {
-            return invokeFunc(time);
+            return invokeFunc(time2);
           }
           lastArgs = lastThis = undefined$1;
           return result2;
@@ -3890,10 +3890,10 @@ var lodash = {
           return timerId === undefined$1 ? result2 : trailingEdge(now());
         }
         function debounced() {
-          var time = now(), isInvoking = shouldInvoke(time);
+          var time2 = now(), isInvoking = shouldInvoke(time2);
           lastArgs = arguments;
           lastThis = this;
-          lastCallTime = time;
+          lastCallTime = time2;
           if (isInvoking) {
             if (timerId === undefined$1) {
               return leadingEdge(lastCallTime);
@@ -4012,7 +4012,7 @@ var lodash = {
           leading = "leading" in options ? !!options.leading : leading;
           trailing = "trailing" in options ? !!options.trailing : trailing;
         }
-        return debounce2(func, wait, {
+        return debounce(func, wait, {
           "leading": leading,
           "maxWait": wait,
           "trailing": trailing
@@ -5026,7 +5026,7 @@ var lodash = {
       lodash2.create = create;
       lodash2.curry = curry;
       lodash2.curryRight = curryRight;
-      lodash2.debounce = debounce2;
+      lodash2.debounce = debounce;
       lodash2.defaults = defaults;
       lodash2.defaultsDeep = defaultsDeep;
       lodash2.defer = defer;
@@ -5550,17 +5550,20 @@ const listenForStateRequests = (state2) => {
   });
 };
 const syncState = async (state2) => {
-  try {
-    await chrome.runtime.sendMessage({
-      action: "state-changed",
-      state: state2
-    });
-  } catch (err) {
-    console.warn("Worker send message:", err);
-  }
+  return await time({ root: "worker", label: "stateSync" }, async () => {
+    try {
+      await chrome.runtime.sendMessage({
+        action: "state-changed",
+        state: state2
+      });
+    } catch (err) {
+      console.warn("Worker send message:", err);
+    }
+  });
 };
 let controller;
 const abortExistingRequestsAndReset = () => {
+  controller == null ? void 0 : controller.abort();
   controller = new AbortController();
   controller.signal.addEventListener(
     "abort",
@@ -5568,36 +5571,42 @@ const abortExistingRequestsAndReset = () => {
   );
   return controller;
 };
+let trackingState = false;
 const trackViewportState = (state2) => {
+  if (trackingState)
+    return;
   state2.on(
     "changed:currentCoordinates",
-    debounce(250, async (newCoords) => {
-      var _a;
-      if (!state2.api)
-        return;
-      const abortController = abortExistingRequestsAndReset();
-      const opts = { signal: abortController.signal };
-      state2.loading = true;
-      try {
-        state2.viewableNeighbourhoods = await neighbourhoodsWithin(
-          newCoords,
-          state2.api,
-          opts
-        );
-        state2.viewableProperties = ((_a = state2.viewableNeighbourhoods) == null ? void 0 : _a.length) === 1 ? await propertiesWithRent(
-          state2.viewableNeighbourhoods,
-          newCoords,
-          state2.api,
-          opts
-        ) || [] : void 0;
-      } catch (err) {
-        console.warn(err);
-      } finally {
-        state2.loading = false;
-        controller = void 0;
-      }
-    })
+    async (newCoords) => {
+      time({ root: "worker", label: `trackViewportState ${JSON.stringify(newCoords)}` }, async (timerOpts) => {
+        var _a;
+        if (!state2.api)
+          return;
+        const abortController = abortExistingRequestsAndReset();
+        const opts = { signal: abortController.signal, timerOpts };
+        state2.loading = true;
+        try {
+          state2.viewableNeighbourhoods = await neighbourhoodsWithin(
+            newCoords,
+            state2.api,
+            opts
+          );
+          state2.viewableProperties = ((_a = state2.viewableNeighbourhoods) == null ? void 0 : _a.length) === 1 ? await propertiesWithRent(
+            state2.viewableNeighbourhoods,
+            newCoords,
+            state2.api,
+            opts
+          ) || [] : void 0;
+        } catch (err) {
+          console.warn(err);
+        } finally {
+          state2.loading = false;
+          controller = void 0;
+        }
+      });
+    }
   );
+  trackingState = true;
 };
 async function monitorUpland(state2) {
   chrome.tabs.onUpdated.addListener(() => startOrStop(state2));

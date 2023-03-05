@@ -26,12 +26,12 @@ export const boundariesToPolygon = (boundaries: Boundaries): Coords[] => {
   }));
 };
 
-export const areaCoordsFrom = ([long, lat]: number[]): AreaCoords => {
+export const areaCoordsFrom = ([long, lat]: number[], adjustment: number = 0): AreaCoords => {
   return {
-    north: lat + 0.002,
-    south: lat - 0.002,
-    east: long + 0.002,
-    west: long - 0.002,
+    north: lat + adjustment,
+    south: lat - adjustment,
+    east: long + adjustment,
+    west: long - adjustment,
   };
 };
 

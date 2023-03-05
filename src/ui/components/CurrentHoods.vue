@@ -16,6 +16,7 @@
 import List from "./SimpleList.vue";
 import * as service from "../../services/neighbourhood";
 import Api from "../../lib/api";
+import timer from "../../lib/timer";
 import * as ClientMonitor from "../../lib/client";
 import state from "../state";
 import { compareNumeric } from "../../lib/comparitors";
@@ -63,19 +64,22 @@ export default {
     },
 
     async updateHoods(hoods: (Neighbourhood | Hood)[]) {
-      if (!state.currentCoordinates || !hoods) return;
+      return await timer({ root: "ui", label: "CurrentHoods - updateHoods" }, async (timerOpts) => {
+        if (!state.currentCoordinates || !hoods) return;
 
-      this.loading = true;
+        this.loading = true;
 
-      this.hoods = await service.decorate(
-        hoods,
-        state,
-        new Api(state.session?.auth_token)
-      );
+        this.hoods = await service.decorate(
+          hoods,
+          state,
+          new Api(state.session?.auth_token),
+          { timerOpts }
+        );
 
-      (this.$refs as any).list?.sort();
+        (this.$refs as any).list?.sort();
 
-      this.loading = false;
+        this.loading = false;
+      });
     },
   },
 };

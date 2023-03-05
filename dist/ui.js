@@ -1,4 +1,4 @@
-import { S as SharedState, U as UplandApi, i as instance, d as decorate, A as APP_URL, g as getStashedProperties, s as setStashedProperties, a as stashedProperties, M as Model } from "./property.js";
+import { S as SharedState, U as UplandApi, i as instance, t as time, d as decorate, A as APP_URL, g as getStashedProperties, s as setStashedProperties, a as stashedProperties, M as Model } from "./property.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -7112,7 +7112,8 @@ const _sfc_main$d = {
         item.expanded = !item.expanded;
     },
     applyFilter() {
-      [...this.$el.querySelectorAll("tbody tr")].forEach((el) => {
+      var _a2;
+      [...(_a2 = this.$el) == null ? void 0 : _a2.querySelectorAll("tbody tr")].forEach((el) => {
         const item = this.rows.find(
           (row) => String(el.dataset["id"]) === String(row.__id)
         );
@@ -7145,8 +7146,8 @@ const _sfc_main$d = {
     }
   }
 };
-const SimpleList_vue_vue_type_style_index_0_scoped_3567a03d_lang = "";
-const _withScopeId$2 = (n) => (pushScopeId("data-v-3567a03d"), n = n(), popScopeId(), n);
+const SimpleList_vue_vue_type_style_index_0_scoped_e7da9f49_lang = "";
+const _withScopeId$2 = (n) => (pushScopeId("data-v-e7da9f49"), n = n(), popScopeId(), n);
 const _hoisted_1$b = { class: "SimpleList" };
 const _hoisted_2$9 = { class: "ListHeader" };
 const _hoisted_3$4 = {
@@ -7248,7 +7249,7 @@ function _sfc_render$c(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-const List = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-3567a03d"]]);
+const List = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["render", _sfc_render$c], ["__scopeId", "data-v-e7da9f49"]]);
 const _sfc_main$c = {
   components: { List },
   data() {
@@ -7283,21 +7284,24 @@ const _sfc_main$c = {
       (await instance(State)).markNeighbourhoods([]);
     },
     async updateHoods(hoods) {
-      var _a2, _b;
-      if (!State.currentCoordinates || !hoods)
-        return;
-      this.loading = true;
-      this.hoods = await decorate(
-        hoods,
-        State,
-        new UplandApi((_a2 = State.session) == null ? void 0 : _a2.auth_token)
-      );
-      (_b = this.$refs.list) == null ? void 0 : _b.sort();
-      this.loading = false;
+      return await time({ root: "ui", label: "CurrentHoods - updateHoods" }, async (timerOpts) => {
+        var _a2, _b;
+        if (!State.currentCoordinates || !hoods)
+          return;
+        this.loading = true;
+        this.hoods = await decorate(
+          hoods,
+          State,
+          new UplandApi((_a2 = State.session) == null ? void 0 : _a2.auth_token),
+          { timerOpts }
+        );
+        (_b = this.$refs.list) == null ? void 0 : _b.sort();
+        this.loading = false;
+      });
     }
   }
 };
-const CurrentHoods_vue_vue_type_style_index_0_scoped_870a772f_lang = "";
+const CurrentHoods_vue_vue_type_style_index_0_scoped_b3cfaabf_lang = "";
 function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_List = resolveComponent("List");
   return $data.loading || $data.hoods && $data.hoods.length > 0 ? (openBlock(), createBlock(_component_List, {
@@ -7312,7 +7316,7 @@ function _sfc_render$b(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "list"
   }, null, 8, ["items", "cols", "loading", "onItemHoverOn", "onItemHoverOff"])) : createCommentVNode("", true);
 }
-const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-870a772f"]]);
+const Neighbourhoods = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["render", _sfc_render$b], ["__scopeId", "data-v-b3cfaabf"]]);
 const _sfc_main$b = {
   props: {
     label: {

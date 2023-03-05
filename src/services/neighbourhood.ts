@@ -2,6 +2,7 @@ import * as store from "../lib/storage";
 import * as Geo from "../services/geo";
 import { ServiceError } from "../lib/errors";
 import { yieldPerMonth } from "../lib/calc";
+import { timedSingleInvocation } from "../lib/single_invocation";
 
 import type { AreaCoords, default as UplandApi } from "../lib/api";
 import type { Neighbourhood } from "../lib/api/types";
@@ -24,20 +25,24 @@ class Error extends ServiceError {
   }
 }
 
-let rents: NeighbourhoodYieldMap | null = null;
-let hoods: NeighbourhoodMap | null = null;
+let rents: NeighbourhoodYieldMap;
+let hoods: NeighbourhoodMap;
+
+const FUZZY_AREA_RADIUS = 0.005;
 
 export const fetchAll = async (api: UplandApi, opts?: ServiceOpts) => {
   if (hoods) return hoods;
 
-  const all = await api.listNeighbourhoods(opts);
+  return await timedSingleInvocation({ ...opts?.timerOpts, label: "hood - fetchAll" }, async () => {
+    const all = await api.listNeighbourhoods(opts);
 
-  hoods = all.reduce((map, hood) => {
-    map[hood.id] = hood;
-    return map;
-  }, {} as any);
+    hoods = all.reduce((map, hood) => {
+      map[hood.id] = hood;
+      return map;
+    }, {} as any);
 
-  return hoods as NeighbourhoodMap;
+    return hoods as NeighbourhoodMap;
+  });
 };
 
 export const monthlyRentPerUnitFor = async (
@@ -45,37 +50,45 @@ export const monthlyRentPerUnitFor = async (
   api: UplandApi,
   opts?: ServiceOpts
 ) => {
-  rents ||= await store.getNeighbourhoodYields();
+  return timedSingleInvocation({ ...opts?.timerOpts, label: `monthlyRentPerUnitFor ${neighbourhoodId}` }, async (timerOpts) => {
+    rents ||= await store.getNeighbourhoodYields();
 
-  const rent = rents[neighbourhoodId];
-  if (rent) return rent;
+    const rent = rents[neighbourhoodId];
+    const hasAlreadyAttemptedToFetchRentThisSession = typeof rent !== 'undefined';
+    if (rent || hasAlreadyAttemptedToFetchRentThisSession) return rent;
 
-  const neighbourhoods = await fetchAll(api, opts);
-  const hood = neighbourhoods[neighbourhoodId];
 
-  if (!hood) throw new Error(`Unknown hood (Id: ${neighbourhoodId})`);
-  if (!hood.center)
-    throw new Error(`Hood has no center coords (Id: ${neighbourhoodId})`);
+    const neighbourhoods = await fetchAll(api, { timerOpts, ...opts });
+    const hood = neighbourhoods[neighbourhoodId];
 
-  const areaCoords = Geo.areaCoordsFrom(hood.center.coordinates);
-  const res =
-    (await api.listProperties(areaCoords, { limit: 1, offset: 0 }, "asc", opts))
-      .properties || [];
+    if (!hood) throw new Error(`Unknown hood (Id: ${neighbourhoodId})`);
+    if (!hood.center)
+      throw new Error(`Hood has no center coords (Id: ${neighbourhoodId})`);
 
-  if (!res || res.length === 0) {
-    return null;
-  }
+    const hoodAreaCoords = Geo.areaCoordsFrom(
+      hood.center.coordinates,
+      FUZZY_AREA_RADIUS
+    );
 
-  const propertySummary = res[0];
-  const property = await api.property(propertySummary.prop_id, opts);
+    const res =
+      (await api.listProperties(hoodAreaCoords, { limit: 1, offset: 0 }, "asc", opts))
+        .properties || [];
 
-  const monthlyRent = yieldPerMonth(property.yield_per_hour);
-  const amt = monthlyRent / property.area;
+    if (!res || res.length === 0) {
+      return null;
+    }
 
-  rents[neighbourhoodId] = amt;
-  store.setNeighbourhoodYields(rents);
+    const propertySummary = res[0];
+    const property = await api.property(propertySummary.prop_id, opts);
 
-  return amt;
+    const monthlyRent = yieldPerMonth(property.yield_per_hour);
+    const amt = monthlyRent / property.area;
+
+    rents[neighbourhoodId] = amt;
+    store.setNeighbourhoodYields(rents);
+
+    return amt;
+  });
 };
 
 export const neighbourhoodsWithin = async (
@@ -83,42 +96,47 @@ export const neighbourhoodsWithin = async (
   api: UplandApi,
   opts?: ServiceOpts
 ) => {
-  const neighbourhoods = await fetchAll(api, opts);
-  const polygon = Geo.areaCoordsToPolygon(area);
+  return await timedSingleInvocation({ ...opts?.timerOpts, label: "neighbourhoodsWithin" }, async (timerOpts) => {
+    const neighbourhoods = await fetchAll(api, { timerOpts, ...opts });
+    const polygon = Geo.areaCoordsToPolygon(area);
 
-  return Object.values(neighbourhoods).filter((hood) => {
-    if (!hood?.boundaries) return false;
+    return Object.values(neighbourhoods).filter((hood) => {
+      if (!hood?.boundaries) return false;
 
-    const points = Geo.boundariesToPolygon(hood.boundaries);
-    return Geo.anyOverlap(polygon, points);
-  }) as Neighbourhood[];
+      const points = Geo.boundariesToPolygon(hood.boundaries);
+      return Geo.anyOverlap(polygon, points);
+    }) as Neighbourhood[];
+  });
 };
 
 export const decorate = (
   hoods: (Hood | Neighbourhood)[],
   state: typeof SharedState,
-  api: UplandApi
+  api: UplandApi,
+  opts?: ServiceOpts
 ): Promise<Hood[]> => {
-  const promises = hoods.map(async (hood) => {
-    const upx = await monthlyRentPerUnitFor(hood.id, api);
+  return timedSingleInvocation({ ...opts?.timerOpts, label: "neighbourhood decorate" }, async (timerOpts) => {
+    const promises = hoods.map(async (hood) => {
+      const upx = await monthlyRentPerUnitFor(hood.id, api, { timerOpts });
 
-    return {
-      ...hood,
-      monthlyYield:
-        (hood as Hood).monthlyYield ||
-        (upx ? parseFloat(upx.toFixed(2)) : null),
+      return {
+        ...hood,
+        monthlyYield:
+          (hood as Hood).monthlyYield ||
+          (upx ? parseFloat(upx.toFixed(2)) : null),
 
-      screenCoords:
-        (hood as Hood).screenCoords ||
-        screenCoordsFor(
-          hood,
-          state.currentCoordinates as any,
-          state.screenDimensions
-        ),
-    };
+        screenCoords:
+          (hood as Hood).screenCoords ||
+          screenCoordsFor(
+            hood,
+            state.currentCoordinates as any,
+            state.screenDimensions
+          ),
+      };
+    });
+
+    return Promise.all(promises);
   });
-
-  return Promise.all(promises);
 };
 
 export const screenCoordsFor = (
