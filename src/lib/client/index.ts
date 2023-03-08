@@ -30,7 +30,7 @@ const createClientMonitor = async function (tab: any, state: any) {
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      files: ["injected_client.js"],
+      files: ["injected_client.js", "embedded.js"],
     });
   } catch (err: any) {
     console.log(`Could not create client monitor: ${err.message}`);

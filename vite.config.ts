@@ -11,18 +11,29 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  worker: {
+    plugins: [vue(), vueJsx()],
+    rollupOptions: {
+      output: {
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name].js",
+        assetFileNames: "[name][extname]",
+      }
+    }
+  },
   build: {
     minify: false,
     rollupOptions: {
       input: {
         ui: fileURLToPath(new URL("./index.html", import.meta.url)),
         worker: "./src/worker/index.ts",
+        embedded: "./src/embedded/index.ts"
       },
-      output: {
+      output: [{
         entryFileNames: "[name].js",
         chunkFileNames: "[name].js",
         assetFileNames: "[name][extname]",
-      },
+      }]
     },
   },
 });

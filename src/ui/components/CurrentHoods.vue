@@ -17,7 +17,7 @@ import List from "./SimpleList.vue";
 import * as service from "../../services/neighbourhood";
 import Api from "../../lib/api";
 import timer from "../../lib/timer";
-import * as ClientMonitor from "../../lib/client";
+// import * as ClientMonitor from "../../lib/client";
 import state from "../state";
 import { compareNumeric } from "../../lib/comparitors";
 
@@ -56,11 +56,11 @@ export default {
 
   methods: {
     async onHoodHoverIn(hood: Hood) {
-      (await ClientMonitor.instance(state)).markNeighbourhoods([hood]);
+      // (await ClientMonitor.instance(state)).markNeighbourhoods([hood]);
     },
 
     async onHoodHoverOut() {
-      (await ClientMonitor.instance(state)).markNeighbourhoods([]);
+      // (await ClientMonitor.instance(state)).markNeighbourhoods([]);
     },
 
     async updateHoods(hoods: (Neighbourhood | Hood)[]) {

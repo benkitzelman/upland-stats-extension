@@ -42,16 +42,20 @@ if (!window.UplandStats) {
       .catch(console.error);
   };
 
-  const MARKER_LAYER_ID = "upland-stats-markers";
-
-  const markerLayer = () => {
-    const el = document.getElementById(MARKER_LAYER_ID);
+  const findOrAddEl = (id, generateHtml) => {
+    const el = document.getElementById(id);
     if (el) return el;
 
-    const html = `<div id='${MARKER_LAYER_ID}' style='position: absolute; top: 0; left: 0; right: 0; bottom: 0;'></div>`;
+    document.body.insertAdjacentHTML("beforeend", generateHtml());
+    return document.getElementById(id);
+  };
 
-    document.body.insertAdjacentHTML("beforeend", html);
-    return document.getElementById(MARKER_LAYER_ID);
+  const markerLayer = () => {
+    const id = "upland-stats-markers";
+
+    return findOrAddEl(id, () => (
+      `<div id='${id}' style='position: absolute; top: 0; left: 0; right: 0; bottom: 0;'></div>`
+    ));
   };
 
   const markerIdFor = (hood) => `hood-${hood.id}`;

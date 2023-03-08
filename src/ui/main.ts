@@ -9,6 +9,6 @@ const app = createApp(App);
 
 app.use(router);
 
-app.mount("#app");
-
 syncWithWorker().catch((err) => console.error(err));
+
+export default app;
